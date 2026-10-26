@@ -1,45 +1,53 @@
 ---
 name: fe-skel
 description: >
-  Create and refine 1:1 pixel-accurate LOADING SKELETONS (exact box heights, widths, radii, and grid gaps)
-  gated by the AsyncContent multi-state switch, eliminating Cumulative Layout Shift (CLS = 0).
-  Use when: authoring loading skeletons for new features, fixing flickering/shifting layouts during data fetch,
-  or standardizing 4-state asynchronous UI rendering (loading/error/empty/content).
-  DO NOT USE FOR: Aligning static production UI layout or spacing (see fe-layout);
-  DO NOT USE FOR: API data fetching cache or SWR query logic (see fe-data).
+  Build loading, empty, and error states: 1:1 ghost skeletons that mirror the real layout (no layout shift),
+  a single 4-state switch (loading / error / empty / content), route-level loading UI, and retry affordances.
+  Use when: adding skeletons, fixing flicker or layout shift while data loads, standardizing async UI states,
+  or designing what users see when an API is down.
+  DO NOT USE FOR: static layout or spacing (see fe-layout); fetch, cache or retry logic (see fe-data); wording of error/empty messages (see fe-ux);
+  DO NOT USE FOR: measuring Core Web Vitals in general (see fe-perf).
 ---
 
-# `fe-skel` — 1:1 Pixel Ghost Skeletons & AsyncContent (CLS = 0)
+# fe-skel — Ghost Skeletons & Async States
 
-Specialized skill for engineering asynchronous loading states that mirror real layout geometry with 1:1 pixel precision, eliminating Cumulative Layout Shift (CLS = 0) and providing smooth perceived performance. Strictly follows [conventions.md](../fe-andy/references/conventions.md).
+Loading states that mirror real geometry so nothing shifts when data arrives. Follows [conventions.md](../fe-andy/references/conventions.md).
 
----
-
-## 1. Core Law: Skeletons as 1:1 Ghost Replicas
-
-> **A loading skeleton is not a generic placeholder blob. It must be an exact, pixel-accurate "ghost replica" of the real loaded interface.**
-
-1. **Geometry Parity**:
-   - Box heights (`h-*`), widths (`w-*`), corner radii (`rounded-*`), and container gaps (`gap-*`, `padding`) must match loaded components identically.
-2. **Typography Hierarchy Matching**:
-   - Title placeholders match heading box sizes (e.g., `Skeleton className="h-9 w-48 rounded-lg"`).
-   - Paragraph lines mirror body font metrics (e.g., `Skeleton className="h-4 w-full rounded-md"`).
-3. **Zero Layout Shift (CLS = 0)**:
-   - When asynchronous data resolves and real components mount, the layout remains completely stable without shifting neighboring elements.
+## Minimum rules (apply even without fe-andy)
+- Read `project-profile.md` in the target project first (does it have an async-state component? where?).
+- Read-only audit first; propose; wait for approval before editing.
+- Never print secrets; never edit protected areas without explicit instruction.
+- Finish with the learning loop: append new, proven lessons to [references/learned.md](./references/learned.md) after a duplicate check ([learning-loop.md](../fe-andy/references/learning-loop.md)).
 
 ---
 
-## 2. Integrated `AsyncContent` Multi-State Conventions
+## 1. Ghost-replica law
 
-This skill governs the standardized 4-state asynchronous rendering switch:
-- Detailed documentation: [`references/async-content.md`](./references/async-content.md).
-- Enforce rendering data-backed regions through `AsyncContent` rather than ad-hoc ternaries (`isLoading ? ... : ...`) or unadorned spinners.
+A skeleton is an exact replica of the loaded UI, not a generic blob:
+1. **Geometry parity**: same heights, widths, radii, gaps, padding, and row count as the real component.
+2. **Typography parity**: title bars match heading line-height; text lines match body line-height.
+3. **Media parity**: same aspect ratio box as the real image/video.
+4. **No shift**: when content mounts, neighbours do not move.
+5. **Accessible**: container has `aria-busy="true"` while loading; skeleton shapes are `aria-hidden="true"`; one visually hidden "Loading…" status for screen readers; shimmer respects `prefers-reduced-motion`.
 
----
+## 2. One 4-state switch
 
-## 3. Workflow Protocol
+Render data-backed regions through one switch component: **Error → Loading → Empty → Content**.
+- If the project has one (e.g. `AsyncContent`), use it: [async-content.md](./references/async-content.md).
+- If not, propose a small one with the same 4 branches before scattering ternaries; get approval.
+- Show skeleton only on first load (`isLoading && !data`); on refetch keep stale content and show a subtle indicator.
+- Error state: plain-language message + retry; empty state: why it is empty + the next action (copy rules: fe-ux skill).
+- Route-level: in Next.js App Router, `loading.tsx` per segment for instant navigation feedback.
 
-1. **Inspect Loaded Component**: Extract DOM hierarchy, padding, typography height, and media aspect ratios from the real component.
-2. **Author Ghost Skeleton**: Implement the corresponding skeleton component (typically named `[Feature]Skeleton`).
-3. **Bind State Gate**: Wrap the region in `AsyncContent` passing `skeleton={<[Feature]Skeleton />}`.
-4. **CLS Validation**: Verify layout stability via Chrome DevTools (Performance ➔ Web Vitals) ensuring CLS = 0.
+## 3. Workflow
+
+1. **Inspect** the loaded component: DOM structure, padding, line-heights, media ratios, list length.
+2. **Author** `<Feature>Skeleton` next to the component.
+3. **Bind** it to the 4-state switch.
+4. **Verify**:
+   - DevTools → Network throttling "Slow 4G" + Rendering → "Layout Shift Regions": no highlighted shift when content replaces the skeleton.
+   - Performance trace: layout-shift entries for the region = 0.
+   - Overlay check: screenshot skeleton and loaded state at the same width; outer boxes align.
+   - Error and empty branches: force them (block the request in DevTools / mock empty response) and check each renders.
+
+Learned notes: [references/learned.md](./references/learned.md).

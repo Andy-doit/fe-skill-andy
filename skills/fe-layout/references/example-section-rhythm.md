@@ -1,6 +1,6 @@
-# Case Study: Alternating Ambient Rhythm & Viewport Centered Flow (DNL Capital)
+# Example: Alternating Section Rhythm & Viewport-Centered Flow
 
-Real-world architectural reference from the DNL Capital project (`dnl-capital-landing-page`), illustrating general principles enforced by `fe-layout`.
+Worked example from a corporate landing page, illustrating principles used by `fe-layout`. Class names are examples; use the project's own tokens and scale.
 
 ---
 

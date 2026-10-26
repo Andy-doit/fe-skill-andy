@@ -1,128 +1,151 @@
 # Universal Frontend Agent Conventions (`fe-skill-andy`)
 
-Core governance and engineering standards applied across all skills in the `fe-skill-andy` ecosystem. All skills reference this document as the Single Source of Truth (SSOT).
+Core governance and engineering standards applied across all skills in the `fe-skill-andy` ecosystem. All skills reference this document as the Single Source of Truth (SSOT). Install the whole skill set together so this sibling file resolves.
 
 ---
 
-## 1. Mandatory 5-Step Protocol (Audit-First Workflow)
+## 0. Project Profile First
 
-Every code modification and enhancement task must strictly adhere to this 5-step sequence:
+Before auditing or editing, look for `project-profile.md` at the root of the **target project** (the app being worked on, not this skill set).
+- Found → its values (stack, versions, package manager, protected areas, budgets, a11y level, locales, spacing scale) override the defaults in every skill.
+- Not found → state the assumptions you are making, or ask the user. Offer to create one from [project-profile.template.md](./project-profile.template.md).
+- Project-specific facts discovered during work go into the project's `project-profile.md`, never into this skill set.
+
+---
+
+## 1. Mandatory 6-Step Protocol (Audit-First Workflow)
 
 ```
-[1. Read-Only Audit & Inspection]
-               ↓
-[2. Breakdown & Structured Proposal]
-               ↓
-[3. Await User Review & Approval]
-               ↓
-[4. Precision Code Modification (Apply)]
-               ↓
-[5. Verification & work_log.md Update]
+[1. Read-Only Audit] → [2. Proposal] → [3. User Approval] → [4. Precise Edit] → [5. Verify] → [6. Learn]
 ```
 
 1. **Read-Only Audit & Inspection**: Never modify code prior to inspection. Explicitly distinguish between:
    - **"Observed in code"**: Specific file path, line numbers, and existing implementation.
    - **"Inferred / Requires measurement"**: Hypotheses regarding server latency, CDN caching, or runtime profiler bottlenecks.
-2. **Breakdown & Structured Proposal**: Present findings clearly:
-   - Target files and exact line ranges.
-   - Impact level: **Critical / High / Medium / Low**.
-   - Remediation cost and associated regression risks.
-3. **Await User Approval**: Pause and solicit confirmation. Only proceed to code edits upon explicit approval ("Proceed", "Approved", "Go ahead").
+2. **Breakdown & Structured Proposal**: Present findings ranked with the rubric in §2: target files and line ranges, impact, effort, risk.
+3. **Await User Approval**: Pause and ask for confirmation. Only proceed to code edits upon explicit approval ("Proceed", "Approved", "Go ahead").
 4. **Precision Code Modification**: Apply minimal, surgical diffs. Preserve all existing docstrings, comments, and unrelated business logic.
-5. **Verification & Work Log**: Run build, lint, and type-checks; log session entries in `work_log.md` immediately upon completion.
+5. **Verification**: Run the checks the skill names (lint, types, build, scripts, measurements) and report real output. Log the session (§7).
+6. **Learn**: Run the learning loop in [learning-loop.md](./learning-loop.md) — capture anything new and reusable into the skill set.
 
 ---
 
-## 2. Skill Architecture & Boundary Principles
+## 2. Priority Rubric (use in every report)
+
+| Field | Values | Meaning |
+|---|---|---|
+| **Impact** | Critical / High / Medium / Low | Critical = security hole, data loss, broken core flow. High = user-visible failure or metric outside budget. Medium = degraded quality. Low = polish. |
+| **Effort** | S (< 1 h) / M (1–3 h) / L (> 3 h) | Estimated fix time including verification. |
+| **Risk** | Low / Med / High | Chance the fix causes a regression; High if it touches protected areas, shared blocks, routing, or auth. |
+
+Order findings: Impact (desc) → Risk (asc) → Effort (asc). Mark each estimate as an estimate.
+
+Standard finding row:
+```markdown
+| # | Finding | Location (file:line) | Evidence (observed / measured / inferred) | Impact | Effort | Risk | Proposed fix | Verify by |
+```
+
+---
+
+## 3. Skill Architecture & Boundary Principles
 
 > **Core Axiom:** Separate skills when the **DOMAIN / NATURE OF WORK** is different; do NOT separate skills merely because of audit vs. apply modes.
 
-- **`fe-clean` vs. `fe-code`**: Maintained as distinct skills because their objectives are fundamentally different:
-  - `fe-clean`: Dedicated to **Technical Debt, Anti-Patterns & Refactoring** (identifying code smells, pruning dead code, enforcing TypeScript strictness, breaking down God components).
-  - `fe-code`: Dedicated to **Scaffolding & Authoring New Features** (generating new components, hooks, resilient Server Actions, Redux/Zustand slices on-pattern from day one).
-- All other skills (`fe-layout`, `fe-skel`, `fe-perf`, `fe-motion`, `fe-sec`, `fe-i18n`) natively support both Audit (read-only inspection) and Apply (implementation) modes following the 5-step protocol.
+- **`fe-clean` vs. `fe-code`**: `fe-clean` = technical debt, anti-patterns, refactoring existing code. `fe-code` = scaffolding and authoring new code on-pattern.
+- All other skills support both Audit (read-only) and Apply (implementation) modes following the protocol above.
+- Refer to other skills by plain name ("use the fe-perf skill"), never by tool-specific invocation syntax.
+
+### 3.1 The 4-Layer Architecture Law
+
+> Every decision lives in exactly ONE layer. Style flows downward; features compose — they never paint.
+
+```
+[Layer 1: Tokens]      theme variables: colors, fonts, spacing, radius
+        ↓
+[Layer 2: Primitives]  UI library / base components (from the project profile)
+        ↓
+[Layer 3: Blocks]      reusable composed widgets — OWN style, props-only, no data fetching
+        ↓
+[Layer 4: Features]    coordinate data/state, compose Blocks — no custom styling
+```
+
+### 3.2 Image-to-Proposal Rule
+
+When the user provides a screenshot, mockup, or bug image and asks for UI changes: inspect it, map regions to source files, propose exact class/code diffs, and wait for approval before editing.
 
 ---
 
-## 3. Measure First, Optimize Later (Measurement-Driven Performance)
+## 4. Measure First, Optimize Later
 
 - Never sprinkle `React.memo`, `useMemo`, or `useCallback` speculatively.
-- Every performance intervention must be backed by quantifiable diagnostic data:
-  - React DevTools Profiler (Render frequency, commit phase duration).
-  - Chrome DevTools Performance / Coverage (Long Tasks > 50ms, Layout Thrashing).
-  - Bundle Analyzer stats (Net KB bundle delta).
+- Every performance intervention must be backed by data: React DevTools Profiler, Chrome Performance panel (long tasks > 50 ms), Lighthouse, bundle analyzer output, or field data (RUM).
+- Report before/after numbers for every performance change.
 - **Optimization Hierarchy (High Leverage First):**
-  1. Payload Reduction: Modern image compression (WebP/AVIF), bundle code-splitting, font subsetting, dependency pruning.
-  2. Request Latency & Waterfall Elimination: Parallel data fetching (`Promise.all`), SWR/TanStack cache deduplication, hover prefetching.
-  3. Rendering Strategy: Optimal selection between SSR, SSG, ISR, and Streaming SSR.
-  4. Main-Thread Offloading: Task slicing, Web Workers, long-list virtualization (`TanStack Virtual`).
-  5. React Re-render Optimization: State colocation, context selectors, targeted memoization.
-  6. Micro-optimizations: Final pass only.
+  1. Payload reduction: images, code-splitting, fonts, dependency pruning.
+  2. Request latency & waterfall elimination: parallel fetching, cache deduplication, prefetching.
+  3. Rendering strategy: SSR / SSG / ISR / streaming.
+  4. Main-thread offloading: task slicing, Web Workers, virtualization.
+  5. React re-render optimization: state colocation, context splitting, targeted memoization.
+  6. Micro-optimizations: final pass only.
 
 ---
 
-## 4. Security & Protected Zones
+## 5. Security & Protected Zones
 
-### 4.1 Client-Side Data & Secret Protection
-- Never print API tokens, database connection strings, private keys, or passwords in output logs.
-- Immediately flag any sensitive environment variables improperly prefixed with public client tags (`NEXT_PUBLIC_*` or `VITE_*`).
-- Never introduce heavyweight external npm packages without user consent.
+### 5.1 Secrets
+- Never print API tokens, connection strings, private keys, passwords, or personal data in output, reports, logs, or learned notes.
+- Flag any sensitive environment variable exposed with a public client prefix (`NEXT_PUBLIC_*`, `VITE_*`, `PUBLIC_*`, `REACT_APP_*`).
+- Never install packages or change the lockfile without user consent.
 
-### 4.2 Protected Zones
-> **WARNING:** The following functional areas are designated as strictly protected. Agents **MUST NEVER MODIFY** these areas without explicit, written user instruction:
-1. **Financial & Valuation Modules**: Financial data tables, M&A transaction pipelines, currency/decimal calculations.
-2. **Chart & Real-Time Visualization Engines**: WebGL/SVG canvas chart configurations, real-time streaming tickers.
-3. **Authentication & Sensitive Transaction Flows**: Session management, cookie validation, SMTP mailers, payment flows.
-
----
-
-## 5. Domain Boundary Delineation
-
-- **`fe-i18n` Owns:**
-  - Regional locale formatting for currency, dates, and numbers (e.g. `vi-VN` via `Intl.NumberFormat`).
-  - Bilingual/multilingual dictionary parity (`en.json` vs `vi.json`).
-  - Router pathname, search params, and anchor `#hash` preservation during locale toggles.
-- **`fe-ux` Owns:**
-  - Numerical tabular styling: `tabular-nums` ensuring fixed-width digits in dashboards/tables to avoid jitter.
-  - Typographic visual balancing: `text-balance` preventing orphaned words in headings.
-  - Perceived performance, Nielsen heuristics, keyboard shortcuts, inline form validation ergonomics.
-- **`fe-skel` Owns:**
-  - `AsyncContent` multi-state conventions (loading / error / empty / content).
-  - 1:1 pixel-accurate ghost skeleton layouts (CLS = 0).
+### 5.2 Protected Zones
+Protected areas come from the project profile. If none is defined, treat these as protected by default and **never modify them without explicit user instruction**:
+1. Money, pricing, currency/decimal calculations.
+2. Authentication, session, payment, and other sensitive transaction flows.
+3. Chart / real-time visualization engines and their configuration.
 
 ---
 
-## 6. Session Continuity & `work_log.md` Protocol
+## 6. Domain Boundary Delineation
 
-`work_log.md` at the repository root serves as the immutable Single Source of Truth for ongoing development:
+| Topic | Owner | Not owner |
+|---|---|---|
+| Measuring CLS / LCP / INP | fe-perf | — |
+| Fixing CLS caused by loading states | fe-skel | fe-perf |
+| Measured re-render problems | fe-perf | fe-clean (only flags anti-patterns while refactoring) |
+| GSAP / ScrollTrigger / canvas / frame rate | fe-motion | fe-perf |
+| Form behaviour and copy | fe-ux | fe-code (writes the form code) |
+| Optimistic cache logic | fe-data | fe-ux (decides when to be optimistic) |
+| Locale formatting, dictionaries, locale routing | fe-i18n | fe-ux |
+| `tabular-nums`, `text-balance`, perceived performance | fe-ux | fe-i18n |
+| `AsyncContent` 4-state UI | fe-skel | fe-data |
+| Theming, dark mode, responsive, container queries | fe-layout | fe-code |
+| Release, CI, deploy, observability, SEO | fe-ship | fe-test (runs checks only) |
+| Updating this skill set | fe-learn | any other skill (they only capture notes) |
 
-### 6.1 Session Bootstrap (Start of Session)
-- Read the first **50–80 lines** of `work_log.md` to establish context:
-  - What was accomplished in the preceding session?
-  - Which files were recently modified?
-  - Which architectural decisions were locked in?
-  - What pending items or blockers require continuation?
+---
 
-### 6.2 Task Wrap-Up (End of Task)
-- Prepend a new entry at the **TOP** of the list (Newest First) using this standard format:
+## 7. Session Log (optional)
+
+- If the target project has `work_log.md` (or the profile names a log file): read its newest 50–80 lines at session start, and prepend an entry at the end of each task:
   ```markdown
-  ### [YYYY-MM-DD HH:mm] <Task Name / Brief Title>
-  - **Objective / Requirements:** <Summary of user request>
-  - **Files Changed:**
-    - Created / Modified: <clickable markdown file links>
-  - **Architectural & Design Decisions:** <Technical rationale and rules applied>
-  - **Status & Next Steps:** <Current verification state and upcoming roadmap>
+  ### [YYYY-MM-DD HH:mm] <Task Name>
+  - **Objective:** <summary of request>
+  - **Files Changed:** <relative links>
+  - **Decisions:** <rationale>
+  - **Status & Next Steps:** <verification state, open items>
   ```
+- If there is no log file: report the same fields in the final message. Do not create a log file unless the user asks.
 
 ---
 
-## 7. Universal Definition of Done (DoD)
+## 8. Universal Definition of Done (DoD)
 
-A task is officially complete only when all criteria are satisfied:
-- [x] **Lint & Types**: `npm run lint` passes with 0 errors/warnings; TypeScript strict compliance without `any`.
-- [x] **Pixel-Precision**: Adherence to 4px spacing scale (`0·2·3·4·6`), equal row heights (`h-full` + `mt-auto`).
-- [x] **Motion & GPU Hygiene**: Zero idle spinning, ScrollTrigger cleanup (`clearProps`, `once: true`), `prefers-reduced-motion` enabled.
-- [x] **Accessibility & Contrast**: WCAG AA (≥ 4.5:1) and AAA (≥ 7.0:1 for primary text); visible keyboard focus rings.
-- [x] **Zero Layout Shift**: CLS = 0; skeletons mirror real layouts 1:1; media elements have explicit aspect ratios.
-- [x] **Cleanliness**: No leftover `console.log`, dead imports, or orphaned temporary scripts.
-- [x] **Work Log**: Comprehensive entry recorded in `work_log.md`.
+A task is complete only when all applicable criteria are satisfied (profile values override defaults):
+- [ ] **Lint & Types**: the project's lint and type-check commands pass with no new errors; no new `any`.
+- [ ] **Layout**: spacing follows the profile's scale; rows in a grid align (`h-full` + `mt-auto` pattern when relevant).
+- [ ] **Motion**: no idle infinite animations; animation cleanup in place; `prefers-reduced-motion` respected.
+- [ ] **Accessibility & Contrast**: WCAG 2.2 AA (text ≥ 4.5:1, large text and UI ≥ 3:1); AAA only if the profile requires it; visible keyboard focus.
+- [ ] **Layout Shift**: no new CLS; skeletons mirror real layouts; media has explicit size or aspect ratio.
+- [ ] **Cleanliness**: no leftover `console.log`, dead imports, or temporary scripts.
+- [ ] **Evidence**: verification output reported; anything not verified is labelled as such.
+- [ ] **Learn**: learning loop run (§1 step 6).

@@ -1,52 +1,61 @@
 ---
 name: fe-recon
 description: >
-  Survey and map an unfamiliar frontend codebase in READ-ONLY mode: identify framework stack,
-  directory layout, rendering strategies (CSR/SSR/SSG/ISR), data/state management flows, and potential risk zones.
-  Use when: onboarding to a new or unfamiliar frontend repository, surveying architecture before planning refactors,
-  or compiling comprehensive project reconnaissance reports.
-  DO NOT USE FOR: Modifying or editing source code (see fe-code or fe-clean);
-  DO NOT USE FOR: In-depth mathematical color contrast verification (see fe-contrast).
+  Survey an unfamiliar frontend codebase in READ-ONLY mode: framework and versions, package manager, directory layout
+  and layers, rendering strategy (CSR/SSR/SSG/ISR), routing, data and state flow, styling system, i18n, tests, CI,
+  risk hotspots and protected zones; optionally draft the project's project-profile.md.
+  Use when: onboarding to a new repo, before planning a refactor, or when no project profile exists yet.
+  DO NOT USE FOR: editing source code (see fe-code or fe-clean);
+  DO NOT USE FOR: deep audits of one domain (use fe-perf, fe-sec, fe-a11y, fe-contrast, etc.).
 ---
 
-# `fe-recon` — Read-Only Architecture Reconnaissance
+# fe-recon — Read-Only Reconnaissance
 
-Specialized skill for rapidly surveying and mapping frontend codebases without mutating any files, generating structured architectural reconnaissance summaries. Strictly follows [conventions.md](../fe-andy/references/conventions.md).
+Map a frontend codebase quickly without changing anything. Follows [conventions.md](../fe-andy/references/conventions.md).
+
+## Minimum rules (apply even without fe-andy)
+- Strictly read-only: no installs, builds that write files, deletes, or edits (except writing a new `project-profile.md` draft if the user asks).
+- Never print secret values from `.env*` files — list variable names only.
+- Label every claim as observed (file:line) or inferred.
+- Finish with the learning loop: append new, proven lessons to [references/learned.md](./references/learned.md) after a duplicate check ([learning-loop.md](../fe-andy/references/learning-loop.md)).
 
 ---
 
-## 1. Standard Reconnaissance Report Template
+## 1. Steps
 
-When executing `fe-recon`, output must conform to this standardized structure:
+| Step | Read / run (read-only) | Extract |
+|---|---|---|
+| 1 Stack | `package.json` (deps + scripts), lockfile name, `tsconfig.json`, framework config (`next.config.*`, `vite.config.*`) | Framework + versions, package manager, TS strictness, scripts |
+| 2 Layout | Directory listing 2–3 levels deep (`git ls-files` grouped by folder) | Source root, layering (features/blocks/ui), naming patterns |
+| 3 Rendering & routing | `app/` or `pages/` tree, `"use client"` count, route handlers, middleware | Router type, client/server split, dynamic segments (`[locale]`) |
+| 4 Data & state | Imports of SWR/TanStack/Redux/Zustand, API client files | Server-state lib, stores, fetch wrappers |
+| 5 Styling | `globals.css`, Tailwind config/`@theme`, UI library imports | Tokens, dark mode, UI primitives |
+| 6 i18n | messages folder, i18n config | Library, locales |
+| 7 Quality | ESLint/Prettier/Biome config, test folders, Playwright config, `.github/workflows` | Lint/test/CI setup |
+| 8 Risks | Largest files (`git ls-files | xargs wc -l | sort -n | tail`), `any` count, TODO/FIXME count, auth/payment/money folders | Hotspots, protected-zone candidates |
+| 9 Env | `.env.example` / env names used in code | Public vs server env names (names only) |
+
+## 2. Report template
 
 ```markdown
-# 🗺️ ARCHITECTURE RECONNAISSANCE REPORT: [Project Name]
+# Recon Report: <project>  (date)
 
-### 1. Technology Stack Overview
-- **Framework & Core**: Next.js (App / Pages Router) / Vite / React Version
-- **Styling Architecture**: Tailwind CSS (v3 / v4), CSS Modules, HeroUI, Radix, Shadcn
-- **State Management**: Redux Toolkit / Zustand / Context API
-- **Data Fetching / Cache Layer**: SWR / TanStack Query / Server Actions
-- **Forms & Validation**: React Hook Form / Zod / Native actions
-
-### 2. Directory Hierarchy & Architectural Layering
-- Primary source root: `src/` or repository root
-- Layering pattern: Feature-driven, domain-driven, or monorepo
-- Token & Global declarations: `globals.css` / theme tokens
-
-### 3. Rendering Strategy & Data Lifecycle
-- Routing: Dynamic localized segments (`/[locale]`), route handlers
-- Rendering: SSR, Static Generation, Client boundary partitions (`"use client"`)
-- Data Services: Service layer abstractions, API client configurations
-
-### 4. Risk Hotspots & Protected Zones
-- Oversized modules (> 500 lines)
-- Financial calculation, valuation, and transaction flows
-- Potential performance bottlenecks and legacy anti-patterns
+## 1. Stack
+| Item | Value | Evidence |
+## 2. Structure & layers
+## 3. Rendering & routing
+## 4. Data & state flow
+## 5. Styling & design tokens
+## 6. i18n
+## 7. Quality tooling (lint, types, tests, CI)
+## 8. Risk hotspots & protected-zone candidates
+| Area | Location | Why risky | Evidence |
+## 9. Open questions (cannot determine)
+## 10. Suggested next skills (by plain name) and why
 ```
 
----
+## 3. Project profile draft
 
-## 2. Strict Constraints
-- ❌ STRICTLY PROHIBITED from running write, delete, or installation commands (`npm install`, `rm`, file edits).
-- ❌ Restrict tooling strictly to safe read-only operations (`git status`, directory listings, file reads).
+If the target repo has no `project-profile.md`, offer to fill [project-profile.template.md](../fe-andy/references/project-profile.template.md) from the findings and show it for approval before writing.
+
+Learned notes: [references/learned.md](./references/learned.md).

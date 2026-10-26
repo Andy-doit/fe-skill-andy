@@ -1,47 +1,60 @@
 ---
 name: fe-code
 description: >
-  Scaffold and AUTHOR NEW FRONTEND CODE compliant with the 4-layer architecture (Tokens -> Primitives -> Blocks -> Features):
-  generate new components, reusable blocks, custom hooks, Redux slices, Zustand stores,
-  resilient Server Actions with developer fallbacks, typed props, and app router pages.
-  Use when: creating new UI components, scaffolding features, creating forms/modals, or authoring custom hooks.
-  DO NOT USE FOR: Auditing legacy code or detecting code smells (see fe-clean);
-  DO NOT USE FOR: Fine-tuning micro layout spacing on existing UI (see fe-layout).
+  Author NEW frontend code on-pattern with the 4-layer architecture (Tokens → Primitives → Blocks → Features):
+  components, reusable blocks, custom hooks, stores, forms, modals, Server Actions, typed props, pages/routes,
+  component API design, and choosing where state lives (local / global / server / URL).
+  Use when: creating new UI components, scaffolding a feature, writing a form or modal, or adding a hook/store.
+  DO NOT USE FOR: auditing or refactoring existing code (see fe-clean); fine spacing on existing UI (see fe-layout);
+  DO NOT USE FOR: form UX behaviour and copy decisions (see fe-ux); fetch/cache logic design (see fe-data).
 ---
 
-# `fe-code` — 4-Layer Feature Authoring & Scaffolding
+# fe-code — On-Pattern Authoring
 
-Specialized skill for creating new frontend components, state stores, and server integration logic aligned with the Universal 4-Layer Architecture Law from day one. Strictly follows [conventions.md](../fe-andy/references/conventions.md).
+Create new code that fits the project's layers from day one. Follows [conventions.md](../fe-andy/references/conventions.md).
+
+## Minimum rules (apply even without fe-andy)
+- Read `project-profile.md` in the target project first (stack, folders, UI library, state/data libraries).
+- Propose the file plan and wait for approval before writing; never install packages without consent.
+- No secrets in client code; never edit protected areas without explicit instruction.
+- Finish with the learning loop: append new, proven lessons to [references/learned.md](./references/learned.md) after a duplicate check ([learning-loop.md](../fe-andy/references/learning-loop.md)).
 
 ---
 
-## 1. Universal 4-Layer Architecture Rules
+## 1. Layers (paths from the project profile; defaults shown)
 
-Every newly authored code file must reside in **EXACTLY ONE LAYER** with strict separation of concerns:
-
-| Layer | Target Location | Sole Responsibility | Strict Prohibition |
+| Layer | Default location | Responsibility | Not allowed |
 |---|---|---|---|
-| **Layer 4: Features** | `src/features/**` or `components/features/**` | Coordinates SWR/Store, dispatches actions, composes Blocks | **PROHIBITED from writing custom CSS styling** (no ad-hoc borders, backgrounds, shadows) |
-| **Layer 3: Blocks** | `src/components/blocks/**` | Reusable composed UI widgets, **OWNS style**, pure/props-only | **PROHIBITED from calling Store / SWR / API directly**; accepts pure props only |
-| **Layer 2: UI Primitives** | `@heroui/react`, `@radix-ui`, `globals.css` | Accessible base interactive primitives (Button, Modal, Input) | Avoid overriding CSS haphazardly with `!important` |
-| **Layer 1: Tokens** | `globals.css` / theme config | Semantic CSS variables: color (`--primary-*`), fonts, spacing | PROHIBITED from hardcoding raw hex values in JSX |
+| 4 Features | `src/components/features/**` or `src/features/**` | Fetch/state, compose Blocks | Custom styling |
+| 3 Blocks | `src/components/blocks/**` | Reusable widgets, own style, props-only | Calling stores/APIs |
+| 2 Primitives | UI library + base components | Accessible interactive base | `!important` overrides |
+| 1 Tokens | global CSS / theme config | Semantic variables | Raw hex in JSX |
 
----
+## 2. Authoring workflow
 
-## 2. Resilient Server Actions & Developer Fallbacks
+1. **Search first**: look for an existing Block/hook that already does it (grep component names, `blocks/`, `hooks/`). Reuse or extend before creating.
+2. **Classify**: Block or Feature? Where does each piece of state live? ([state.md](./references/state.md))
+3. **Design the API**: props, variants, composition ([component-api.md](./references/component-api.md)).
+4. **Propose** the file list + public API; wait for approval.
+5. **Write**: strict types (no `any`), early returns, small components, semantic HTML, accessible names, all copy through the i18n helper if the project uses one.
+6. **States**: every data-backed region gets loading/empty/error (fe-skel).
+7. **Verify**: project lint + `tsc --noEmit` + build for routes; render each state once (mock or DevTools blocking); keyboard pass (Tab/Enter/Escape).
 
-Synthesized from enterprise production form patterns:
-1. **Safe Developer Simulation**:
-   - In development/preview environments lacking live SMTP or external API credentials, Server Actions must simulate safe success/logging without crashing the invocation pipeline.
-2. **Visual Optical Feedback**:
-   - Highlight required empty inputs with optical warning borders (`fieldErrors`).
-   - Deliver localized feedback via toast messages (`toast.error(t("validation.required"))` and `toast.success(t("submit.success"))`).
+## 3. Forms and Server Actions
 
----
+- Validate on the server always; mirror the schema on the client for inline feedback (one shared schema, e.g. Zod, if the project uses it).
+- Server Action / API handler returns a typed result `{ ok: true, data } | { ok: false, fieldErrors, formError }`; never throw raw errors to the UI.
+- Keep user input on failure; focus the first invalid field; show field errors next to fields (UX rules: fe-ux).
+- In development without external credentials (mail, payment), use an explicit mock path guarded by environment checks — never silently pretend success in production.
+- Disable double submit while pending; show progress state.
 
-## 3. Authoring Workflow
+## 4. Output
 
-1. **Classify Layer**: Determine if the new element is a Layer 3 (Block) or Layer 4 (Feature).
-2. **Declare Types**: Define strict TypeScript interfaces or PropTypes; never use `any`.
-3. **Scaffold Implementation**: Author clean, early-return logic with bounded component sizes.
-4. **Verify Quality**: Run `fe-test` to validate linting and build readiness.
+```markdown
+## New code plan — <feature>
+| File | Layer | Purpose | Public API |
+States covered: loading / empty / error / content
+Verify: <commands + manual checks>
+```
+
+Learned notes: [references/learned.md](./references/learned.md).

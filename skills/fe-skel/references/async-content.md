@@ -1,5 +1,7 @@
 # Asynchronous State & AsyncContent Multi-Branch Conventions
 
+> Reference pattern. The import path, prop names, and `t()` translation helper below come from one project. Use the target project's own component and paths from its `project-profile.md`; if it has none, propose this shape first.
+
 Architectural reference for handling asynchronous server state (SWR / TanStack Query) across 4 standardized states: Loading, Error, Empty, and Content. Managed by `fe-skel`.
 
 ---

@@ -1,55 +1,75 @@
 ---
 name: fe-perf
 description: >
-  Optimize page load performance, React runtime execution, Core Web Vitals (LCP, INP, CLS, TTFB),
-  and network request flows.
-  Use when: page is slow, bundle size is excessive, widespread re-renders occur, memory leaks are suspected,
-  layout thrashing occurs (offsetHeight, getBoundingClientRect), or main thread tasks exceed 50ms (Long Tasks).
-  DO NOT USE FOR: Animating keyframes, Canvas WebGL shaders, or ScrollTrigger stutter (see fe-motion);
-  DO NOT USE FOR: Static visual layout or spacing fixes (see fe-layout).
+  Measure and optimize page load and React runtime performance: Core Web Vitals (LCP, INP, CLS, TTFB),
+  bundle size, code splitting, images/fonts/third-party scripts, caching, rendering strategy (CSR/SSR/SSG/ISR,
+  streaming, hydration), Next.js App Router caching, re-renders, layout thrashing, long tasks, performance budgets.
+  Use when: a page is slow, a metric is over budget, the bundle is large, re-renders are measured, or the main
+  thread is blocked.
+  DO NOT USE FOR: GSAP/ScrollTrigger, canvas/WebGL or frame-rate stutter (see fe-motion);
+  DO NOT USE FOR: fixing CLS caused by loading states (see fe-skel); request logic and caching code (see fe-data).
 ---
 
-# `fe-perf` — Loading Performance & React Runtime Optimization
+# fe-perf — Loading Performance & React Runtime
 
-Specialized skill for diagnosing and remediating frontend performance bottlenecks across network, bundle assets, DOM rendering, and React component lifecycles. Strictly follows [conventions.md](../fe-andy/references/conventions.md).
+Diagnose and fix performance bottlenecks across network, bundle, rendering, and React. Follows [conventions.md](../fe-andy/references/conventions.md).
 
----
-
-## 1. Proven Technical Benchmarks (Case Study Insights)
-
-This skill synthesizes battle-tested solutions across production projects:
-1. **Layout Thrashing & CPU Repaint Mitigation**:
-   - Utilize CSS `content-visibility: auto` paired with `contain-intrinsic-size` on large below-the-fold content blocks to instruct the browser engine to bypass layout calculation until scrolled into view.
-2. **ScrollTrigger Lifecycle & Resource Reclamation**:
-   - Configure `once: true` on ScrollTrigger entry animations and enforce `clearProps: "transform,opacity"` upon completion to detach event listeners and revert elements to passive hardware rendering (0% idle CPU overhead).
-3. **Hardware-Responsive Input Alignment**:
-   - Avoid blanket `scroll-smooth` on the root `<html>` element on Windows platforms to eliminate mouse wheel inertia drift and restore instantaneous 1:1 scroll responsiveness.
+## Minimum rules (apply even without fe-andy)
+- Read `project-profile.md` in the target project first (stack, versions, budgets, protected areas).
+- **Measure before optimizing**; read-only audit → proposal → wait for approval → edit → re-measure.
+- Never print secrets; never edit protected areas without explicit instruction.
+- Finish with the learning loop: append new, proven lessons to [references/learned.md](./references/learned.md) after a duplicate check ([learning-loop.md](../fe-andy/references/learning-loop.md)).
 
 ---
 
-## 2. Measurement-First Diagnostic Protocol
+## 1. Workflow
 
-Every performance proposal must follow the **Measure First, Optimize Later** hierarchy:
+1. **Baseline** — collect numbers before touching code ([measurement.md](./references/measurement.md)):
+   - Lab: Lighthouse mobile run, Chrome Performance trace, React Profiler for the slow interaction.
+   - Field (if available): CrUX / RUM p75 for LCP, INP, CLS.
+   - Bundle: analyzer output or `node scripts/check-bundle-size.mjs <build-dir> --budget <KB>` (from this skill folder).
+2. **Locate** — map each bad metric to a cause:
 
-### Step 1: Read-Only Audit & Profiling
-- **Core Web Vitals**: Audit LCP elements (ensure `fetchpriority="high"` on hero images), CLS (explicit width/height or aspect ratios on media/cards), and INP (identify long tasks blocking the main thread > 50ms).
-- **Bundle & Network**: Identify un-treeshaken barrel imports (e.g., importing entire `lodash` instead of `lodash-es`), request waterfalls (sequential API calls that can be parallelized).
-- **DOM & Runtime**: Pinpoint layout thrashing (interleaved DOM reads like `element.offsetHeight` followed by style writes) and context re-render cascades.
+   | Symptom | Look at | Reference |
+   |---|---|---|
+   | LCP high | LCP element, TTFB, render-blocking CSS/JS, image priority, fonts | [loading.md](./references/loading.md) |
+   | INP high | Long tasks in the interaction, re-renders, heavy handlers, layout thrashing | [react-runtime.md](./references/react-runtime.md) |
+   | CLS high | Media without size, late fonts, injected banners (loading-state CLS → fe-skel) | [loading.md](./references/loading.md) |
+   | Big JS | Barrel imports, client-only libs in shared chunks, missing code splitting | [loading.md](./references/loading.md) |
+   | Next.js specific | Server/Client boundary, fetch cache, hydration errors | [nextjs.md](./references/nextjs.md) |
 
-### Step 2: Diagnostic Proposal Matrix
-Present findings using the standard reporting format:
-```markdown
-| Bottleneck | Location (File:Line) | Impact Level | Fix Cost | Regress Risk | Proposed Remediation |
-|---|---|---|---|---|---|
-| Layout Thrashing | Component.tsx:42 | High (85ms Main Block) | Low (15 mins) | Low | Batch DOM reads via requestAnimationFrame |
-```
+3. **Propose** — use the conventions rubric:
+   ```markdown
+   | # | Bottleneck | Location (file:line) | Evidence (measured) | Impact | Effort | Risk | Fix | Verify by |
+   |---|---|---|---|---|---|---|---|---|
+   | 1 | Layout thrashing in resize handler | Chart.tsx:42 | 85 ms task in trace | High | S | Low | Batch reads before writes in rAF | Re-trace, task < 50 ms |
+   ```
+4. **Apply** the approved fixes one at a time.
+5. **Re-measure** with the same method and report before → after.
 
-### Step 3: Implement & Validate Metrics
-Verify post-optimization benchmarks (reduction in render duration, bundle KB delta, or INP improvements).
+## 2. Thresholds (defaults; the project profile overrides)
 
----
+| Metric | Good | Needs improvement | Poor |
+|---|---|---|---|
+| LCP | ≤ 2.5 s | ≤ 4.0 s | > 4.0 s |
+| INP | ≤ 200 ms | ≤ 500 ms | > 500 ms |
+| CLS | ≤ 0.1 | ≤ 0.25 | > 0.25 |
+| Long task | — | — | > 50 ms on main thread |
 
-## 3. Strict Prohibitions
-- ❌ DO NOT wrap components in `React.memo`, `useMemo`, or `useCallback` speculatively without Profiler evidence.
-- ❌ DO NOT introduce heavy virtualization libraries (`react-window`, `TanStack Virtual`) for small lists (< 100 items).
-- ❌ DO NOT alter protected modules (financial computation, charting engines) without explicit instruction.
+Judge Core Web Vitals at the 75th percentile of real users when field data exists.
+
+## 3. Prohibitions
+
+- ❌ `React.memo` / `useMemo` / `useCallback` without Profiler evidence.
+- ❌ Virtualization libraries for small lists (< ~100 rows) without a measured problem.
+- ❌ New dependencies or lockfile changes without consent.
+- ❌ Claims of improvement without before/after numbers.
+
+## 4. References
+
+- [measurement.md](./references/measurement.md) — tools, commands, budgets in CI, RUM
+- [loading.md](./references/loading.md) — bundle, code splitting, lazy loading, images, video, fonts, caching, compression, third-party scripts
+- [react-runtime.md](./references/react-runtime.md) — event loop, rendering pipeline, re-renders, memoization, transitions, virtualization, keys
+- [nextjs.md](./references/nextjs.md) — App Router, Server/Client Components, caching/revalidate, streaming, `next/image`, `next/font`, hydration errors
+- [scripts/check-bundle-size.mjs](./scripts/check-bundle-size.mjs) — built-in-only bundle size check
+- [learned.md](./references/learned.md) — learned notes

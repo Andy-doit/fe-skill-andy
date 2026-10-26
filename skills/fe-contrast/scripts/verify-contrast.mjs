@@ -1,136 +1,134 @@
 /**
- * Generic Automated Verification Script: Multi-State Contrast Across Scroll Positions
- * Calculates WCAG 2.1 Contrast Ratios for Header/Card states across configurable scroll positions.
- * Pure Node.js built-in (Zero external dependencies).
+ * WCAG Contrast Verification (pairs mode + translucent-header scroll mode).
+ * Pure Node.js built-ins (zero external dependencies).
+ *
+ * Usage:
+ *   node verify-contrast.mjs --config <path>        config: see ../references/config-schema.md
+ *   node verify-contrast.mjs --fg "#333" --bg "#fff" [--size large] [--level AAA]
+ * Options:
+ *   --level AA|AAA   override the config level (default AA)
+ * Exit code: 1 if any check fails or the input is invalid; else 0.
  */
 
 import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
-import { fileURLToPath } from "node:url";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const args = process.argv.slice(2);
+const flag = (name) => {
+  const i = args.indexOf(name);
+  return i !== -1 ? args[i + 1] : undefined;
+};
 
-function srgbToLinear(c) {
-  const norm = c / 255;
-  return norm <= 0.04045 ? norm / 12.92 : Math.pow((norm + 0.055) / 1.055, 2.4);
-}
-
-function calculateLuminance(r, g, b) {
-  return 0.2126 * srgbToLinear(r) + 0.7152 * srgbToLinear(g) + 0.0722 * srgbToLinear(b);
-}
-
-function calculateContrast(lum1, lum2) {
-  const lighter = Math.max(lum1, lum2);
-  const darker = Math.min(lum1, lum2);
-  return (lighter + 0.05) / (darker + 0.05);
-}
-
-function compositeColor(fg, bg, alpha) {
-  return {
-    r: Math.round(fg.r * alpha + bg.r * (1 - alpha)),
-    g: Math.round(fg.g * alpha + bg.g * (1 - alpha)),
-    b: Math.round(fg.b * alpha + bg.b * (1 - alpha)),
-  };
-}
-
-// Parse CLI args for --config
-let configPath = path.resolve(__dirname, "../references/dnl-config.json");
-const configArgIdx = process.argv.indexOf("--config");
-if (configArgIdx !== -1 && process.argv[configArgIdx + 1]) {
-  configPath = path.resolve(process.cwd(), process.argv[configArgIdx + 1]);
-}
-
-if (!fs.existsSync(configPath)) {
-  console.error(`[Error] Configuration file not found at: ${configPath}`);
+function fail(msg) {
+  console.error(`[Error] ${msg}`);
   process.exit(1);
 }
 
-const config = JSON.parse(fs.readFileSync(configPath, "utf-8"));
+function parseColor(c, where) {
+  if (c && typeof c === "object" && ["r", "g", "b"].every((k) => typeof c[k] === "number")) return c;
+  if (typeof c === "string") {
+    let h = c.trim().replace(/^#/, "");
+    if (h.length === 3) h = h.split("").map((x) => x + x).join("");
+    if (/^[0-9a-fA-F]{6}$/.test(h)) {
+      return { r: parseInt(h.slice(0, 2), 16), g: parseInt(h.slice(2, 4), 16), b: parseInt(h.slice(4, 6), 16) };
+    }
+  }
+  fail(`Invalid colour at ${where}: ${JSON.stringify(c)} (use "#RRGGBB" or {r,g,b})`);
+}
 
-const HEADER_OFF_WHITE = config.headerOffWhite;
-const TEXT_REGULAR = config.textColors.regular;
-const TEXT_ACTIVE = config.textColors.active;
-const TEXT_HOVER = config.textColors.hover;
+const toHex = ({ r, g, b }) => "#" + [r, g, b].map((v) => v.toString(16).padStart(2, "0")).join("").toUpperCase();
+const lin = (v) => {
+  const n = v / 255;
+  return n <= 0.04045 ? n / 12.92 : Math.pow((n + 0.055) / 1.055, 2.4);
+};
+const luminance = ({ r, g, b }) => 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+const ratio = (a, b) => {
+  const [l1, l2] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+  return (l1 + 0.05) / (l2 + 0.05);
+};
+const composite = (fg, bg, alpha) => ({
+  r: Math.round(fg.r * alpha + bg.r * (1 - alpha)),
+  g: Math.round(fg.g * alpha + bg.g * (1 - alpha)),
+  b: Math.round(fg.b * alpha + bg.b * (1 - alpha)),
+});
 
-const lumRegular = calculateLuminance(TEXT_REGULAR.r, TEXT_REGULAR.g, TEXT_REGULAR.b);
-const lumActive = calculateLuminance(TEXT_ACTIVE.r, TEXT_ACTIVE.g, TEXT_ACTIVE.b);
-const lumHover = calculateLuminance(TEXT_HOVER.r, TEXT_HOVER.g, TEXT_HOVER.b);
+// WCAG 2.x thresholds (1.4.3 AA, 1.4.6 AAA, 1.4.11 non-text).
+function required(size, level) {
+  if (size === "ui") return 3;
+  if (size === "large") return level === "AAA" ? 4.5 : 3;
+  return level === "AAA" ? 7 : 4.5;
+}
 
-const sectionBackgrounds = config.sectionBackgrounds;
+let config;
+const configArg = flag("--config");
+if (configArg) {
+  const p = path.resolve(process.cwd(), configArg);
+  if (!fs.existsSync(p)) fail(`Configuration file not found: ${p}`);
+  try {
+    config = JSON.parse(fs.readFileSync(p, "utf-8"));
+  } catch (e) {
+    fail(`Invalid JSON in ${p}: ${e.message}`);
+  }
+} else if (flag("--fg") && flag("--bg")) {
+  config = { title: "Single pair", pairs: [{ name: "pair", fg: flag("--fg"), bg: flag("--bg"), size: flag("--size") || "normal" }] };
+} else {
+  fail('Usage: --config <file>  or  --fg "#RRGGBB" --bg "#RRGGBB" [--size normal|large|ui] [--level AA|AAA]');
+}
+
+const level = (flag("--level") || config.level || "AA").toUpperCase();
+if (!["AA", "AAA"].includes(level)) fail(`Invalid level "${level}" (AA or AAA)`);
+
+const rows = [];
+
+// Mode 1: explicit pairs.
+for (const [i, p] of (config.pairs || []).entries()) {
+  const fg = parseColor(p.fg, `pairs[${i}].fg`);
+  let bg = parseColor(p.bg, `pairs[${i}].bg`);
+  if (p.bgAlpha !== undefined) bg = composite(bg, parseColor(p.under, `pairs[${i}].under`), p.bgAlpha);
+  const size = p.size || "normal";
+  const r = ratio(fg, bg);
+  rows.push({ context: p.name || `pair ${i + 1}`, fg: toHex(fg), bg: toHex(bg), size, ratio: r, need: required(size, level) });
+}
+
+// Mode 2: translucent header over scroll-ranged sections.
+if (config.header) {
+  const h = config.header;
+  const surface = parseColor(h.surface, "header.surface");
+  if (!h.alphas || typeof h.alphas.top !== "number" || typeof h.alphas.scrolled !== "number") {
+    fail("header.alphas.top and header.alphas.scrolled must be numbers between 0 and 1");
+  }
+  if (!Array.isArray(h.sections) || !h.sections.length) fail("header.sections must be a non-empty array");
+  const texts = Object.entries(h.texts || {}).map(([name, c]) => [name, parseColor(c, `header.texts.${name}`)]);
+  if (!texts.length) fail("header.texts must define at least one text colour");
+  const { min = 0, max = 3000, step = 100, scrolledThreshold = 24 } = h.scroll || {};
+  for (let y = min; y <= max; y += step) {
+    const state = y > scrolledThreshold ? "scrolled" : "top";
+    const section = h.sections.find((s) => y >= s.range[0] && y <= s.range[1]);
+    if (!section) continue;
+    const bg = composite(surface, parseColor(section.color, `section ${section.name}`), h.alphas[state]);
+    for (const [name, fg] of texts) {
+      rows.push({ context: `${y}px ${state} · ${section.name} · ${name}`, fg: toHex(fg), bg: toHex(bg), size: h.size || "normal", ratio: ratio(fg, bg), need: required(h.size || "normal", level) });
+    }
+  }
+}
+
+if (!rows.length) fail('Config has no checks: add "pairs" and/or "header" (see references/config-schema.md)');
 
 console.log("===============================================================================");
-console.log(` ${config.title}`);
-console.log("===============================================================================\n");
-
-console.log(`Alpha configured for scrolled state: ${config.meta.alphaScrolledText}`);
-console.log(`Backdrop filter: ${config.meta.backdropFilter}`);
-console.log(`Elevation shadow: ${config.meta.elevationShadow}\n`);
-
-const scrollSteps = [];
-const { min = 0, max = 3500, step = 100, scrolledThreshold = 24 } = config.scrollSteps || {};
-for (let y = min; y <= max; y += step) {
-  scrollSteps.push(y);
+console.log(` ${config.title || "CONTRAST REPORT"} — level ${level}`);
+console.log("===============================================================================");
+console.log("| Context | FG | BG | Size | Ratio | Needs | Result |");
+console.log("|---|---|---|---|---|---|---|");
+let failed = 0;
+for (const r of rows) {
+  const ok = r.ratio >= r.need;
+  if (!ok) failed++;
+  console.log(`| ${r.context} | ${r.fg} | ${r.bg} | ${r.size} | ${r.ratio.toFixed(2)}:1 | ${r.need}:1 | ${ok ? "✓ PASS" : "✗ FAIL"} |`);
 }
-
-let totalTests = 0;
-let passedTests = 0;
-const results = [];
-
-for (const scrollY of scrollSteps) {
-  const isScrolled = scrollY > scrolledThreshold;
-  const state = !isScrolled ? "top" : "scrolled";
-  const alpha = !isScrolled ? config.alphas.top : config.alphas.scrolled;
-
-  // Find background under header
-  const section = sectionBackgrounds.find(
-    (s) => scrollY >= s.scrollRange[0] && scrollY <= s.scrollRange[1]
-  ) || sectionBackgrounds[0];
-
-  const compBg = compositeColor(HEADER_OFF_WHITE, section.color, alpha);
-  const lumBg = calculateLuminance(compBg.r, compBg.g, compBg.b);
-
-  const crRegular = calculateContrast(lumBg, lumRegular);
-  const crActive = calculateContrast(lumBg, lumActive);
-  const crHover = calculateContrast(lumBg, lumHover);
-
-  const pass = crRegular >= 4.5 && crActive >= 4.5 && crHover >= 4.5;
-  totalTests += 3;
-  if (crRegular >= 4.5) passedTests++;
-  if (crActive >= 4.5) passedTests++;
-  if (crHover >= 4.5) passedTests++;
-
-  results.push({
-    scrollY,
-    state,
-    section: section.name,
-    crRegular: crRegular.toFixed(2),
-    crActive: crActive.toFixed(2),
-    crHover: crHover.toFixed(2),
-    pass,
-  });
-}
-
-console.log(`| Scroll (px) | State | Background Underneath | Regular (${TEXT_REGULAR.hex || "#0D0D0D"}) | Active (${TEXT_ACTIVE.hex || "#123B6E"}) | Hover (${TEXT_HOVER.hex || "#1A4E8F"}) | Result |`);
-console.log("|-------------|-------|-----------------------|-------------------|------------------|-----------------|--------|");
-
-for (const r of results) {
-  const status = r.pass ? "✓ PASS (AA+)" : "✗ FAIL";
-  console.log(
-    `| ${String(r.scrollY).padEnd(11)} | ${r.state.padEnd(5)} | ${r.section.padEnd(21)} | ${(r.crRegular + ":1").padEnd(17)} | ${(r.crActive + ":1").padEnd(16)} | ${(r.crHover + ":1").padEnd(15)} | ${status} |`
-  );
-}
-
-console.log("\n===============================================================================");
-console.log(`TOTAL CHECKS: ${totalTests} | PASSED: ${passedTests} (${((passedTests / totalTests) * 100).toFixed(1)}%)`);
-console.log("MINIMUM CONTRAST OBSERVED IN SCROLLED STATE:");
-const scrolledResults = results.filter((r) => r.state === "scrolled");
-const minRegular = Math.min(...scrolledResults.map((r) => parseFloat(r.crRegular)));
-const minActive = Math.min(...scrolledResults.map((r) => parseFloat(r.crActive)));
-const minHover = Math.min(...scrolledResults.map((r) => parseFloat(r.crHover)));
-
-console.log(`- Regular text: ${minRegular}:1 (WCAG AAA >= 7.0:1) -> EXCEEDS AAA`);
-console.log(`- Active text:  ${minActive}:1 (WCAG AAA >= 7.0:1) -> EXCEEDS AAA`);
-console.log(`- Hover text:   ${minHover}:1 (WCAG AA >= 4.5:1)  -> EXCEEDS AA`);
-console.log("===============================================================================\n");
+const worst = rows.reduce((a, b) => (b.ratio - b.need < a.ratio - a.need ? b : a));
+console.log("-------------------------------------------------------------------------------");
+console.log(`Checks: ${rows.length} | Passed: ${rows.length - failed} | Failed: ${failed}`);
+console.log(`Lowest margin: ${worst.ratio.toFixed(2)}:1 (needs ${worst.need}:1) at "${worst.context}"`);
+console.log(`Result: ${failed ? "FAIL" : "PASS"}`);
+process.exit(failed ? 1 : 0);

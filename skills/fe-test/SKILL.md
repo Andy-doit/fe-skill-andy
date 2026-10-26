@@ -1,35 +1,64 @@
 ---
 name: fe-test
 description: >
-  Verify frontend source code integrity and prevent regressions through structured testing: build/lint/type-check verification,
-  Playwright E2E suites, component testing, axe accessibility audits, and visual regression checks.
-  Use when: validating pull requests, performing pre-commit verification, verifying completed tasks,
-  or selecting testing tiers based on change risk.
-  DO NOT USE FOR: Initial high-level codebase reconnaissance (see fe-recon);
-  DO NOT USE FOR: Automatic code generation or fixing (see fe-clean or fe-code).
+  Verify frontend changes and write tests: choose a verification tier by risk, run lint/type/build, unit tests,
+  component tests, E2E (Playwright), automated accessibility checks (axe), and visual regression; report real results.
+  Use when: verifying a finished task, preparing a pull request, adding tests for new or changed code,
+  or deciding how much testing a change needs.
+  DO NOT USE FOR: first survey of a repo (see fe-recon); fixing the code under test (see fe-clean or fe-code);
+  DO NOT USE FOR: CI/CD pipeline and release setup (see fe-ship).
 ---
 
-# `fe-test` — Frontend Quality Verification & Regression Defense
+# fe-test — Verification & Tests
 
-Specialized skill for defining and executing tiered verification checks across the codebase, guaranteeing zero functional regression and enforcing the Definition of Done. Strictly follows [conventions.md](../fe-andy/references/conventions.md).
+Pick the right depth of checking, run it, and report exactly what passed. Follows [conventions.md](../fe-andy/references/conventions.md).
+
+## Minimum rules (apply even without fe-andy)
+- Read `project-profile.md` in the target project first (package manager, scripts, test tools). Use the project's own scripts; detect the package manager from the lockfile (`package-lock.json` → npm, `pnpm-lock.yaml` → pnpm, `yarn.lock` → yarn, `bun.lockb`/`bun.lock` → bun).
+- Never install test tools or change the lockfile without consent.
+- Report real exit codes and failures; never claim "all green" without output.
+- Finish with the learning loop: append new, proven lessons to [references/learned.md](./references/learned.md) after a duplicate check ([learning-loop.md](../fe-andy/references/learning-loop.md)).
 
 ---
 
-## 1. 3-Tier Verification Matrix
+## 1. Tiers by risk
 
-Select the appropriate testing tier based on the scope and risk of changes:
+| Tier | Change type | Required checks |
+|---|---|---|
+| 1 Low | Copy, i18n strings, token tweaks, small styles | Lint; i18n parity script if messages changed (fe-i18n) |
+| 2 Medium | Component logic, hooks, forms, data queries, responsive layout | Tier 1 + type-check + unit/component tests for touched code + build |
+| 3 High | Architecture, routing, auth, payments, protected modules, dependency upgrades | Tier 2 + E2E for affected flows + axe checks on affected pages + visual regression if set up |
 
-| Verification Tier | Scope of Changes | Mandatory Commands | Success Criteria |
+## 2. Commands (adapt to the project's scripts)
+
+```bash
+<pm> run lint
+npx tsc --noEmit
+<pm> run test            # unit/component (Vitest or Jest)
+<pm> run build
+npx playwright test      # E2E, if Playwright is in devDependencies
+```
+`npx` may download a package if it is not installed — check `package.json` first.
+
+## 3. Writing tests
+
+Recipes and examples: [test-recipes.md](./references/test-recipes.md) — unit (pure logic), component (Testing Library: query by role/label, user-event), E2E (Playwright with role locators), axe in Playwright, visual snapshots, mocking network (MSW or route interception).
+
+What to test for a change:
+- Pure logic (formatters, reducers, validators): unit tests with edge cases.
+- Component behaviour: renders each state (loading/empty/error/content), handles user input, calls callbacks.
+- Critical user flows (login, checkout, main create/edit): E2E.
+- Do not snapshot whole component trees as the main assertion.
+
+## 4. Report
+
+```markdown
+| Check | Command | Exit | Result / notes |
 |---|---|---|---|
-| **Tier 1: Low Risk** | Copy updates, i18n strings, CSS token adjustments, minor styling tweaks | `npm run lint` | Zero errors, zero warnings |
-| **Tier 2: Medium Risk**| Component logic edits, form validations, custom hooks, SWR queries, responsive layouts | `npm run lint` + `npm run build` | TypeScript strict check passes, SSR pre-render succeeds |
-| **Tier 3: High Risk** | Core architecture refactor, route changes, auth flows, payments, protected modules | Build + Playwright E2E + Axe a11y audit | User flows pass end-to-end, zero accessibility violations |
+| Lint | pnpm run lint | 0 | 0 errors |
+| Types | npx tsc --noEmit | 2 | 3 errors in src/x.ts (pre-existing? yes/no) |
+Not run: <checks skipped and why>
+```
+Separate pre-existing failures (present on the base branch) from new ones when possible.
 
----
-
-## 2. Verification Protocol
-
-1. **Static Analysis**: Run `npm run lint` and `npx tsc --noEmit` to ensure type soundness.
-2. **Build Verification**: Execute `npm run build` (Turbopack) to validate server-side rendering and module resolution.
-3. **Accessibility Audit**: Run axe-core checks on critical views to ensure ARIA and label compliance.
-4. **Structured Reporting**: Document verification results and exit codes in `work_log.md`.
+Learned notes: [references/learned.md](./references/learned.md).
