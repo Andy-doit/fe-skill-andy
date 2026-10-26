@@ -3,9 +3,10 @@ name: fe-layout
 description: >
   Align and refine visual LAYOUT: spacing scale and hierarchy, grid/flex alignment, equal-height rows with pinned footers,
   icon-text alignment, section rhythm, viewport-height balance, responsive/mobile-first layout, container queries,
-  design tokens, theming and dark mode.
+  design tokens, theming and dark mode, and modern CSS adoption (cascade layers with Tailwind v4, :has(), nesting,
+  @property/color-mix/light-dark, popover + anchor positioning, @starting-style entry/exit, subgrid).
   Use when: fixing gaps/padding, uneven card heights, misaligned icons, harsh section transitions, breakpoints,
-  or adding/repairing theme tokens and dark mode.
+  adding/repairing theme tokens and dark mode, vendor CSS overriding utilities, or adopting a new CSS feature.
   DO NOT USE FOR: loading skeletons (see fe-skel); scroll animation or frame stutter (see fe-motion);
   DO NOT USE FOR: measured colour contrast (see fe-contrast).
 ---
@@ -54,6 +55,7 @@ With the default scale, snap off-scale values (`gap-1`, `gap-5`, `p-5`, `p-7`) t
 
 - Mobile-first breakpoints, fluid type, container queries: [responsive.md](./references/responsive.md).
 - Design tokens, theming, dark mode: [theming.md](./references/theming.md).
+- Modern CSS (support table, `@layer` ordering with Tailwind v4 and vendor CSS, `:has()` patterns, nesting limits, `@property`/`color-mix`/`light-dark()`, popover + anchor positioning, `@starting-style` transitions, subgrid): [modern-css.md](./references/modern-css.md). Rule: Baseline widely available → use; newly available → `@supports` + fallback; not Baseline → enhancement only.
 
 ## 4. Workflow
 

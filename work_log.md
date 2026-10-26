@@ -10,6 +10,57 @@
 
 ## 📜 Danh sách nhật ký (Mới nhất ở trên cùng)
 
+### [2026-10-26] v2.6.0 — new skill fe-viz (data visualization)
+- **Objective:** Close the last open coverage item with a dedicated skill.
+- **Files Changed:**
+  - Created: [skills/fe-viz/SKILL.md](skills/fe-viz/SKILL.md) (goal, use/not-use, chart-by-question, encoding/colour, SVG/Canvas/WebGL, library table, data pipeline, a11y, responsive/theming/SSR, perf, Next.js + Vite/visx + canvas examples, 3 case studies, Done checklist, cross-links), `skills/fe-viz/references/learned.md`.
+  - Modified: [fe-andy/SKILL.md](skills/fe-andy/SKILL.md) (description list, router row), [conventions.md](skills/fe-andy/references/conventions.md) (§5.2 item 3 note, §6 row), [routing.md](skills/fe-andy/evals/routing.md) R54–R56, fe-motion + fe-contrast descriptions (boundary to fe-viz), [README.md](README.md), [USAGE.md](USAGE.md), [GIOI-THIEU.md](GIOI-THIEU.md), [HUONG-DAN-SU-DUNG.md](HUONG-DAN-SU-DUNG.md) (§7.6), [audit/coverage-report.md](audit/coverage-report.md) §0, manifests 2.6.0.
+- **Decisions:** Existing chart engines stay a protected zone; fe-viz designs/audits and only changes engines with explicit instruction. Library table is descriptive; the choice must pass fe-review per project.
+- **Status & Next Steps:** Health check PASS. Code samples (Recharts/visx/canvas sketch) not compiled. Re-run the installer to link 21 skills; run routing evals R01–R56 in real tools.
+
+### [2026-10-26] v2.5.0 — P2 partial-coverage closure
+- **Objective:** Close the eight "partial" items from the Senior re-assessment.
+- **Files Changed:**
+  - Created: [fe-i18n/references/dates-time-zones.md](skills/fe-i18n/references/dates-time-zones.md), [fe-code/references/files.md](skills/fe-code/references/files.md), [fe-code/references/component-docs.md](skills/fe-code/references/component-docs.md), [fe-ship/references/monorepo-packages.md](skills/fe-ship/references/monorepo-packages.md), [fe-ship/references/incidents.md](skills/fe-ship/references/incidents.md).
+  - Modified: [fe-ship/references/observability.md](skills/fe-ship/references/observability.md) §8 experimentation; [fe-code/references/component-api.md](skills/fe-code/references/component-api.md) §4 progressive enhancement, §5 Web Components; [fe-code/references/nextjs-routing.md](skills/fe-code/references/nextjs-routing.md) scroll note; descriptions + links in fe-i18n/fe-code/fe-ship SKILL.md; fe-test SKILL.md §3; [conventions.md](skills/fe-andy/references/conventions.md) §6 (6 rows); [routing.md](skills/fe-andy/evals/routing.md) R48–R53; [USAGE.md](USAGE.md); [HUONG-DAN-SU-DUNG.md](HUONG-DAN-SU-DUNG.md); [audit/coverage-report.md](audit/coverage-report.md) §0; manifests 2.5.0.
+- **Decisions:** Storybook authored under fe-code (contract), executed under fe-test. Incidents and experimentation under fe-ship (operations). Temporal marked not Baseline (Safari) per secondary sources; Storybook package/import names marked "(verify)".
+- **Status & Next Steps:** Health check PASS. Open: `fe-viz` candidate skill if charts are needed; run routing evals R01–R53 in real tools; confirm "(verify)" facts per project version with fe-review.
+
+### [2026-10-26] v2.4.0 — Senior coverage re-assessment + P1 gap closure
+- **Objective:** Re-assess coverage against a 95-item Senior Frontend map (scan script in session scratchpad), then close the five gaps that were missing entirely.
+- **Files Changed:**
+  - Created: [fe-data/references/api-contracts.md](skills/fe-data/references/api-contracts.md), [fe-layout/references/modern-css.md](skills/fe-layout/references/modern-css.md), [fe-motion/references/modern-motion.md](skills/fe-motion/references/modern-motion.md), [fe-code/references/nextjs-routing.md](skills/fe-code/references/nextjs-routing.md), [fe-andy/references/engineering-workflow.md](skills/fe-andy/references/engineering-workflow.md).
+  - Modified: [fe-sec/references/auth-frontend.md](skills/fe-sec/references/auth-frontend.md) (§6 OAuth/OIDC+PKCE, SSO, passkeys/MFA; checklist), descriptions + links in fe-data/fe-layout/fe-motion/fe-code SKILL.md, [fe-perf/references/nextjs.md](skills/fe-perf/references/nextjs.md) (§6 proxy.ts note, §8 pointer), [fe-andy/SKILL.md](skills/fe-andy/SKILL.md), [conventions.md](skills/fe-andy/references/conventions.md) §6 (6 rows), [routing.md](skills/fe-andy/evals/routing.md) R42–R47, [USAGE.md](USAGE.md) (coverage statement, non-goals, rows, flow), [HUONG-DAN-SU-DUNG.md](HUONG-DAN-SU-DUNG.md) (prompt nhanh ×5, §13 row), [audit/coverage-report.md](audit/coverage-report.md) §0, manifests 2.4.0.
+- **Decisions:** Next.js routing conventions live in fe-code (authoring) with fe-perf linking to them (cost only). Login protocols extend fe-sec's auth reference instead of a new skill. Version-sensitive claims (React `<ViewTransition>` stability — react.dev blog vs reference page conflict; Next.js 16 `proxy.ts`; anchor-positioning Baseline) are marked "(verify)".
+- **Status & Next Steps:** Health check PASS. Remaining partial items (P2) listed in coverage-report §0: time zones, file handling, Storybook, monorepo/publishing, A/B, incident runbook, progressive enhancement, Web Components; P3: `fe-viz` candidate, run routing evals in real tools.
+
+### [2026-10-26] v2.3.0 — fe-sec defensive hardening (source maps, sink audit, Electron/Tauri, UI is only affordance)
+- **Objective:** Add four defensive controls: production source-map ban, pre-deploy static XSS sink audit + env secret quality, Electron/Tauri hardening reference, "UI is only affordance" principle across fe-sec/fe-data. Defensive content only; no offensive tooling.
+- **Files Changed:**
+  - Rewritten: [fe-sec/SKILL.md](skills/fe-sec/SKILL.md) (§2 four principles, §4 pre-deploy gate), [checklist.md](skills/fe-sec/references/checklist.md) (§1 extended grep, §8 sink audit + secret quality, §9 source maps), [auth-frontend.md](skills/fe-sec/references/auth-frontend.md) (§0 affordance anti-patterns).
+  - Created: [desktop-apps.md](skills/fe-sec/references/desktop-apps.md), [scripts/check-build-output.mjs](skills/fe-sec/scripts/check-build-output.mjs), [scripts/check-env-secrets.mjs](skills/fe-sec/scripts/check-env-secrets.mjs).
+  - Modified: [fe-ship/SKILL.md](skills/fe-ship/SKILL.md) (release checklist, security gates), [ci-cd.md](skills/fe-ship/references/ci-cd.md) (pipeline step 5, §6 source-map policy), [fe-data/SKILL.md](skills/fe-data/SKILL.md) + [resilience.md](skills/fe-data/references/resilience.md) (401/403 handling, affordance), [conventions.md](skills/fe-andy/references/conventions.md) §5.2–5.4, [fe-andy](skills/fe-andy/SKILL.md) router row, [routing.md](skills/fe-andy/evals/routing.md) R38–R41, [USAGE.md](USAGE.md) §3.1 security gates, [HUONG-DAN-SU-DUNG.md](HUONG-DAN-SU-DUNG.md) §11.1 prompts, plugin manifests 2.3.0.
+- **Decisions:** Electron/Tauri guidance kept as a reference under fe-sec (not a new skill): same domain, one owner. Scripts report variable names and pattern names only, never values. Version-dependent option names (Electron fuses, Tauri v2 config keys, tracker plugin flags) are marked "(verify)".
+- **Status & Next Steps:** Scripts tested on a synthetic fixture (see session). Health check PASS. Not tested against a real Electron/Tauri project. Routing evals R38–R41 not run.
+
+### [2026-10-26] GIOI-THIEU.md + e-commerce case study rewritten as plan-only
+- **Objective:** User asked for a guidance plan without sample code and a full Vietnamese introduction file.
+- **Files Changed:** Created [GIOI-THIEU.md](GIOI-THIEU.md); rewrote [case-study-ecommerce.md](skills/fe-andy/references/case-study-ecommerce.md) (no code: goal, decisions, tasks, output, gate per phase); updated wording in [HUONG-DAN-SU-DUNG.md](HUONG-DAN-SU-DUNG.md) (link to intro, 17 → 20 skills in checks), [fe-andy](skills/fe-andy/SKILL.md), [USAGE.md](USAGE.md), [README.md](README.md).
+- **Status & Next Steps:** Health check PASS. Root-level docs links checked by hand only (the script checks skills/ only).
+
+### [2026-10-26] Static/dynamic playbooks + A–Z e-commerce case study
+- **Objective:** Fill the gap of end-to-end guidance per project type; full worked example for an online shop.
+- **Files Changed:** Created [playbooks.md](skills/fe-andy/references/playbooks.md), [case-study-ecommerce.md](skills/fe-andy/references/case-study-ecommerce.md); linked from [fe-andy](skills/fe-andy/SKILL.md) and [USAGE.md](USAGE.md); [HUONG-DAN-SU-DUNG.md](HUONG-DAN-SU-DUNG.md): 20 skills, prompts §11.3–11.5 (fe-pwa, fe-mfe, fe-review), §13 new rows, new Phần F (§18–21).
+- **Status & Next Steps:** Health check PASS. Case-study code not compiled. APIs marked (verify) depend on Next.js version (revalidateTag signature, next/image priority, Cache Components, generateSitemaps).
+
+### [2026-10-26] v2.2.0 — fe-pwa, fe-mfe, fe-review + TS/observability refinements + USAGE.md
+- **Objective:** Close coverage gaps (PWA/offline, micro-frontends, knowledge reviewer); add Advanced TypeScript and Advanced Observability; write USAGE.md.
+- **Files Changed:**
+  - Created: [skills/fe-pwa/SKILL.md](skills/fe-pwa/SKILL.md), [skills/fe-mfe/SKILL.md](skills/fe-mfe/SKILL.md), [skills/fe-review/SKILL.md](skills/fe-review/SKILL.md) (+ `references/learned.md` each), [USAGE.md](USAGE.md)
+  - Modified: [fe-code](skills/fe-code/SKILL.md) (§4 Advanced TypeScript, §5 validate with fe-review), [fe-ship](skills/fe-ship/SKILL.md) + [observability.md](skills/fe-ship/references/observability.md) (§7 Advanced observability), [fe-data](skills/fe-data/SKILL.md) (offline → fe-pwa, description boundary), [fe-andy](skills/fe-andy/SKILL.md) (router rows, fe-review rule), [conventions.md](skills/fe-andy/references/conventions.md) §6, [routing.md](skills/fe-andy/evals/routing.md) R31–R37, README, plugin manifests 2.2.0
+- **Decisions:** New skills follow the requested 7-section structure inside the repo's SKILL.md format (frontmatter + minimum rules). The TypeScript section went into fe-code (authoring) rather than fe-clean. Version-sensitive facts (Serwist/Turbopack, nextjs-mf EOL, MF Vite options) carry "verify current docs" notes.
+- **Status & Next Steps:** Health check PASS. Code samples not compiled or run. Routing evals R31–R37 not run. HUONG-DAN-SU-DUNG.md not yet updated for the 3 new skills. Re-run the installer so the new skill folders get linked.
+
 ### [2026-10-26] Fast-Path for micro-edits & Antigravity skills.json sync in installers
 - **Objective:** Add a low-friction Fast-Path protocol for micro-edits (<= 5 lines) to conventions.md, sync Antigravity global `skills.json` automatically in installer scripts, and document in the user guide.
 - **Files Changed:**

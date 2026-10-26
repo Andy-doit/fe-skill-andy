@@ -8,6 +8,23 @@
 
 ---
 
+## 0. Re-assessment 2026-10-26 (v2.4) — supersedes the totals in §2–§3
+
+Method: a 95-item Senior Frontend competency map (platform, React/Next.js/Vite, quality, delivery, UX/a11y/i18n, collaboration) was grepped against every file under `skills/` with tight regexes; a hit counts only when a file contains guidance, not a passing mention. Self-assessment by file inspection; not an external benchmark.
+
+| Status | Share (approx.) | Examples |
+|---|---|---|
+| Fully covered (rules + verify steps) | ~60 % | CWV/perf, data fetching/resilience, security incl. source maps/desktop, a11y/contrast, layout/theming, state placement, TS patterns, tests, CI/CD/observability/SEO, PWA, MFE, knowledge review |
+| Closed in v2.4 (were missing) | +5 items | API contracts & typed clients (fe-data), OAuth/OIDC/PKCE/SSO/passkeys (fe-sec), modern CSS (fe-layout), View Transitions/scroll-driven/FLIP (fe-motion), Next.js routing conventions (fe-code), git/PR/review/ADR workflow (fe-andy) |
+| Closed in v2.5 (were partial) | +8 items | dates & time zones (fe-i18n `dates-time-zones.md`), file handling (fe-code `files.md`), Storybook/component docs (fe-code `component-docs.md`), monorepo & package publishing (fe-ship `monorepo-packages.md`), A/B experimentation (fe-ship observability §8), incident response (fe-ship `incidents.md`), progressive enhancement and Web Components interop (fe-code component-api §4–5) |
+| Closed in v2.6 | +1 skill | data visualization → `fe-viz` (chart by question, encoding/colour, SVG/Canvas/WebGL, libraries, a11y, performance, dashboards) |
+| Still open | small | routing evals never run in real tools, code samples outside the four tested scripts not compiled, version-sensitive facts marked "(verify)" not yet confirmed against official docs |
+| Out of scope by design | — | backend/DB, React Native/Capacitor, Figma design work, print/email, offensive security; data-viz is a candidate skill (`fe-viz`) |
+
+Quality caveats carried forward: version-specific option names are marked "(verify)" in the skills; code samples outside the four tested scripts are not compiled; routing evals R01–R47 have not been run in real tools.
+
+---
+
 ## 1. Inventory (Step 1)
 
 ### 1.1 Active skills (`skills/`)

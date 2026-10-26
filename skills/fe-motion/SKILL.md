@@ -1,12 +1,14 @@
 ---
 name: fe-motion
 description: >
-  Optimize motion and animation smoothness: CSS/JS animation, GSAP and ScrollTrigger lifecycle, scroll-linked effects,
-  canvas/WebGL shaders, GPU compositing, idle GPU/CPU load, and prefers-reduced-motion.
+  Optimize motion and animation smoothness: CSS/JS animation, View Transitions API (same-document, cross-document,
+  React ViewTransition), CSS scroll-driven animations, FLIP, choosing Motion vs GSAP, GSAP and ScrollTrigger
+  lifecycle, scroll-linked effects, canvas/WebGL shaders, GPU compositing, idle GPU/CPU load, micro-interaction
+  timing, and prefers-reduced-motion.
   Use when: scrolling or animations drop frames, ScrollTrigger lags or leaks, infinite animations burn CPU/GPU at idle,
-  or canvas effects are expensive.
+  canvas effects are expensive, or a page/state change needs an animated transition.
   DO NOT USE FOR: bundle size, React re-renders, Core Web Vitals or request waterfalls (see fe-perf);
-  DO NOT USE FOR: static layout or spacing (see fe-layout).
+  DO NOT USE FOR: static layout or spacing (see fe-layout); chart type, encoding or chart-library choice (see fe-viz).
 ---
 
 # fe-motion — Smooth Motion & GPU Hygiene
@@ -45,6 +47,10 @@ Fluid, compositor-friendly animation with zero idle load. Follows [conventions.m
 | Canvas/WebGL cost | Render at reduced resolution (e.g. 0.5 device scale) for soft effects; cap DPR; stop the loop off-screen; measure per-frame time. |
 | Blur cost | Smaller blur radius, smaller blurred area, or a pre-rendered gradient instead of live blur. Measure paint time before/after. |
 | Native smooth scrolling feels laggy on some wheel devices | Avoid global `scroll-behavior: smooth` on `<html>`; apply smooth scrolling only to programmatic anchor jumps. Observed on Windows wheel input in one project — verify on target devices. |
+
+## 2.1 Platform-first motion
+
+Before adding or extending a library: [modern-motion.md](./references/modern-motion.md) — tool choice table, View Transitions API (same-document, cross-document, React `<ViewTransition>` status, Next.js flag), CSS scroll-driven animations with `@supports` fallback, FLIP, Motion vs GSAP in React, and default durations/easings for micro-interactions.
 
 ## 3. Reduced motion (required)
 

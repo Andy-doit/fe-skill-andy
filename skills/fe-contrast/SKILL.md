@@ -6,7 +6,8 @@ description: >
   Use when: checking text readability, validating design tokens or a palette, checking a header that changes
   state while scrolling, or verifying contrast after a theme change.
   DO NOT USE FOR: keyboard navigation, focus traps, ARIA or screen readers (see fe-a11y);
-  DO NOT USE FOR: general UX or form flow review (see fe-ux).
+  DO NOT USE FOR: general UX or form flow review (see fe-ux); chart type, encoding and palette design
+  (see fe-viz — fe-contrast only measures the result).
 ---
 
 # fe-contrast — Measured WCAG Contrast

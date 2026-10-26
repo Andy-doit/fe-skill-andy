@@ -1,6 +1,8 @@
 # Hướng dẫn sử dụng fe-skill-andy
 
-Bộ 17 skill cho frontend (UX, UI, hiệu năng, bảo mật, chất lượng code, phát hành), dùng chung cho **Claude Code, Codex và Antigravity**. Mỗi lần dùng, skill ghi lại bài học mới; định kỳ bạn dùng `fe-learn` để thu thập, kiểm tra, chốt kế hoạch rồi mới bổ sung vào bộ skill.
+> Mới dùng lần đầu? Đọc [GIOI-THIEU.md](GIOI-THIEU.md) trước.
+
+Bộ 21 skill cho frontend (UX, UI, hiệu năng, bảo mật, chất lượng code, phát hành, PWA/offline, micro-frontend, thẩm định kiến thức, biểu đồ), dùng chung cho **Claude Code, Codex và Antigravity**. Mỗi lần dùng, skill ghi lại bài học mới; định kỳ bạn dùng `fe-learn` để thu thập, kiểm tra, chốt kế hoạch rồi mới bổ sung vào bộ skill.
 
 > Mục có đánh dấu **(cần xác nhận)** dựa trên tài liệu của tool tại 10/2026, chưa thử trên máy này (Codex và Antigravity chưa được cài khi viết).
 
@@ -14,17 +16,20 @@ Bộ 17 skill cho frontend (UX, UI, hiệu năng, bảo mật, chất lượng c
 
 **Phần C — Từng skill: prompt mẫu**
 6. [Bắt đầu dự án: fe-recon](#61-fe-recon--khảo-sát-repo-chỉ-đọc) · [fe-andy](#62-fe-andy--không-biết-dùng-skill-nào)
-7. [Giao diện: fe-layout](#71-fe-layout--khoảng-cách-căn-lề-responsive-dark-mode) · [fe-contrast](#72-fe-contrast--độ-tương-phản-màu) · [fe-a11y](#73-fe-a11y--bàn-phím-focus-trình-đọc-màn-hình) · [fe-motion](#74-fe-motion--animation-mượt) · [fe-skel](#75-fe-skel--skeleton-và-trạng-thái-loadingemptyerror)
+7. [Giao diện: fe-layout](#71-fe-layout--khoảng-cách-căn-lề-responsive-dark-mode) · [fe-contrast](#72-fe-contrast--độ-tương-phản-màu) · [fe-a11y](#73-fe-a11y--bàn-phím-focus-trình-đọc-màn-hình) · [fe-motion](#74-fe-motion--animation-mượt) · [fe-skel](#75-fe-skel--skeleton-và-trạng-thái-loadingemptyerror) · [fe-viz](#76-fe-viz--biểu-đồ-kpi-dashboard)
 8. [Trải nghiệm: fe-ux](#81-fe-ux--đề-xuất-layout-review-luồng-form-câu-chữ) · [fe-i18n](#82-fe-i18n--bản-dịch-định-dạng-đổi-ngôn-ngữ)
 9. [Hiệu năng & dữ liệu: fe-perf](#91-fe-perf--trang-chậm-bundle-re-render-nextjs) · [fe-data](#92-fe-data--fetch-cache-hủy-request-realtime)
 10. [Code: fe-code](#101-fe-code--viết-code-mới) · [fe-clean](#102-fe-clean--refactor-code-cũ) · [fe-test](#103-fe-test--kiểm-tra-và-viết-test)
-11. [Bảo mật & phát hành: fe-sec](#111-fe-sec--bảo-mật-frontend) · [fe-ship](#112-fe-ship--release-cicd-giám-sát-seo)
+11. [Bảo mật, phát hành & kiến trúc: fe-sec](#111-fe-sec--bảo-mật-frontend) · [fe-ship](#112-fe-ship--release-cicd-giám-sát-seo) · [fe-pwa](#113-fe-pwa--offline-service-worker-cài-đặt-như-app) · [fe-mfe](#114-fe-mfe--micro-frontend) · [fe-review](#115-fe-review--thẩm-định-kiến-thức-trước-khi-áp-dụng)
 
 **Phần D — Bổ sung kiến thức vào bộ skill**
 12. [fe-learn: thu thập → kiểm tra → kế hoạch → chốt → bổ sung](#12-fe-learn--thu-thập--kiểm-tra--kế-hoạch--chốt--bổ-sung)
 
 **Phần E — Tham khảo**
 13. [Kịch bản kết hợp](#13-kịch-bản-kết-hợp) · 14. [Script kiểm tra](#14-script-kiểm-tra) · 15. [Cập nhật, gỡ cài đặt](#15-cập-nhật-gỡ-cài-đặt) · 16. [Xử lý sự cố](#16-xử-lý-sự-cố) · 17. [Câu hỏi thường gặp](#17-câu-hỏi-thường-gặp)
+
+**Phần F — Làm dự án từ A–Z**
+18. [Trang tĩnh hay trang động?](#18-trang-tĩnh-hay-trang-động) · 19. [Playbook trang tĩnh](#19-playbook-trang-tĩnh) · 20. [Playbook trang động](#20-playbook-trang-động) · 21. [Case study A–Z: web bán hàng](#21-case-study-az-web-bán-hàng)
 
 ---
 
@@ -64,7 +69,7 @@ Script tạo **liên kết** (junction/symlink) cho từng skill — không copy
 
 | Tool | Thư mục cài | Thư mục cũ (`-IncludeLegacy`) | Trạng thái |
 |---|---|---|---|
-| Claude Code | `%USERPROFILE%\.claude\skills\` | — | Đã kiểm chứng (nạp đủ 17 skill) |
+| Claude Code | `%USERPROFILE%\.claude\skills\` | — | Đã kiểm chứng với bản 17 skill; bản 21 skill: chạy lại installer |
 | Codex | `%USERPROFILE%\.agents\skills\` | `%USERPROFILE%\.codex\skills\` | Đã tạo liên kết (cần xác nhận) |
 | Antigravity app/IDE | `%USERPROFILE%\.gemini\config\skills\` | `%USERPROFILE%\.gemini\antigravity\skills\` | Đã tạo liên kết (cần xác nhận) |
 | Antigravity CLI | `%USERPROFILE%\.gemini\antigravity-cli\skills\` | — | Đã tạo liên kết (cần xác nhận) |
@@ -75,9 +80,9 @@ Cài theo dự án cho cả team: copy `skills/*` vào `<repo-ứng-dụng>/.age
 
 | Kiểm tra | Cách làm | Mong đợi |
 |---|---|---|
-| Liên kết | `Get-ChildItem $env:USERPROFILE\.claude\skills \| Select Name, LinkType, Target` | 17 dòng `Junction` trỏ về repo |
+| Liên kết | `Get-ChildItem $env:USERPROFILE\.claude\skills \| Select Name, LinkType, Target` | 21 dòng `Junction` trỏ về repo |
 | Bộ skill hợp lệ | `node skills/fe-andy/scripts/check-skills.mjs` *(chạy từ thư mục repo)* | `→ PASS` |
-| Claude Code | Phiên mới → gõ `/` → tìm `fe-` | Thấy 17 skill |
+| Claude Code | Phiên mới → gõ `/` → tìm `fe-` | Thấy 21 skill |
 | Codex | Phiên mới → "list the skills you can use" | Thấy các skill `fe-*` (cần xác nhận) |
 | Antigravity | Chat mới → gõ `/` | Thấy `fe-*` (cần xác nhận) |
 | Chọn đúng skill | "Trang chậm, LCP 3.8 s — nên dùng skill nào?" | Agent chọn `fe-perf` |
@@ -220,7 +225,7 @@ Ràng buộc: không nháy sai theme khi tải trang; component chỉ dùng toke
 Đầu ra: kế hoạch file cần sửa + danh sách màu hard-code cần thay; sau khi sửa chạy fe-contrast cho cả 2 theme.
 ```
 
-**Prompt nhanh:** `/fe-layout card giá cao thấp khác nhau, nút không thẳng hàng — PricingGrid.tsx`
+**Prompt nhanh:** `/fe-layout card giá cao thấp khác nhau, nút không thẳng hàng — PricingGrid.tsx` · `/fe-layout CSS của thư viện datepicker ghi đè utility Tailwind v4, sắp xếp lại @layer` · `/fe-layout làm tooltip/menu bằng popover + anchor positioning, có fallback`
 
 **Prompt chưa tốt:** `/fe-layout làm cho đẹp hơn` → không có phạm vi, không có tiêu chí "đẹp"; nên chỉ rõ chỗ nào và sai thế nào (hoặc dùng fe-ux để brainstorm).
 
@@ -280,7 +285,7 @@ Hiện trạng: rớt khung khi cuộn qua hero; CPU cao kể cả khi đứng y
 Mục tiêu: mượt ở CPU throttle 4×; CPU gần 0% khi không có tương tác; hỗ trợ prefers-reduced-motion.
 Chế độ: đo trước (Performance trace), đề xuất, chờ duyệt.
 ```
-**Prompt nhanh:** `/fe-motion marquee logo chạy mãi gây nóng máy, cần dừng khi khuất màn hình`
+**Prompt nhanh:** `/fe-motion marquee logo chạy mãi gây nóng máy, cần dừng khi khuất màn hình` · `/fe-motion chuyển từ lưới sản phẩm sang trang chi tiết bằng View Transitions, có reduced motion` · `/fe-motion thanh tiến độ đọc bài bằng scroll-driven animation, fallback cho Firefox`
 
 **Prompt chưa tốt:** `/fe-motion thêm animation cho đẹp` → đây là yêu cầu thiết kế; dùng fe-ux để đề xuất, fe-motion để làm mượt.
 
@@ -301,6 +306,18 @@ Ràng buộc: dùng component trạng thái chung của dự án (xem project-pr
 **Prompt chưa tốt:** `/fe-skel thêm loading` → không nói vùng nào; skeleton phải bám đúng layout thật.
 
 **Lưu ý phân vai:** câu chữ thông báo lỗi/trống → fe-ux; logic retry/cache → fe-data.
+
+### 7.6 fe-viz — biểu đồ, KPI, dashboard
+
+**Prompt chuẩn**
+```
+/fe-viz Thiết kế các biểu đồ cho dashboard doanh thu.
+Bối cảnh: Next.js App Router, Tailwind v4 có token màu, dark mode; dữ liệu 90 ngày, API trả về theo ngày.
+Câu hỏi cần trả lời: doanh thu theo ngày có tăng không; top 5 danh mục; tỷ lệ chuyển đổi theo bước.
+Đầu ra: bảng chọn loại biểu đồ theo câu hỏi, đề xuất thư viện (có verdict fe-review), quy tắc màu từ token, a11y (tóm tắt + bảng dữ liệu + bàn phím), skeleton cùng tỷ lệ.
+Ràng buộc: không sửa engine biểu đồ đang có; không cài thư viện khi chưa duyệt.
+```
+**Prompt nhanh:** `/fe-viz scatter 50.000 điểm bị giật khi hover, có nên chuyển sang canvas?` · `/fe-viz biểu đồ này fail axe: không có tên, chỉ phân biệt bằng màu` · `/fe-viz thêm sparkline vào bảng 5.000 dòng mà không chậm`
 
 ## 8. Trải nghiệm
 
@@ -343,7 +360,7 @@ Mục tiêu: không thiếu key, không placeholder lệch; tiền VND hiển th
 đổi ngôn ngữ giữ nguyên trang, query và #hash.
 Đầu ra: kết quả script check-i18n + danh sách chỗ định dạng sai + kế hoạch sửa.
 ```
-**Prompt nhanh:** `/fe-i18n vi.json thiếu key nào so với en.json?`
+**Prompt nhanh:** `/fe-i18n vi.json thiếu key nào so với en.json?` · `/fe-i18n hạn chót hiển thị sớm 1 ngày với người dùng ở New York, rà cách lưu và hiển thị ngày` · `/fe-i18n chọn Temporal hay date-fns cho dự án này, có DST`
 
 **Prompt chưa tốt:** `/fe-i18n dịch hết sang tiếng Việt` → dịch nội dung không phải trọng tâm skill; nếu cần, nói rõ để agent đánh dấu "cần review" cho câu chưa chắc.
 
@@ -391,7 +408,7 @@ Mục tiêu: luôn hiện kết quả của từ khóa cuối; request cũ bị 
 /fe-data Bảng giá realtime qua WebSocket bị đứng sau khi mất mạng.
 Mục tiêu: tự kết nối lại (backoff), báo "Đang kết nối lại…", lấy lại dữ liệu bị lỡ.
 ```
-**Prompt nhanh:** `/fe-data trang dashboard gọi 3 API tuần tự, chuyển sang song song`
+**Prompt nhanh:** `/fe-data trang dashboard gọi 3 API tuần tự, chuyển sang song song` · `/fe-data sinh client TypeScript từ file OpenAPI, nối vào TanStack Query, thêm bước CI chặn drift` · `/fe-data nên dùng GraphQL (urql/Apollo) hay REST cho dự án này?`
 
 **Prompt chưa tốt:** `/fe-data gọi API cho nhanh` → nói rõ API nào, chậm vì sao (tuần tự? trùng lặp? không cache?).
 
@@ -407,7 +424,7 @@ Phạm vi: block ở src/components/blocks/, feature ở src/components/features
 Ràng buộc: block chỉ nhận props, không gọi API; có đủ 4 trạng thái; mọi chữ qua i18n.
 Chế độ: đưa danh sách file + API props trước, chờ duyệt rồi mới viết.
 ```
-**Prompt nhanh:** `/fe-code tạo hook useDebouncedValue có test`
+**Prompt nhanh:** `/fe-code tạo hook useDebouncedValue có test` · `/fe-code mở chi tiết sản phẩm dạng modal từ lưới nhưng URL chia sẻ được và F5 vẫn chạy (intercepting route)` · `/fe-code dashboard có 2 panel tải độc lập bằng parallel routes`
 
 **Prompt chưa tốt:** `/fe-code làm trang checkout` → quá lớn; chia thành block, feature, form; nếu chưa rõ UX thì dùng fe-ux trước.
 
@@ -439,9 +456,9 @@ Phạm vi: src/components/features/signup/.
 Cần: unit cho validator; component test cho 4 trạng thái và lỗi email; 1 E2E đăng ký thành công; axe cho trang /signup.
 Ràng buộc: dùng công cụ test đã có trong package.json; không cài thêm.
 ```
-**Prompt nhanh:** `/fe-test chạy lint, tsc, test và build`
+**Prompt nhanh:** `/fe-test chạy lint, tsc, test và build` · `/fe-test đưa interaction test của Storybook vào CI, fail khi có lỗi a11y`
 
-## 11. Bảo mật & phát hành
+## 11. Bảo mật, phát hành & kiến trúc
 
 ### 11.1 fe-sec — bảo mật frontend
 
@@ -453,13 +470,29 @@ Trọng tâm: XSS (dangerouslySetInnerHTML, nội dung CMS), lộ secret qua NEX
 Ràng buộc: không in giá trị secret — chỉ tên biến và file:line.
 Đầu ra: bảng theo mức Critical/High/Medium/Low + cách sửa + cách kiểm tra.
 ```
+**Prompt chuẩn (cổng kiểm tra trước deploy)**
+```
+/fe-sec Chạy cổng kiểm tra bảo mật trước khi merge vào nhánh release.
+Phạm vi: src/, .env.production (chỉ báo tên biến), build production.
+Việc cần làm: quét sink XSS và lập sink inventory; check-env-secrets.mjs; build rồi chạy check-build-output.mjs (không có *.map, không secret trong bundle); với mỗi nút/route ẩn theo role, ghi rõ server check tương ứng.
+Đầu ra: bảng cổng kiểm tra (✓/✗ + bằng chứng), ngoại lệ có người chịu trách nhiệm + ngày.
+```
+**Prompt chuẩn (app desktop)**
+```
+/fe-sec Rà soát bảo mật bản đóng gói Electron (hoặc Tauri) của app.
+Phạm vi: electron/main.ts, electron/preload.ts, cấu hình BrowserWindow (hoặc src-tauri/capabilities, tauri.conf.json, các #[tauri::command]).
+Trọng tâm: contextIsolation/nodeIntegration/sandbox, preload chỉ expose API hẹp có kiểu, mọi IPC được validate ở main, CSP, fuses/ký số/updater; không in secret.
+Đầu ra: checklist desktop-apps.md §1.7 hoặc §2.6 + bảng finding theo mức.
+```
 **Prompt chuẩn (auth)**
 ```
 /fe-sec Người dùng thỉnh thoảng bị đăng xuất ngẫu nhiên.
 Phạm vi: src/lib/api-client.ts (refresh token), middleware.ts.
 Nghi ngờ: nhiều request cùng refresh một lúc.
 ```
-**Prompt nhanh:** `/fe-sec có biến NEXT_PUBLIC_ nào chứa secret không?`
+**Prompt nhanh:** `/fe-sec có biến NEXT_PUBLIC_ nào chứa secret không?` · `/fe-sec site đang public file .js.map không?` · `/fe-sec ẩn nút Xoá với non-admin là đủ chưa?` · `/fe-sec thiết kế đăng nhập OIDC của công ty bằng Authorization Code + PKCE qua BFF` · `/fe-sec thêm passkey làm cách đăng nhập, giữ OTP làm dự phòng`
+
+> Bốn quy tắc fe-sec luôn áp dụng: (1) **UI chỉ là affordance**: ẩn nút theo role không phải bảo mật, server mới là nơi kiểm tra quyền; (2) **không bao giờ để source map ra production**; (3) **mọi sink XSS phải nằm trong sink inventory** trước khi release; (4) **app desktop = trình duyệt có quyền truy cập OS**: cô lập renderer, bridge hẹp, validate mọi IPC. Chi tiết: [fe-sec §2](skills/fe-sec/SKILL.md), [desktop-apps.md](skills/fe-sec/references/desktop-apps.md).
 
 ### 11.2 fe-ship — release, CI/CD, giám sát, SEO
 
@@ -470,7 +503,43 @@ Bối cảnh: deploy lên Vercel; Sentry chưa cấu hình; chưa có sitemap.
 Đầu ra: checklist release (✓/✗ + bằng chứng), kế hoạch cấu hình Sentry (lọc dữ liệu cá nhân), sitemap + canonical + hreflang cho en/vi.
 Ràng buộc: không tự deploy.
 ```
-**Prompt nhanh:** `/fe-ship viết GitHub Actions chạy lint, tsc, test, build cho PR`
+**Prompt nhanh:** `/fe-ship viết GitHub Actions chạy lint, tsc, test, build cho PR` · `/fe-ship checkout lỗi từ lần deploy 20 phút trước, chạy quy trình sự cố: làm gì trước?` · `/fe-ship tách repo thành apps/ và packages/, publish gói ui nội bộ bằng changesets` · `/fe-ship chạy A/B test nút mua hàng không bị nháy giao diện`
+
+Thêm cho fe-code: `/fe-code upload video 2 GB có thanh tiến độ, hủy được, nối lại khi rớt mạng` · `/fe-code viết story Storybook + interaction test cho Button và Card`
+
+### 11.3 fe-pwa — offline, service worker, cài đặt như app
+
+**Prompt chuẩn**
+```
+/fe-pwa Cho app chạy được khi mất mạng.
+Bối cảnh: Next.js App Router; nhân viên hiện trường nhập form ở nơi sóng yếu.
+Đầu ra: bảng chiến lược cache theo loại route, cách xếp hàng thao tác ghi khi offline (IndexedDB), luồng cập nhật phiên bản mới, manifest + icon.
+Ràng buộc: không cache dữ liệu cá nhân dùng chung; có kill switch trước khi lên production.
+```
+**Prompt nhanh:** `/fe-pwa deploy xong người dùng vẫn thấy bản cũ, kiểm tra service worker`
+
+### 11.4 fe-mfe — micro-frontend
+
+**Prompt chuẩn**
+```
+/fe-mfe Có nên tách frontend thành micro-frontend không?
+Bối cảnh: 4 team (catalog, checkout, account, CMS), mỗi team muốn deploy riêng; hiện 1 repo Next.js, pipeline 60 phút.
+Đầu ra: đi qua cây quyết định, so sánh Multi-Zones / Module Federation / monorepo, đề xuất + ADR.
+Ràng buộc: chưa sửa code.
+```
+**Prompt nhanh:** `/fe-mfe load remote checkout bị lỗi "Invalid hook call"`
+
+### 11.5 fe-review — thẩm định kiến thức trước khi áp dụng
+
+**Prompt chuẩn**
+```
+/fe-review Thẩm định khuyến nghị này trước khi áp dụng: "<dán đoạn khuyến nghị / link bài viết / đề xuất thư viện>".
+Phiên bản dự án: lấy từ project-profile.md.
+Đầu ra: từng claim → nguồn đã kiểm tra → mức bằng chứng → kết luận (Still Best Practice / Acceptable / Outdated / Harmful) → phiên bản cải tiến.
+```
+**Prompt nhanh:** `/fe-review React 19 có còn cần bọc useCallback mọi nơi không?`
+
+> Quy tắc: trước khi coi một pattern mới là "chuẩn" (thư viện mới, kiến trúc mới, lời khuyên từ blog hay AI), luôn chạy qua `fe-review`.
 
 ---
 
@@ -592,6 +661,11 @@ powershell -ExecutionPolicy Bypass -File <duong-dan-repo>\fe-skill-andy\scripts\
 | Dọn nợ kỹ thuật | `fe-clean` (từng bước) → `fe-test` |
 | Release | `fe-sec` → `fe-test` mức cao → `fe-ship` |
 | Cuối dự án | `fe-learn` thu thập → chốt → bổ sung |
+| Thêm offline / PWA | `fe-review` (chọn công cụ) → `fe-pwa` → `fe-data` (trạng thái trong app) → `fe-test` → `fe-ship` |
+| Nhiều team, muốn deploy độc lập | `fe-recon` → `fe-mfe` (cây quyết định) → `fe-review` → `fe-ship` |
+| Áp dụng thư viện / pattern mới | `fe-review` → skill sở hữu (fe-code, fe-data…) → `fe-test` |
+| Dự án mới từ đầu | Xem [Phần F](#18-trang-tĩnh-hay-trang-động) |
+| Review PR, viết ADR, quy ước git/commit/PR | `fe-andy` với [engineering-workflow.md](skills/fe-andy/references/engineering-workflow.md): "/fe-andy viết ADR cho việc chuyển Redux sang TanStack Query" · "/fe-andy review PR #123 theo thứ tự đúng → bảo mật → a11y → hiệu năng" |
 
 ## 14. Script kiểm tra
 
@@ -645,3 +719,125 @@ Gỡ cài đặt chỉ xóa liên kết trỏ về repo này; không xóa nội 
 **Ghi chú học được ở đâu?** `skills/<skill>/references/learned.md` trong repo này. Commit định kỳ.
 
 **Tài liệu liên quan:** [README.md](README.md) · [HOW-IT-LEARNS.md](HOW-IT-LEARNS.md) · [audit/install-guide.md](audit/install-guide.md) · [conventions.md](skills/fe-andy/references/conventions.md) · [learning-loop.md](skills/fe-andy/references/learning-loop.md)
+
+---
+
+# Phần F — Làm dự án từ A–Z
+
+Bản đầy đủ (tiếng Anh, dành cho agent, dạng plan): [playbooks.md](skills/fe-andy/references/playbooks.md) và [case-study-ecommerce.md](skills/fe-andy/references/case-study-ecommerce.md). Phần này tóm tắt bằng tiếng Việt kèm prompt mẫu cho từng bước.
+
+## 18. Trang tĩnh hay trang động?
+
+| Câu hỏi | Tĩnh | Động |
+|---|---|---|
+| Mọi người xem cùng một nội dung? | Có (có thể khác theo ngôn ngữ) | Không: theo user, phiên, quyền |
+| Nội dung đổi khi nào? | Khi xuất bản | Mỗi request / realtime |
+| Có đăng nhập, giỏ hàng, dữ liệu cá nhân? | Không (tối đa form liên hệ) | Có |
+| Cách render | SSG / static export / ISR | SSR + streaming (trang công khai), RSC/CSR (trang app) |
+
+Hầu hết sản phẩm thật là **lai**: quyết định **theo từng route**, không theo cả dự án. Ví dụ web bán hàng: trang chủ, danh mục và chi tiết sản phẩm là tĩnh hoặc cache; giỏ hàng, thanh toán và tài khoản là động.
+
+## 19. Playbook trang tĩnh
+
+(landing, marketing, docs, blog, portfolio)
+
+| # | Bước | Skill | Prompt mẫu |
+|---|---|---|---|
+| 1 | Tạo project profile, ngân sách hiệu năng | fe-andy | `/fe-andy tạo project-profile.md cho landing page Next.js, 2 ngôn ngữ vi/en, LCP ≤ 2.5s` |
+| 2 | Đề xuất 2–3 layout (chưa code) | fe-ux | `/fe-ux Mode 1: đề xuất 3 layout cho trang chủ, có mockup` |
+| 3 | Token màu, spacing, chữ, dark mode | fe-layout → fe-contrast | `/fe-layout dựng token trong globals.css theo spacing 2·3·4·6·8` rồi `/fe-contrast kiểm tra toàn bộ cặp màu` |
+| 4 | Dựng section thành Block | fe-code | `/fe-code tạo các block hero, feature-grid, pricing, faq — chỉ nhận props` |
+| 5 | Animation (nếu có) | fe-motion | `/fe-motion thêm scroll reveal nhẹ, tôn trọng reduced motion` |
+| 6 | Accessibility | fe-a11y | `/fe-a11y audit landmark, heading, skip link, focus` |
+| 7 | Hiệu năng | fe-perf | `/fe-perf tối ưu LCP ảnh hero, font, script bên thứ ba` |
+| 8 | SEO | fe-ship | `/fe-ship metadata, canonical, OG, sitemap, robots, JSON-LD Organization` |
+| 9 | Đa ngôn ngữ | fe-i18n | `/fe-i18n kiểm tra vi.json đủ key so với en.json, hreflang` |
+| 10 | Header bảo mật, chống spam form | fe-sec | `/fe-sec header bảo mật + chống spam form liên hệ` |
+| 11 | (Tuỳ chọn) trang offline | fe-pwa | `/fe-pwa thêm trang offline đơn giản (case A)` |
+| 12 | Kiểm tra + release | fe-test → fe-ship | `/fe-test chạy lint, tsc, build, axe` rồi `/fe-ship checklist release` |
+
+**Xong khi:** mọi trang được pre-render; LCP đạt ngân sách; SEO được validate; contrast AA; dùng được bằng bàn phím; script bên thứ ba chỉ tải sau khi người dùng đồng ý.
+
+## 20. Playbook trang động
+
+(SaaS dashboard, portal, admin, app cần đăng nhập)
+
+| # | Bước | Skill | Prompt mẫu |
+|---|---|---|---|
+| 1 | Profile + vùng bảo vệ (auth, tiền, quyền) | fe-andy / fe-recon | `/fe-recon khảo sát repo và soạn project-profile.md` |
+| 2 | Kiến trúc: ma trận render theo route, nơi đặt state, chọn thư viện | fe-code + fe-review | `/fe-review thẩm định: dùng Zustand cho state toàn cục, TanStack Query cho server state` |
+| 3 | Luồng + layout | fe-ux | `/fe-ux review luồng tạo hoá đơn, đề xuất 2 layout` |
+| 4 | Token, app shell, dark mode | fe-layout → fe-contrast | `/fe-layout dựng app shell sidebar + header, dark mode` |
+| 5 | Đăng nhập, phiên, bảo vệ route | fe-sec | `/fe-sec thiết kế auth bằng cookie HttpOnly, kiểm tra quyền ở tầng dữ liệu` |
+| 6 | Tầng dữ liệu: API client, schema, query key | fe-data | `/fe-data dựng api client có Zod, hủy request, retry` |
+| 7 | Tính năng: Block → Feature, form, bảng | fe-code | `/fe-code tạo feature invoices: bảng, filter trên URL, form tạo mới` |
+| 8 | Loading / empty / error | fe-skel | `/fe-skel skeleton 1:1 cho bảng invoices + trạng thái lỗi có nút thử lại` |
+| 9 | Realtime / offline (nếu cần) | fe-data → fe-pwa | `/fe-data SSE cập nhật trạng thái đơn, tự kết nối lại` |
+| 10 | a11y cho widget phức tạp | fe-a11y | `/fe-a11y kiểm tra dialog, combobox, bảng theo APG` |
+| 11 | Hiệu năng: bundle, INP, virtualization | fe-perf | `/fe-perf đo INP khi lọc bảng 5.000 dòng` |
+| 12 | Test | fe-test | `/fe-test E2E luồng đăng nhập → tạo hoá đơn → xuất PDF` |
+| 13 | CI/CD, giám sát, release | fe-ship | `/fe-ship pipeline + Sentry + RUM + SLO + rollback` |
+| 14 | Nhiều team (chỉ khi cần) | fe-mfe + fe-review | `/fe-mfe có cần micro-frontend không?` |
+
+**Xong khi:** mọi lần truy cập dữ liệu đều kiểm tra quyền phía server; server state chỉ nằm ở một cache; filter, sort và page lưu trên URL; mỗi vùng dữ liệu có đủ 4 trạng thái; lỗi được theo dõi kèm phiên bản release.
+
+## 21. Case study A–Z: web bán hàng
+
+Ví dụ: shop ~5.000 sản phẩm, tiếng Việt + tiếng Anh, tiền VND, khách vãng lai mua được, thanh toán qua cổng thanh toán (trang thanh toán của nhà cung cấp), backend thương mại có REST API, 1 team frontend. Stack: Next.js App Router, React 19, TypeScript strict, Tailwind v4, Zod, next-intl. Plan chi tiết từng bước: [case-study-ecommerce.md](skills/fe-andy/references/case-study-ecommerce.md).
+
+### 21.1 Trang nào tĩnh, trang nào động
+
+| Route | Loại | Cách làm |
+|---|---|---|
+| Trang chủ, giới thiệu, chính sách | Tĩnh | SSG/ISR, làm mới khi CMS gọi webhook |
+| Danh mục `/c/[category]` | Render động, dữ liệu cache | Filter/sort/page lưu trên URL; dữ liệu cache 5 phút theo tag; tổ hợp filter để `noindex` |
+| Chi tiết sản phẩm `/p/[slug]` | Khung tĩnh + phần giá/tồn kho tươi | `generateStaticParams` top 500 sản phẩm; giá/tồn kho stream trong `Suspense`, cache ≤ 60 s |
+| Tìm kiếm | Động | `noindex`, debounce 300 ms, cập nhật URL |
+| Giỏ hàng, thanh toán, tài khoản | Động theo user | Cookie HttpOnly, `no-store`, không index |
+
+### 21.2 Cấu trúc thư mục (rút gọn)
+
+```
+src/app/[locale]/  page.tsx · (shop)/c/[category] · (shop)/p/[slug] · search · cart · checkout · account/(protected)
+src/app/api/       revalidate/route.ts (webhook CMS) · webhooks/payment/route.ts (cổng thanh toán)
+src/components/ui/      primitive (button, input, dialog)
+src/components/blocks/  product-card · price · gallery · filter-panel · pagination · empty-state · skeletons
+src/features/           catalog · product · search · cart (actions.ts) · checkout (actions.ts) · account
+src/lib/                env.ts · money.ts · commerce/ (client duy nhất gọi backend) · auth/dal.ts · seo/jsonld.tsx
+src/i18n/messages/      vi.json · en.json
+```
+
+Luật: Block chỉ nhận props, không gọi API. Feature ghép Block và không tự viết style. Chỉ `lib/commerce` được gọi backend.
+
+### 21.3 Từng bước + prompt mẫu
+
+| # | Bước | Skill | Prompt mẫu | Xong khi |
+|---|---|---|---|---|
+| 1 | Profile | fe-andy | `/fe-andy tạo project-profile.md cho web bán hàng Next.js: vi/en, VND, vùng bảo vệ: money.ts, checkout, webhooks, auth` | Có ngân sách + vùng bảo vệ |
+| 2 | Kiến trúc | fe-code + fe-review + fe-mfe | `/fe-review thẩm định: Next.js hybrid cho storefront, không dùng Redux cho giỏ hàng, không micro-frontend` | ADR + ma trận route được duyệt |
+| 3 | Cấu trúc thư mục | fe-code | `/fe-code dựng khung thư mục theo case-study-ecommerce Phase 3, chưa viết logic` | Cây thư mục + luật import |
+| 4 | Token + layout | fe-layout → fe-contrast | `/fe-layout token màu thương hiệu, lưới sản phẩm 2/3/4 cột, card cao bằng nhau` | Contrast AA |
+| 5 | Tiền + Block | fe-code | `/fe-code tạo money.ts (số nguyên, Intl), Price, ProductCard` | Unit test money pass |
+| 6 | Tầng dữ liệu | fe-data | `/fe-data commerce client có Zod, timeout 8s, cache tag theo sản phẩm/danh mục` | Không gọi trùng, có timeout |
+| 7 | Trang catalog | fe-code + fe-perf | `/fe-code trang danh mục: filter trên URL, phân trang bằng link, empty state` | LCP ảnh đầu đạt ngân sách |
+| 8 | Giỏ hàng | fe-code + fe-data | `/fe-code Server Action thêm vào giỏ, cookie HttpOnly, thông báo aria-live` | Giá lấy từ server |
+| 9 | Thanh toán | fe-sec | `/fe-sec luồng checkout: tính lại tổng ở server, chuyển hướng sang cổng thanh toán, webhook xác thực chữ ký, idempotent` | Đơn chỉ được xác nhận qua webhook |
+| 10 | Tài khoản | fe-sec | `/fe-sec DAL requireUser cho /account, kiểm tra quyền sở hữu đơn hàng` | Không dựa riêng vào middleware |
+| 11 | Trạng thái | fe-skel + fe-ux | `/fe-skel skeleton danh mục + sản phẩm, lỗi có thử lại, hết hàng` | Không CLS |
+| 12 | UX + câu chữ | fe-ux | `/fe-ux review luồng danh mục → sản phẩm → giỏ → thanh toán, viết thông báo lỗi` | Không có "Error 500" |
+| 13 | a11y | fe-a11y | `/fe-a11y gallery, filter, drawer giỏ hàng, nút tăng giảm số lượng` | axe sạch, test bàn phím |
+| 14 | Đa ngôn ngữ + tiền tệ | fe-i18n | `/fe-i18n parity vi/en, định dạng VND, hreflang, đổi ngôn ngữ giữ query` | Script i18n pass |
+| 15 | Bảo mật | fe-sec | `/fe-sec header, CSP, rate limit, secret, cookie, audit dependency` | Checklist Phase 15 ✓ |
+| 16 | Hiệu năng | fe-perf | `/fe-perf đo Lighthouse mobile trang chủ, danh mục, sản phẩm; bundle mỗi route` | Đạt ngân sách |
+| 17 | SEO | fe-ship | `/fe-ship JSON-LD Product + Breadcrumb, sitemap, robots chặn cart/checkout/account/search` | Rich Results Test pass |
+| 18 | (Tuỳ chọn) Offline | fe-pwa | `/fe-pwa cho xem catalog offline theo case C, không mua khi offline` | Kill switch sẵn sàng |
+| 19 | Test | fe-test | `/fe-test unit money, component Price, E2E mua hàng (mock thanh toán), axe` | CI xanh |
+| 20 | Release + giám sát | fe-ship | `/fe-ship pipeline, đơn test ở staging, Sentry, RUM, SLO checkout, rollback` | Checklist release ✓ |
+| 21 | Mở rộng + học | fe-mfe / fe-review / fe-learn | `/fe-learn thu thập bài học dự án shop, lập kế hoạch, chờ chốt` | Ghi chú đã được thẩm định |
+
+### 21.4 Năm quy tắc "sống còn" của web bán hàng
+1. **Tiền là số nguyên** (đơn vị nhỏ nhất) và chỉ format qua `money.ts`.
+2. **Server là sự thật**: giá, giảm giá, phí ship tính lại ở server; bỏ qua mọi giá gửi từ client.
+3. **Đơn chỉ thành "đã thanh toán" qua webhook có xác thực chữ ký**, không tin `?paid=true` trên URL.
+4. **Giỏ hàng, thanh toán, tài khoản không bao giờ vào cache dùng chung**.
+5. **Filter, sort, trang lưu trên URL**: chia sẻ link hoặc reload vẫn giữ nguyên.

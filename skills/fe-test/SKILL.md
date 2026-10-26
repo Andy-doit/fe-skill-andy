@@ -44,6 +44,8 @@ npx playwright test      # E2E, if Playwright is in devDependencies
 
 Recipes and examples: [test-recipes.md](./references/test-recipes.md) — unit (pure logic), component (Testing Library: query by role/label, user-event), E2E (Playwright with role locators), axe in Playwright, visual snapshots, mocking network (MSW or route interception).
 
+Storybook projects: `play` interaction tests and the a11y addon run as part of the test suite (Vitest addon) and count toward Tier 2 for Blocks; stories and their rules are authored under fe-code ([component-docs.md](../fe-code/references/component-docs.md)); visual regression can target stories instead of pages. Time-dependent tests pin `TZ` and locale (fe-i18n dates-time-zones.md §6).
+
 What to test for a change:
 - Pure logic (formatters, reducers, validators): unit tests with edge cases.
 - Component behaviour: renders each state (loading/empty/error/content), handles user input, calls callbacks.
