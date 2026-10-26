@@ -2,10 +2,12 @@
 name: fe-i18n
 description: >
   Internationalization: dictionary parity across locale files (missing, orphan, empty keys, placeholder mismatch),
-  locale-aware formatting (numbers, currency, dates, relative time, plurals) with Intl, locale routing that keeps
-  path, query and #hash on language switch, long-translation and RTL layout safety. Works with next-intl and similar libraries.
-  Use when: adding translated content, auditing missing translations, fixing the language switcher, or formatting
-  values per locale.
+  locale-aware formatting (numbers, currency, dates, relative time, plurals) with Intl, dates and time zones (instant
+  vs wall-clock vs plain date, UTC storage, DST-safe arithmetic, Temporal/date-fns choice, hydration-safe rendering,
+  time-zone testing), locale routing that keeps path, query and #hash on language switch, long-translation and RTL
+  layout safety. Works with next-intl and similar libraries.
+  Use when: adding translated content, auditing missing translations, fixing the language switcher, formatting
+  values per locale, or dates show the wrong day/time for some users.
   DO NOT USE FOR: tabular-nums or text-balance typography (see fe-ux); static layout and spacing (see fe-layout).
 ---
 
@@ -46,6 +48,8 @@ The first file is the source. Reports missing keys, orphan keys, empty values, a
 
 Formatting dates/numbers differently on server and client causes hydration errors — format on the server or pass a fixed `timeZone`/locale.
 
+**Dates and time zones in depth:** [dates-time-zones.md](./references/dates-time-zones.md) — the three kinds of time (instant / zoned wall-clock / plain date) and what to store for each, choosing `Intl` + Temporal (polyfilled) vs date-fns v4, DST-safe arithmetic, inputs without zones, SSR/hydration strategies, and pinning `TZ` in tests. Rule: date-only values never pass through `new Date()`.
+
 ## 3. Locale routing
 
 Language switcher must keep the current page, query string, and `#hash`:
@@ -65,5 +69,6 @@ Language switcher must keep the current page, query string, and `#hash`:
 - Script exit code 0 for all locale files.
 - Switch language on a deep page with `?q=x#section` → same page, query and hash kept.
 - Spot-check formatted values per locale on screen.
+- Dates: a user in a negative-offset zone sees the same calendar date for date-only values; no hydration warnings on pages with dates; unit tests run with `TZ` pinned (dates-time-zones.md §6–7).
 
 Learned notes: [references/learned.md](./references/learned.md).

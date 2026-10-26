@@ -114,7 +114,14 @@ When the user provides a screenshot, mockup, or bug image and asks for UI change
 Protected areas come from the project profile. If none is defined, treat these as protected by default and **never modify them without explicit user instruction**:
 1. Money, pricing, currency/decimal calculations.
 2. Authentication, session, payment, and other sensitive transaction flows.
-3. Chart / real-time visualization engines and their configuration.
+3. Chart / real-time visualization engines and their configuration (fe-viz designs new charts and audits existing ones; changing an existing engine needs explicit instruction).
+4. Desktop shell boundaries: Electron `webPreferences`, preload scripts, IPC handlers; Tauri capabilities and commands.
+
+### 5.3 UI Is Only Affordance
+Client-side checks (roles in components, decoded tokens, feature flags, route guards, middleware redirects) shape the experience; they are never the security boundary. Every sensitive action is authorized on the server for the specific resource. A skill that adds or reviews a role-gated element names the server check behind it (fe-sec `auth-frontend.md` §0).
+
+### 5.4 Production Artifacts
+No source maps, `.env*` files, secrets or debugging flags in anything served to users or packaged for them. fe-ship owns the release gate; fe-sec owns the checks (`check-build-output.mjs`, `check-env-secrets.mjs`).
 
 ---
 
@@ -133,6 +140,22 @@ Protected areas come from the project profile. If none is defined, treat these a
 | `AsyncContent` 4-state UI | fe-skel | fe-data |
 | Theming, dark mode, responsive, container queries | fe-layout | fe-code |
 | Release, CI, deploy, observability, SEO | fe-ship | fe-test (runs checks only) |
+| Service worker, offline caching, durable offline queue, SW updates, manifest | fe-pwa | fe-data (in-tab offline state and query cache), fe-perf (HTTP caching) |
+| Micro-frontend decision, Module Federation, shared deps across remotes | fe-mfe | fe-code (structure inside one app) |
+| Validating patterns, libraries, advice, and learned notes against current standards | fe-review | fe-learn (applies approved changes) |
+| API contracts, typed clients (OpenAPI/GraphQL/tRPC), BFF shape, one error shape | fe-data | fe-code (consumes the client) |
+| Login protocols (OAuth/OIDC + PKCE, SSO, passkeys, MFA UI) | fe-sec | fe-data (only reacts to 401/403) |
+| Modern CSS features (`@layer`, `:has()`, popover, anchor positioning, `@starting-style`) | fe-layout | fe-code |
+| View Transitions, scroll-driven animations, FLIP, Motion vs GSAP | fe-motion | fe-layout, fe-perf |
+| Next.js routing conventions (route groups, parallel/intercepting routes, route handlers) | fe-code | fe-perf (only the rendering/caching cost) |
+| Git/PR/code-review/ADR workflow | fe-andy (`engineering-workflow.md`) | fe-test (runs the checks before a PR) |
+| Dates, time zones, DST, Temporal/date libraries | fe-i18n | fe-data (only transports ISO strings) |
+| File upload/download/clipboard/drag-and-drop implementation | fe-code | fe-sec (server-side validation rules), fe-ux (upload UX and copy) |
+| Storybook stories, component docs, interaction tests | fe-code (stories as contract) | fe-test (runs them in CI; visual regression) |
+| Monorepo layout, internal package publishing | fe-ship | fe-clean (import boundaries inside one app) |
+| A/B experimentation mechanics (assignment, exposure, guardrails) | fe-ship | fe-ux (what to test), fe-perf (flicker/CLS budget) |
+| Frontend incident response and postmortems | fe-ship | fe-pwa (SW kill switch), fe-data (degraded modes) |
+| Chart choice, encoding/colour, chart library, chart a11y and performance, dashboards | fe-viz | fe-motion (canvas frame rate), fe-contrast (measures the palette), fe-skel (chart skeleton), fe-layout (dashboard grid) |
 | Updating this skill set | fe-learn | any other skill (they only capture notes) |
 
 ---

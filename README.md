@@ -17,7 +17,7 @@
 
 ## Overview
 
-17 focused skills for UX, UI, performance, security, quality, and shipping. Every skill:
+21 focused skills for UX, UI, performance, security, quality, shipping, offline/PWA, micro-frontends, knowledge review, and data visualization. Giới thiệu (VI): [GIOI-THIEU.md](./GIOI-THIEU.md) · Usage guide: [USAGE.md](./USAGE.md). Every skill:
 - reads the target project's `project-profile.md` first,
 - works audit-first (read → propose → approval → edit → verify),
 - ends with a **learning loop** that adds new, proven lessons back into the skill set.
@@ -42,6 +42,10 @@
 | [fe-code](./skills/fe-code/) | New code on the 4-layer architecture, component API, state placement |
 | [fe-test](./skills/fe-test/) | Verification tiers, unit/component/E2E/axe/visual tests |
 | [fe-ship](./skills/fe-ship/) | Release checklist, CI/CD, env, Docker, rollback, observability, consent, SEO |
+| [fe-pwa](./skills/fe-pwa/) | Service workers, Workbox strategies, offline outbox, SW updates, manifest, installability |
+| [fe-mfe](./skills/fe-mfe/) | Micro-frontends, Module Federation, Multi-Zones, shared deps, independent deploys |
+| [fe-review](./skills/fe-review/) | Validate patterns, libraries, decisions and advice against current standards |
+| [fe-viz](./skills/fe-viz/) | Chart choice by question, encoding/colour, SVG/Canvas/WebGL, chart libraries, accessible and fast charts, KPI tiles, sparklines, dashboards |
 | [fe-learn](./skills/fe-learn/) | Capture lessons, promote learned notes into skills, health check |
 
 ## How the skill set learns

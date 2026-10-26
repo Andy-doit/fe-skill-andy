@@ -6,8 +6,9 @@
 2. Lint → type-check → unit/component tests (parallel jobs where possible).
 3. Build.
 4. Bundle budget check (fe-perf `check-bundle-size.mjs`) and i18n parity (fe-i18n script) if relevant.
-5. E2E + axe on a preview deployment or a locally started build.
-6. Dependency audit (report, fail on new critical).
+5. **Security gate on the build output** (fe-sec): `node <skills>/fe-sec/scripts/check-build-output.mjs --env .env.production` — fails on `*.map` files, served `sourceMappingURL`, secret patterns or server-only env values in client chunks; `check-env-secrets.mjs` on the production env file (§6).
+6. E2E + axe on a preview deployment or a locally started build.
+7. Dependency audit (report, fail on new critical).
 
 Example (GitHub Actions, npm — adapt):
 ```yaml
@@ -75,3 +76,38 @@ Static SPA (Vite): build stage → copy `dist/` into an nginx/caddy image with S
 ## 5. Preview deployments
 
 One preview per pull request; run E2E and Lighthouse against it; protect previews that use production data.
+
+## 6. Source maps in production (release policy)
+
+**Rule:** no publicly reachable `*.map` file, ever. A served map reconstructs the original source (comments, internal names, feature flags, API shape). Decide one of two modes per project and write it in `project-profile.md`:
+
+| Mode | When | Setup |
+|---|---|---|
+| **A. No maps** (default) | No error tracker needs them | Keep bundler defaults (below); the CI gate confirms the artifact contains none |
+| **B. Private maps** | Error tracker symbolication | Emit *hidden* maps (no `sourceMappingURL` comment), upload them to the tracker in the build step, delete them from the deploy artifact; block `*.map` at the server/CDN as a backstop |
+
+| Bundler / framework | Safe production setting | Never |
+|---|---|---|
+| Next.js | `productionBrowserSourceMaps: false` (default). Mode B: the tracker's Next.js plugin uploads during `next build` and can delete maps afterwards **(verify the option name for your plugin version)** | `productionBrowserSourceMaps: true` on a public deployment |
+| Vite | `build.sourcemap: false` (default). Mode B: `build.sourcemap: "hidden"` + tracker plugin upload + delete `dist/**/*.map` before deploy | `build.sourcemap: true` or `"inline"` |
+| webpack / Rspack | `devtool: false`. Mode B: `devtool: "hidden-source-map"` + upload + delete | `"source-map"`, `"inline-source-map"`, any `eval*` |
+| Electron / Tauri | Same as the renderer bundler; also exclude maps from the packaged archive (electron-builder `files` globs / Tauri bundle resources) | Maps inside `app.asar` or bundle resources |
+
+**Server / CDN backstop:**
+```nginx
+# nginx
+location ~* \.map$ { return 404; }
+```
+```caddyfile
+# Caddy
+@maps path *.map
+respond @maps 404
+```
+Static hosts (Vercel, Netlify, Cloudflare Pages, S3+CDN): the simplest control is to never upload maps (mode A, or delete after tracker upload in mode B); add a `*.map` → 404 rule where the host supports it.
+
+**Verification (staging and production):**
+- `curl -sI https://<host>/<any-chunk>.js.map` → `404` or `403`.
+- Production JS contains no `//# sourceMappingURL=` pointing at a reachable file (hidden maps leave no comment).
+- CI step 5 above fails the pipeline if a map slips into the artifact.
+
+**Release-notes rule:** switching a project from mode A to B, or changing the tracker, is a release-notes item with the fe-sec reviewer named.

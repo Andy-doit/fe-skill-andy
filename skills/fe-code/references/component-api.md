@@ -34,3 +34,25 @@
 - ❌ Boolean explosion (`isPrimary`, `isLarge`, `isOutline`, `isRounded`)
 - ❌ Copy-pasting a Block to change one style instead of adding a variant
 - ❌ Hidden side effects (fetching, global state writes) in presentational components
+
+## 4. Progressive enhancement (works before and without JavaScript)
+
+| Rule | Do | Not |
+|---|---|---|
+| Navigation is a link | `<a href>` / `<Link>` for anything that changes the URL | `<div onClick={() => router.push()}>` |
+| Forms submit without JS | `<form action={serverAction}>` / `<form method="post" action="/api/…">`; Server Actions and BFF endpoints accept the plain POST | Submit handlers that only work after hydration |
+| Native first | `<details>`, `<dialog>`, `popover`, `<select>`, `<input type=date>` before custom widgets (fe-layout modern-css.md §5) | Rebuilding native controls in divs |
+| Content is in the HTML | Server-render the primary content; JS enhances (filters, live updates) | Empty shell that fetches everything client-side (fe-perf, fe-ship SEO) |
+| Enhancement is additive | Feature-detect (`"IntersectionObserver" in window`, `@supports`) and add behaviour | UA sniffing; breaking the baseline when the enhancement fails |
+| Verify | Key flows (browse, read, submit a form) work with JavaScript disabled in DevTools; filter forms submit as GET | — |
+
+## 5. Web Components interop
+
+Use when a framework-agnostic widget must be shared across stacks (fe-mfe §3.1) or a vendor ships one.
+
+- Wrap each custom element **once** in a React Block with typed props and mapped events; features never use the tag directly.
+- React 19 sets props as properties when the element defines them and as attributes otherwise; custom events still need `ref` + `addEventListener` in the wrapper (verify for your React version). Type the tag via `React.JSX.IntrinsicElements` augmentation.
+- SSR: custom elements render as empty tags on the server unless they ship Declarative Shadow DOM; render a sized placeholder (no CLS) or load client-only.
+- Styling crosses the shadow boundary only through CSS custom properties and `::part()`; pass tokens from the project's theme (fe-layout).
+- Do not mix a design system's Web Component and React versions of the same control in one app; pick one.
+- Verify: wrapper exposes a11y name/role correctly (axe), events fire once, hydration warnings absent.

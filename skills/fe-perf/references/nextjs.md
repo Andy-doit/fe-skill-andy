@@ -42,8 +42,9 @@ Rules:
 - Load fonts with `next/font/google` or `next/font/local` in the root layout; specify `subsets` and only the needed `weight`s.
 - Expose as a CSS variable and map it in the token layer; make sure the variable name matches what CSS uses.
 
-## 6. Middleware
+## 6. Middleware / proxy
 
+- Next.js 16 renames `middleware.ts` to `proxy.ts` (exported `proxy` function; Node.js runtime by default; the old file is deprecated but still works) — per Vercel's upgrade guide, verify against the official docs for your version.
 - Runs before every matched request; keep it small and fast (no heavy imports, no slow network calls).
 - Limit with `matcher` so static assets and images skip it.
 - Auth checks in middleware are a UX optimization; authorization must still be enforced on the server (see fe-sec).
@@ -59,3 +60,7 @@ Rules:
 | Theme class mismatch (dark mode) | Use the theme library's recommended script/`suppressHydrationWarning` on `<html>` only |
 
 Verify: browser console free of hydration warnings in dev; no layout jump on load.
+
+## 8. Routing structure
+
+Route groups, parallel/intercepting routes, `loading`/`error`/`default` files and route handlers are authoring concerns owned by fe-code: [nextjs-routing.md](../../fe-code/references/nextjs-routing.md). This file only covers their cost: each parallel slot streams independently (good), every dynamic API in a slot makes the whole segment dynamic (check the build output markers).

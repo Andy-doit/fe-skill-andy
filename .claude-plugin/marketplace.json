@@ -6,13 +6,13 @@
   },
   "metadata": {
     "description": "Andy's Agent-native Frontend Engineering Marketplace",
-    "version": "2.1.0"
+    "version": "2.6.0"
   },
   "plugins": [
     {
       "name": "fe-skill-andy",
       "description": "Frontend agent skill set for UX, UI, performance, security, quality and shipping (Next.js, React 19, Tailwind v4). Audit-first workflow, WCAG 2.2 AA, measured performance, zero-dependency check scripts, and a learning loop that adds new lessons back into the skills.",
-      "version": "2.1.0",
+      "version": "2.6.0",
       "author": {
         "name": "Andy-doit"
       },

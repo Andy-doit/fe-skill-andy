@@ -2,7 +2,7 @@
 
 ## 1. Retry with backoff
 
-- Retry only idempotent requests (GET) and only on network errors / 5xx / 429. Never auto-retry 4xx (except 408/429).
+- Retry only idempotent requests (GET) and only on network errors / 5xx / 429. Never auto-retry 4xx (except 408/429). 401 goes to the single-flight refresh/login flow and 403 to an access-denied state: both are server decisions, not transient failures.
 - Exponential backoff with jitter, capped:
 
 ```ts
