@@ -1,0 +1,35 @@
+{
+  "title": "DNL CAPITAL — 3-STATE HEADER CONTRAST VERIFICATION REPORT",
+  "headerOffWhite": { "r": 250, "g": 249, "b": 246 },
+  "textColors": {
+    "regular": { "r": 13, "g": 13, "b": 13, "hex": "#0D0D0D" },
+    "active": { "r": 18, "g": 59, "b": 110, "hex": "#123B6E" },
+    "hover": { "r": 26, "g": 78, "b": 143, "hex": "#1A4E8F" }
+  },
+  "alphas": {
+    "top": 0.55,
+    "scrolled": 0.86
+  },
+  "scrollSteps": {
+    "min": 0,
+    "max": 3500,
+    "step": 100,
+    "scrolledThreshold": 24
+  },
+  "meta": {
+    "alphaScrolledText": "0.86 (86% off-white #FAF9F6)",
+    "backdropFilter": "blur(16px) saturate(1.4)",
+    "elevationShadow": "0 4px 20px -2px rgba(11, 40, 79, 0.08) + 1px hairline border"
+  },
+  "sectionBackgrounds": [
+    { "name": "Hero Off-white", "color": { "r": 250, "g": 249, "b": 246 }, "scrollRange": [0, 600] },
+    { "name": "Hero Canvas Wave Accent", "color": { "r": 195, "g": 216, "b": 240 }, "scrollRange": [600, 800] },
+    { "name": "Core Business White Cards", "color": { "r": 255, "g": 255, "b": 255 }, "scrollRange": [800, 1300] },
+    { "name": "Core Business Dark Heading", "color": { "r": 13, "g": 13, "b": 13 }, "scrollRange": [1300, 1500] },
+    { "name": "Analysis Soft Blue", "color": { "r": 224, "g": 242, "b": 254 }, "scrollRange": [1500, 1900] },
+    { "name": "Analysis CTA Button Navy", "color": { "r": 14, "g": 50, "b": 97 }, "scrollRange": [1900, 2100] },
+    { "name": "Healthcare White Marquee", "color": { "r": 250, "g": 249, "b": 246 }, "scrollRange": [2100, 2500] },
+    { "name": "Contact Blue Gradient", "color": { "r": 186, "g": 230, "b": 253 }, "scrollRange": [2500, 2900] },
+    { "name": "Footer Dark Divider / Text", "color": { "r": 20, "g": 20, "b": 20 }, "scrollRange": [2900, 3500] }
+  ]
+}

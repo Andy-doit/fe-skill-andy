@@ -1,0 +1,24 @@
+{
+  "name": "fe-skill-andy",
+  "displayName": "Andy Frontend Agent Skills",
+  "description": "Universal frontend engineering suite for Next.js, React 19, and Tailwind v4. Enforces 4-layer architecture, 60-120fps motion hygiene, mathematical WCAG 2.1 contrast, 1:1 skeletons, clean code, security, and next-intl parity.",
+  "version": "2.0.0",
+  "author": {
+    "name": "Andy-doit",
+    "url": "https://github.com/Andy-doit"
+  },
+  "repository": "https://github.com/Andy-doit/fe-skill-andy",
+  "homepage": "https://github.com/Andy-doit/fe-skill-andy#readme",
+  "license": "MIT",
+  "keywords": [
+    "frontend",
+    "nextjs",
+    "react19",
+    "tailwind4",
+    "performance",
+    "motion",
+    "accessibility",
+    "clean-code",
+    "security"
+  ]
+}
