@@ -10,6 +10,30 @@
 
 ## 📜 Danh sách nhật ký (Mới nhất ở trên cùng)
 
+### [2026-10-26] fe-learn collect → check → plan → approve flow; per-skill prompt guide
+- **Objective:** Detailed usage guide with standard prompts per skill; a collect/check/plan/approve flow for adding knowledge or new skills (kept under the name fe-learn per user).
+- **Files Changed:** Modified [skills/fe-learn/SKILL.md](skills/fe-learn/SKILL.md) (modes A–D, 8 steps), created [skills/fe-learn/references/skill-template.md](skills/fe-learn/references/skill-template.md); rewrote [HUONG-DAN-SU-DUNG.md](HUONG-DAN-SU-DUNG.md); router row in fe-andy; routing evals R29–R30; check-skills.mjs now skips fenced code blocks.
+- **Status & Next Steps:** Health check PASS; guide links and anchors checked. Next: try on a real project.
+
+### [2026-10-26] Install for Codex + Antigravity, installer scripts, Vietnamese usage guide
+- **Objective:** Install the skill set for Codex and Antigravity; write a detailed usage guide.
+- **Files Changed:**
+  - Created: [scripts/install-skills.ps1](scripts/install-skills.ps1), [scripts/install-skills.sh](scripts/install-skills.sh), [HUONG-DAN-SU-DUNG.md](HUONG-DAN-SU-DUNG.md)
+  - Modified: [README.md](README.md) (install section), [skills/fe-andy/evals/routing.md](skills/fe-andy/evals/routing.md) (run results), fe-data / fe-skel descriptions (routing boundaries)
+- **Decisions:** Junctions created in `~/.claude/skills`, `~/.agents/skills` (Codex), `~/.gemini/config/skills` and `~/.gemini/antigravity-cli/skills` (Antigravity). Codex and Antigravity are not installed on this machine yet, so their detection is unconfirmed.
+- **Status & Next Steps:** Installer tested (install, idempotent re-run, uninstall, reinstall). Health check PASS. Next: install Codex/Antigravity and confirm they list the skills; try the skills on a real project.
+
+### [2026-10-26] Audit + apply update plan + learning loop
+- **Objective:** Audit skill coverage (UX/UI/perf/security/ops) and portability; apply the update plan; make every skill use add new lessons back into the skill set.
+- **Files Changed:**
+  - Created: [audit/coverage-report.md](audit/coverage-report.md), [audit/update-plan.md](audit/update-plan.md), [audit/install-guide.md](audit/install-guide.md)
+  - Created: [skills/fe-andy/references/learning-loop.md](skills/fe-andy/references/learning-loop.md), [skills/fe-andy/references/project-profile.template.md](skills/fe-andy/references/project-profile.template.md), [skills/fe-andy/scripts/check-skills.mjs](skills/fe-andy/scripts/check-skills.mjs), `references/learned.md` in all 17 skills
+  - Created: [skills/fe-ship/](skills/fe-ship/) (new skill) and reference files in fe-perf, fe-layout, fe-contrast, fe-data, fe-code, fe-ux, fe-a11y, fe-sec, fe-test; [skills/fe-perf/scripts/check-bundle-size.mjs](skills/fe-perf/scripts/check-bundle-size.mjs)
+  - Renamed: `skills/merge` → [skills/fe-learn/](skills/fe-learn/); `ambient-rhythm-dnl.md` → `example-section-rhythm.md`; `dnl-config.json` → `example-config.json`
+  - Modified: all SKILL.md files, conventions.md, routing evals, both scripts (contrast pass/fail + exit code; i18n arrays, placeholders, N locales), README, AGENTS.md, GEMINI.md, HOW-IT-LEARNS.md, plugin manifests (v2.1.0)
+- **Decisions:** see audit/update-plan.md header (E1, E3–E7). Project-specific facts go to the target repo's `project-profile.md`, not the skill set.
+- **Status & Next Steps:** Health check PASS (0 errors, 0 warnings); contrast and i18n scripts tested with sample inputs; bundle script not run against a real build. Open: decide StarCi folders (E2), run routing evals R01–R28 in each tool, create junctions per install guide.
+
 ### [2026-10-26 11:00] Milestone 4.4: Complete English Standardization & Rebranding to `fe-skill-andy`
 - **Objective / Requirements:** Transition entire skill suite to English standard format, generalize across all frontend projects, complete short folder renames (`fe-*`), isolate legacy skills into `legacy/`, update plugin manifests, and prepare Git re-initialization for `https://github.com/Andy-doit/fe-skill-andy.git`.
 - **Files Changed:**

@@ -1,36 +1,64 @@
 ---
 name: fe-data
 description: >
-  Manage client data fetching and server state architecture: SWR / TanStack Query, cache key normalization,
-  deduplication, request cancellation (AbortController), retry logic, pagination/infinite scroll, and request waterfall elimination.
-  Use when: managing client-side data fetching, optimizing API traffic, aborting stale requests on search/filter changes,
-  or configuring optimistic mutations.
-  DO NOT USE FOR: Asynchronous UI 4-state component conventions (see fe-skel);
-  DO NOT USE FOR: Overall Core Web Vitals or bundle size profiling (see fe-perf).
+  Design client data fetching and server state: SWR / TanStack Query / framework fetch, cache keys, deduplication,
+  request cancellation (AbortController), retry with backoff, pagination and infinite scroll, prefetching,
+  optimistic mutations with rollback, waterfall elimination, realtime (WebSocket/SSE), offline and API-down behaviour,
+  error boundaries.
+  Use when: writing or fixing data hooks, stale or racing responses, duplicate requests, slow sequential calls,
+  live updates, or resilience when the network/API fails.
+  DO NOT USE FOR: the visual loading/empty/error UI (see fe-skel); auth token refresh or session logic (see fe-sec);
+  DO NOT USE FOR: measuring Core Web Vitals or bundle size (see fe-perf).
 ---
 
-# `fe-data` — Client Data Fetching & Server State Architecture
+# fe-data — Data Fetching, Server State & Resilience
 
-Specialized skill for engineering client-server data synchronization pipelines, caching strategies, and high-efficiency network request lifecycles. Strictly follows [conventions.md](../fe-andy/references/conventions.md).
+Fetch logic, caching policy, and request lifecycles. Follows [conventions.md](../fe-andy/references/conventions.md).
+
+## Minimum rules (apply even without fe-andy)
+- Read `project-profile.md` in the target project first (data library + version).
+- Read-only audit first; propose; wait for approval before editing.
+- Never log tokens or personal data from responses; never edit protected areas without explicit instruction.
+- Finish with the learning loop: append new, proven lessons to [references/learned.md](./references/learned.md) after a duplicate check ([learning-loop.md](../fe-andy/references/learning-loop.md)).
 
 ---
 
-## 1. Important Domain Boundary
+## 1. Audit checklist
 
-> **NOTE:** `fe-data` manages **fetch logic, caching policies, and request lifecycles**. Visual rendering of multi-state UI (`AsyncContent`, `EmptyContent`, `ErrorContent`, `Skeleton`) belongs to **`fe-skel`** (see `fe-skel/references/async-content.md`).
+| Check | Smell | Fix |
+|---|---|---|
+| Waterfalls | `await a(); await b();` for independent data | `Promise.all([a(), b()])` or separate Suspense boundaries |
+| Races | Search/filter results arrive out of order | Abort previous request (`AbortController`), or key the query by input |
+| Duplicates | Same endpoint fetched by several components | Shared hook with a stable cache key |
+| Cache keys | Keys built from unstable objects or missing params | Array keys with all inputs: `["items", { page, filter }]` |
+| Stale data | Data never refreshes after mutation | Invalidate/revalidate the affected keys |
+| Effects fetching | `useEffect` + `fetch` with no cleanup | Library hook, or add abort cleanup |
+| Errors | Errors swallowed or only `console.log` | Surface to the 4-state UI (fe-skel) + error tracking (fe-ship) |
 
----
+## 2. Core patterns
 
-## 2. Core Engineering Principles
+```ts
+// Cancellation in a plain effect
+useEffect(() => {
+  const controller = new AbortController();
+  fetch(`/api/search?q=${encodeURIComponent(q)}`, { signal: controller.signal })
+    .then((r) => r.json()).then(setResults)
+    .catch((e) => { if (e.name !== "AbortError") setError(e); });
+  return () => controller.abort();
+}, [q]);
+```
 
-### 2.1 Waterfall Elimination (Parallel Execution)
-- Never invoke non-dependent requests sequentially (`await fetchA(); await fetchB();`).
-- Aggregate concurrent calls using `Promise.all([fetchA(), fetchB()])` or isolate them within independent React Suspense boundaries.
+- **TanStack Query**: the `queryFn` receives `{ signal }` — pass it to `fetch` for automatic cancellation. Tune `staleTime` to stop refetch storms.
+- **SWR**: `dedupingInterval` for dedupe; `keepPreviousData` to avoid flashing empty lists while the key changes.
+- **Optimistic mutation**: snapshot cache → apply optimistic change → send → on error restore snapshot and show an error → finally revalidate. Use only for actions that usually succeed and are reversible.
 
-### 2.2 Request Cancellation on State Change (`AbortController`)
-- When users type into search inputs or rapidly switch filter tabs, cancel inflight requests via `signal: controller.signal` to prevent stale response race conditions.
+More: [resilience.md](./references/resilience.md) — retry/backoff, pagination, prefetch, realtime, offline, error boundaries.
 
-### 2.3 Server State Caching (SWR / TanStack Query)
-- **Consistent Cache Keys**: Formulate normalized array keys (e.g. `['/api/items', { page, filter }]`).
-- **Deduplication**: Leverage SWR `dedupingInterval` or TanStack Query `staleTime` to avoid duplicate network calls within short intervals.
-- **Optimistic Mutations**: Instantly reflect user actions (bookmarks, likes, status toggles) in local cache prior to server confirmation, with automated rollback on network failure.
+## 3. Verify
+
+- Network tab: no duplicate calls for the same key on one screen; independent requests start in parallel (waterfall view).
+- Type fast in search with "Slow 3G": earlier requests show "(canceled)"; final results match the final input.
+- Block the API (DevTools request blocking) → error UI + retry works; recover → data loads.
+- After a mutation, affected views update without manual reload.
+
+Learned notes: [references/learned.md](./references/learned.md).

@@ -1,0 +1,29 @@
+{
+  "title": "EXAMPLE — tokens + 3-state translucent header",
+  "level": "AA",
+  "pairs": [
+    { "name": "Body text on page", "fg": "#0D0D0D", "bg": "#FAF9F6", "size": "normal" },
+    { "name": "Muted text on card", "fg": "#4B5563", "bg": "#FFFFFF", "size": "normal" },
+    { "name": "Primary button label", "fg": "#FFFFFF", "bg": "#123B6E", "size": "normal" },
+    { "name": "Input border vs page", "fg": "#8A8F98", "bg": "#FAF9F6", "size": "ui" },
+    { "name": "Text on 80% white glass over navy", "fg": "#0D0D0D", "bg": "#FFFFFF", "bgAlpha": 0.8, "under": "#0E3261", "size": "normal" }
+  ],
+  "header": {
+    "surface": "#FAF9F6",
+    "alphas": { "top": 0.55, "scrolled": 0.86 },
+    "texts": { "regular": "#0D0D0D", "active": "#123B6E", "hover": "#1A4E8F" },
+    "size": "normal",
+    "scroll": { "min": 0, "max": 3500, "step": 100, "scrolledThreshold": 24 },
+    "sections": [
+      { "name": "Hero off-white", "color": "#FAF9F6", "range": [0, 600] },
+      { "name": "Hero accent", "color": "#C3D8F0", "range": [601, 800] },
+      { "name": "White cards", "color": "#FFFFFF", "range": [801, 1300] },
+      { "name": "Dark heading band", "color": "#0D0D0D", "range": [1301, 1500] },
+      { "name": "Soft blue", "color": "#E0F2FE", "range": [1501, 1900] },
+      { "name": "Navy CTA band", "color": "#0E3261", "range": [1901, 2100] },
+      { "name": "Off-white marquee", "color": "#FAF9F6", "range": [2101, 2500] },
+      { "name": "Light blue gradient", "color": "#BAE6FD", "range": [2501, 2900] },
+      { "name": "Dark footer", "color": "#141414", "range": [2901, 3500] }
+    ]
+  }
+}

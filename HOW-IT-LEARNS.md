@@ -1,37 +1,33 @@
-# How fe-skill-andy Self-Learns & Retains Session Memory
+# How fe-skill-andy Learns
 
-The core philosophy of `fe-skill-andy`: **force the AI agent to continuously improve over time** across any frontend project by capturing real design decisions, architectural feedback, and session history into structured journals.
+Goal: every time a skill is used, anything new and proven gets added to the skill set — without bloating it, duplicating rules, or leaking project details.
 
----
+## Two stores
 
-## The House Knowledge Base (Dynamic Memory)
+| Store | Location | Holds | Written by |
+|---|---|---|---|
+| Skill knowledge (general) | `skills/<skill>/references/learned.md` → promoted into `SKILL.md` / `references/*.md` | Reusable patterns, pitfalls, verification methods, corrections, version notes | Learning loop (append), fe-learn (promote) |
+| Project knowledge (specific) | `project-profile.md` at the root of each target project | Stack, versions, paths, protected areas, budgets, design decisions | Any skill, with user approval; fe-recon drafts it |
 
-| Store | Contents | Populated From |
-|---|---|---|
-| **`decision/<block>.md`** | **Component Decisions** — Why a scenario selected and styled a specific block | User design feedback & choices |
-| **`design/`** | **Page-Level UX** — Layout and flow decisions (`<page>.md`) + UX heuristics | Realized UX implementations & web research |
-| **`ui/CONTENT.md`** | **Visual System** — Tokens, color palettes, spacing, typography | Design system tokens |
-| **`cannon/`** | **Code Canon & Rules** — Enforceable coding standards | Real-world codebase patterns |
-| **`work_log.md`** | **Session Continuity & Log** — Chronological audit trail, modified files, pending items | Automated logging at task wrap-up |
-
----
-
-## The Autonomous Learning Loop
+## Loop
 
 ```
-1. /fe-ux (Mode 1: Brainstorm)  Read decision/ + design/ + cannon/  +  Web UX Research
-                                → Propose 1–3 layout concepts + widget mockups
-        │  User selects one + provides feedback
-        ▼
-2. /fe-ux (Mode 2: Apply)       Build it on-canon compliant with 4-layer architecture
-                                → At task wrap-up, AUTOMATICALLY write decisions:
-                                  "Scenario → Block Choice → RATIONALE" into decision/,
-                                  Page UX into design/, code rules into cannon/,
-                                  AND append session summary into work_log.md
-        ▼
-3. Future Sessions              Next invocation reads the expanded journals → agent acts smarter
+1. Task done with any fe-* skill (protocol step 6 "Learn")
+2. Filter: reusable? proven? missing from the set? (duplicate search across skills/)
+3. Yes → append a note (Status: new) to the owning skill's references/learned.md
+   Project-specific → project-profile.md instead
+   No → report "Learned: nothing new (checked: …)"
+4. fe-learn, when asked or when a skill has 5+ new notes:
+   triage → user approves → fold into SKILL.md / references → mark notes promoted → run check-skills.mjs
 ```
 
-- **Live Research**: Fresh web UX patterns fetched dynamically during brainstorming.
-- **Automated Retention**: Architectural lessons recorded directly without requiring manual merge commands.
-- **Session Continuity**: Every new session bootstraps by reading the top of `work_log.md` to prevent lost context.
+Rules: [skills/fe-andy/references/learning-loop.md](skills/fe-andy/references/learning-loop.md). Promotion: [skills/fe-learn/SKILL.md](skills/fe-learn/SKILL.md).
+
+## Why append-first, promote-later
+
+- Appending a note is safe and immediate — the next session already sees it (each SKILL.md links its `learned.md`).
+- Editing core rules needs review — fe-learn shows a plan and waits for approval, then the health check keeps names, links, and descriptions valid.
+
+## Legacy
+
+The older StarCi-specific stores (`decision/`, `design/`, `cannon/`, `rules/`, `ui/`, `design-system/`) are kept for reference. They are project knowledge; for new projects use `project-profile.md`.

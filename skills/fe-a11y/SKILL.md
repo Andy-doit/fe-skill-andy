@@ -1,39 +1,72 @@
 ---
 name: fe-a11y
 description: >
-  Enhance web ACCESSIBILITY (a11y) per the WCAG 2.2 standard: keyboard navigation,
-  focus management (focus traps, tabIndex, focus-visible indicators), semantic HTML, proper ARIA attributes, and Screen Reader support.
-  Use when: fixing inability to tab into menus/modals, resolving lost focus states, adding missing aria-labels,
-  or conducting accessibility audits.
-  DO NOT USE FOR: Measuring mathematical color contrast ratios or sRGB luminance (see fe-contrast);
-  DO NOT USE FOR: Handling prefers-reduced-motion animation logic (see fe-motion).
+  Make web UIs accessible per WCAG 2.2 AA: keyboard operation, focus management (dialogs, focus traps, focus return,
+  focus not obscured), visible focus, semantic HTML, correct ARIA, accessible names, form error announcements,
+  live regions, screen-reader support, target size, and automated + manual a11y testing.
+  Use when: elements cannot be reached or operated by keyboard, focus is lost, labels are missing, screen readers
+  read the wrong thing, or an accessibility audit is needed.
+  DO NOT USE FOR: measuring colour contrast ratios (see fe-contrast);
+  DO NOT USE FOR: animation implementation of prefers-reduced-motion (see fe-motion).
 ---
 
-# `fe-a11y` — Web Accessibility & Assistive Navigation (WCAG 2.2)
+# fe-a11y — Accessibility (WCAG 2.2 AA)
 
-Specialized skill for ensuring frontend applications are fully operable via keyboard navigation and optimized for users relying on assistive screen readers according to the WCAG 2.2 standard. Strictly follows [conventions.md](../fe-andy/references/conventions.md).
+Keyboard, focus, semantics, and assistive technology support. Follows [conventions.md](../fe-andy/references/conventions.md).
 
----
-
-## 1. Domain Separation
-
-- **`fe-contrast`**: Exclusively governs mathematical sRGB luminance calculations and color contrast ratios (AA/AAA).
-- **`fe-motion`**: Exclusively governs motion reduction queries (`@media (prefers-reduced-motion)`).
-- **`fe-a11y`**: Governs HTML semantics, keyboard focus lifecycles, and screen reader integration.
+## Minimum rules (apply even without fe-andy)
+- Read `project-profile.md` in the target project first (target level: AA default).
+- Read-only audit first; propose; wait for approval before editing.
+- Never print secrets; never edit protected areas without explicit instruction.
+- Finish with the learning loop: append new, proven lessons to [references/learned.md](./references/learned.md) after a duplicate check ([learning-loop.md](../fe-andy/references/learning-loop.md)).
 
 ---
 
-## 2. Core Accessibility Axioms
+## 1. Core rules
 
-### 2.1 Keyboard Focus & Navigation
-- **Unambiguous Focus Indicators**: Every interactive control (button, link, input) must render an unmistakable focus ring on keyboard interaction (`focus-visible:ring-2 focus-visible:outline-none`). Never remove focus outlines without providing a visible replacement.
-- **Modal Focus Traps**: When a dialog/modal mounts, tab navigation must cycle strictly within the modal; pressing Escape must dismiss the dialog and restore focus back to the triggering element.
-- **Smooth Scroll Focus Shift**: Anchor jumps must assign `tabIndex={-1}` and invoke `element.focus()` on the target element to move screen reader attention.
+**Semantics first** — "No ARIA is better than bad ARIA":
+- `<button>` for actions, `<a href>` for navigation; never `<div onClick>`.
+- Landmarks: one `<main>`, `<nav>`, `<header>`, `<footer>`; headings in order (one `h1`).
+- Lists as `<ul>/<ol>`, tables with `<th scope>`; form fields with `<label for>`.
 
-### 2.2 Semantic HTML ("No ARIA is Better than Bad ARIA")
-- Always prefer standard HTML elements (`<button>` over `<div onClick>`, `<nav>`, `<main>`, `<header>`).
-- Icon-only buttons must declare an `aria-label` or embed a `.sr-only` descriptive label.
-- Dynamic collapsibles (accordions, disclosure menus) must reflect `aria-expanded` and `aria-controls`.
+**Keyboard**:
+- Everything interactive reachable with Tab in visual order; no positive `tabIndex`.
+- Visible focus on every control: `focus-visible:ring-2 focus-visible:ring-offset-2` (never remove outline without a replacement; focus indicator ≥ 3:1 contrast — check with fe-contrast).
+- Skip link to main content on pages with long navigation.
+- Composite widgets (tabs, menus, listbox) use arrow keys per the ARIA Authoring Practices pattern; prefer the UI library's accessible primitive.
 
-### 2.3 Touch Target Sizing
-- On mobile devices, interactive touch targets must measure at least $44 \times 44\text{px}$ to prevent mis-clicks.
+**Dialogs & overlays**:
+- On open: focus moves into the dialog (first field or the dialog title); Tab cycles inside; background inert (`inert` attribute or `aria-modal="true"` with the library's trap).
+- Escape closes; on close focus returns to the trigger.
+- Prefer native `<dialog>` with `showModal()` or the UI library's Dialog.
+
+**Names & state**:
+- Icon-only buttons: `aria-label` or visually hidden text.
+- Toggles/disclosures: `aria-expanded`, `aria-controls`; current page in nav: `aria-current="page"`.
+- Images: meaningful `alt`; decorative `alt=""`.
+
+**Dynamic content**:
+- Form errors: `aria-invalid`, `aria-describedby` to the error text; on submit move focus to the first error or an error summary.
+- Status messages (saved, results count): `role="status"` (polite) or `role="alert"` (urgent) region that exists before the message is inserted.
+- Route changes in SPAs: move focus to the new page's `h1` or announce the title.
+
+**WCAG 2.2 additions** — see [wcag22-checklist.md](./references/wcag22-checklist.md): focus not obscured, target size minimum 24×24 px (44×44 preferred for touch), dragging alternatives, consistent help, redundant entry, accessible authentication.
+
+## 2. Testing
+
+| Layer | How |
+|---|---|
+| Automated | axe DevTools / Lighthouse Accessibility in the browser; in tests `@axe-core/playwright` if installed (fe-test). Automated tools find only part of the issues. |
+| Keyboard walkthrough | Unplug the mouse: Tab through the page, open/close every overlay, submit a form with errors, note focus order and visibility. |
+| Screen reader smoke test | NVDA (Windows) or VoiceOver (macOS/iOS): read the page by headings (H key / rotor), operate the main flow, listen for names/states/announcements. |
+| Zoom & reflow | 200% zoom and 320 px width: no loss of content or function. |
+| Reduced motion | Emulate in DevTools Rendering panel (implementation: fe-motion). |
+
+## 3. Output
+
+```markdown
+| # | Issue | WCAG SC | Location (file:line) | Found by (axe / keyboard / SR) | Impact | Effort | Risk | Fix |
+```
+List what was tested and what was not (e.g. "VoiceOver not tested").
+
+Learned notes: [references/learned.md](./references/learned.md).
