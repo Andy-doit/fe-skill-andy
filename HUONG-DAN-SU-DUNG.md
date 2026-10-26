@@ -32,21 +32,32 @@ Bộ 17 skill cho frontend (UX, UI, hiệu năng, bảo mật, chất lượng c
 
 ## 1. Cài đặt
 
-Yêu cầu: Windows PowerShell 5.1+ (hoặc macOS/Linux), Node.js 18+ cho các script kiểm tra. Để repo ở chỗ cố định (ví dụ `E:\an\fe-skill-andy`); **không di chuyển repo sau khi cài**.
+Yêu cầu: Windows PowerShell 5.1+ (hoặc macOS/Linux), Node.js 18+ cho các script kiểm tra. Để repo ở một thư mục cố định; **không di chuyển thư mục repo sau khi cài** vì các liên kết (junction/symlink) trỏ trực tiếp vào vị trí này.
+
+> [!IMPORTANT]
+> **Lưu ý quan trọng về đường dẫn thư mục:**
+> Mỗi máy tính sẽ lưu repository `fe-skill-andy` ở các ổ đĩa và thư mục khác nhau (ví dụ: `D:\Work\AI\fe-skill-andy`, `C:\Projects\fe-skill-andy`, hoặc `/Users/username/fe-skill-andy`).
+> - **Cách 1 (Khuyến nghị, tiện nhất):** Mở PowerShell/Terminal, dùng lệnh `cd` chuyển thẳng vào thư mục `fe-skill-andy` của bạn, sau đó chỉ cần chạy `scripts\install-skills.ps1` — **không cần phải gõ đường dẫn dài dòng**.
+> - **Cách 2:** Nếu đứng từ thư mục khác chạy lệnh, hãy **thay thế `<duong-dan-repo>`** trong các ví dụ bên dưới bằng đường dẫn thực tế trên máy của bạn.
 
 ```powershell
-# Windows — cài cho Claude Code, Codex, Antigravity (app + CLI)
-powershell -ExecutionPolicy Bypass -File E:\an\fe-skill-andy\scripts\install-skills.ps1
+# Cách 1 (Khuyến nghị): Mở PowerShell, cd vào repo rồi chạy
+# cd <duong-dan-repo>\fe-skill-andy
+# powershell -ExecutionPolicy Bypass -File scripts\install-skills.ps1
+
+# Cách 2: Chạy từ bất kỳ đâu (nhớ đổi <duong-dan-repo> thành đường dẫn thực tế trên máy bạn)
+powershell -ExecutionPolicy Bypass -File <duong-dan-repo>\fe-skill-andy\scripts\install-skills.ps1
 
 # Chỉ một số tool
-powershell -ExecutionPolicy Bypass -File E:\an\fe-skill-andy\scripts\install-skills.ps1 -Tools codex,antigravity
+powershell -ExecutionPolicy Bypass -File <duong-dan-repo>\fe-skill-andy\scripts\install-skills.ps1 -Tools codex,antigravity
 
 # Thêm thư mục cũ cho bản tool đời trước
-powershell -ExecutionPolicy Bypass -File E:\an\fe-skill-andy\scripts\install-skills.ps1 -IncludeLegacy
+powershell -ExecutionPolicy Bypass -File <duong-dan-repo>\fe-skill-andy\scripts\install-skills.ps1 -IncludeLegacy
 ```
 ```bash
 # macOS / Linux
-sh ~/path/to/fe-skill-andy/scripts/install-skills.sh
+# macOS / Linux (cd vào repo rồi chạy, hoặc thay /path/to bằng đường dẫn thực tế):
+cd /path/to/fe-skill-andy && sh scripts/install-skills.sh
 ```
 
 Script tạo **liên kết** (junction/symlink) cho từng skill — không copy — nên sửa repo là mọi tool thấy ngay, và ghi chú học được đổ về một chỗ. Không ghi đè thư mục trùng tên của bộ khác. Cuối cùng chạy health check.
@@ -65,7 +76,7 @@ Cài theo dự án cho cả team: copy `skills/*` vào `<repo-ứng-dụng>/.age
 | Kiểm tra | Cách làm | Mong đợi |
 |---|---|---|
 | Liên kết | `Get-ChildItem $env:USERPROFILE\.claude\skills \| Select Name, LinkType, Target` | 17 dòng `Junction` trỏ về repo |
-| Bộ skill hợp lệ | `node E:\an\fe-skill-andy\skills\fe-andy\scripts\check-skills.mjs` | `→ PASS` |
+| Bộ skill hợp lệ | `node skills/fe-andy/scripts/check-skills.mjs` *(chạy từ thư mục repo)* | `→ PASS` |
 | Claude Code | Phiên mới → gõ `/` → tìm `fe-` | Thấy 17 skill |
 | Codex | Phiên mới → "list the skills you can use" | Thấy các skill `fe-*` (cần xác nhận) |
 | Antigravity | Chat mới → gõ `/` | Thấy `fe-*` (cần xác nhận) |
@@ -129,6 +140,14 @@ Mọi skill đi theo: **đọc → đề xuất → chờ duyệt → sửa → 
 | Dừng | `Dừng, chưa sửa gì` |
 
 Sau khi sửa, agent báo kết quả kiểm tra thật (lệnh + exit code) và dòng `Learned: …` (đã ghi bài học gì, hoặc "nothing new").
+
+### Ngoại lệ: Cơ chế Fast-Path cho chỉnh sửa vi mô (không cần chờ duyệt)
+Với các chỉnh sửa siêu nhỏ, an toàn tuyệt đối:
+- **Điều kiện (thỏa mãn cả 3):**
+  1. Thay đổi $\le 5$ dòng trong đúng 1 file.
+  2. Tính chất: Tinh chỉnh giao diện/copy đơn lẻ hoặc lệnh chỉ định rõ ràng (ví dụ: đổi `gap-4` thành `gap-6`, sửa chính tả text, đổi icon, sửa import).
+  3. Không rủi ro: Tuyệt đối không chạm vào auth, thanh toán, data store, router, hoặc interface props dùng chung.
+- **Cách Agent thực hiện:** Agent sửa trực tiếp với diff tối thiểu, chạy kiểm tra (lint/types) và báo kết quả ngay trong 1 lượt (bỏ qua bước lập bảng chờ duyệt để tránh mất thời gian của bạn).
 
 ---
 
@@ -549,7 +568,7 @@ Pending notes left: none
 
 fe-learn chỉ đề xuất skill mới khi: chưa skill nào phủ lĩnh vực đó, có ít nhất 3 luật đã kiểm chứng, và từ khóa kích hoạt không trùng skill khác. Nếu bạn chốt, agent tạo skill từ [skill-template.md](skills/fe-learn/references/skill-template.md), thêm vào bảng điều hướng và bảng phân vai, thêm câu thử routing. Sau đó **bạn chạy lại script cài** để mọi tool có liên kết tới skill mới:
 ```powershell
-powershell -ExecutionPolicy Bypass -File E:\an\fe-skill-andy\scripts\install-skills.ps1
+powershell -ExecutionPolicy Bypass -File <duong-dan-repo>\fe-skill-andy\scripts\install-skills.ps1
 ```
 
 ### 12.6 Nhịp khuyến nghị

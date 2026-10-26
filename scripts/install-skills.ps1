@@ -74,6 +74,51 @@ foreach ($tool in $Selected) {
   }
 }
 
+# Sync Antigravity global skills.json configuration
+if ($Selected -contains "antigravity" -or $Selected -contains "all") {
+  $geminiConfigDir = Join-Path $HomeDir ".gemini\config"
+  $geminiSkillsJson = Join-Path $geminiConfigDir "skills.json"
+  if ($Uninstall) {
+    if (Test-Path $geminiSkillsJson) {
+      try {
+        $json = Get-Content $geminiSkillsJson -Raw | ConvertFrom-Json
+        if ($json.entries) {
+          $normalizedSrc = $Src.Replace("\", "/")
+          $json.entries = @($json.entries | Where-Object {
+            $p = "$($_.path)".Replace("\", "/")
+            $p -ne $normalizedSrc -and -not $p.EndsWith("/fe-skill-andy/skills") -and -not $p.EndsWith("/starci-fe-skills/skills")
+          })
+          $json | ConvertTo-Json -Depth 5 | Set-Content -Path $geminiSkillsJson -Encoding UTF8
+          Write-Host "`n== Antigravity global config: cleaned $geminiSkillsJson"
+        }
+      } catch {
+        Write-Warning "Could not update Antigravity skills.json: $_"
+      }
+    }
+  } else {
+    try {
+      if (-not (Test-Path $geminiConfigDir)) { New-Item -ItemType Directory -Force $geminiConfigDir | Out-Null }
+      $normalizedSrc = $Src.Replace("\", "/")
+      $entries = @()
+      if (Test-Path $geminiSkillsJson) {
+        $existing = Get-Content $geminiSkillsJson -Raw | ConvertFrom-Json
+        if ($existing.entries) {
+          $entries = @($existing.entries | Where-Object {
+            $p = "$($_.path)".Replace("\", "/")
+            $p -ne $normalizedSrc -and -not $p.EndsWith("/starci-fe-skills/skills")
+          })
+        }
+      }
+      $entries += [PSCustomObject]@{ path = $normalizedSrc }
+      $config = [PSCustomObject]@{ entries = $entries }
+      $config | ConvertTo-Json -Depth 5 | Set-Content -Path $geminiSkillsJson -Encoding UTF8
+      Write-Host "`n== Antigravity global config: registered $normalizedSrc in $geminiSkillsJson"
+    } catch {
+      Write-Warning "Could not update Antigravity skills.json: $_"
+    }
+  }
+}
+
 if (-not $Uninstall) {
   $node = Get-Command node -ErrorAction SilentlyContinue
   if ($node) {

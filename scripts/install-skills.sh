@@ -55,6 +55,47 @@ for tool in $TOOLS; do
   done
 done
 
+# Sync Antigravity global skills.json
+case " $TOOLS " in
+  *" antigravity "*)
+    GEMINI_CFG="$HOME/.gemini/config"
+    GEMINI_JSON="$GEMINI_CFG/skills.json"
+    if [ "$UNINSTALL" = 1 ]; then
+      if [ -f "$GEMINI_JSON" ] && command -v node >/dev/null 2>&1; then
+        node -e '
+          const fs = require("fs");
+          try {
+            const p = process.argv[1];
+            const src = process.argv[2];
+            const d = JSON.parse(fs.readFileSync(p, "utf8"));
+            if (Array.isArray(d.entries)) {
+              d.entries = d.entries.filter(e => e.path !== src && !e.path.endsWith("/fe-skill-andy/skills"));
+              fs.writeFileSync(p, JSON.stringify(d, null, 2) + "\n");
+              console.log("== Antigravity global config: cleaned skills.json");
+            }
+          } catch (_) {}
+        ' "$GEMINI_JSON" "$SRC"
+      fi
+    else
+      mkdir -p "$GEMINI_CFG"
+      if command -v node >/dev/null 2>&1; then
+        node -e '
+          const fs = require("fs");
+          const p = process.argv[1];
+          const src = process.argv[2];
+          let d = { entries: [] };
+          try { d = JSON.parse(fs.readFileSync(p, "utf8")); } catch (_) {}
+          if (!Array.isArray(d.entries)) d.entries = [];
+          d.entries = d.entries.filter(e => e.path !== src && !e.path.endsWith("/starci-fe-skills/skills"));
+          d.entries.push({ path: src });
+          fs.writeFileSync(p, JSON.stringify(d, null, 2) + "\n");
+          console.log("== Antigravity global config: registered in skills.json");
+        ' "$GEMINI_JSON" "$SRC"
+      fi
+    fi
+    ;;
+esac
+
 if [ "$UNINSTALL" = 0 ] && command -v node >/dev/null 2>&1; then
   echo ""
   echo "== Health check"

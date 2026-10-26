@@ -28,6 +28,19 @@ Before auditing or editing, look for `project-profile.md` at the root of the **t
 5. **Verification**: Run the checks the skill names (lint, types, build, scripts, measurements) and report real output. Log the session (§7).
 6. **Learn**: Run the learning loop in [learning-loop.md](./learning-loop.md) — capture anything new and reusable into the skill set.
 
+### 1.1 Fast-Path for Micro-Edits
+
+For tiny, uncontroversial adjustments, the full proposal ceremony can be streamlined to prevent friction:
+- **Eligibility (ALL must be true):**
+  1. Scope: $\le 5$ lines changed within a single file.
+  2. Nature: Isolated cosmetic tweak or explicit single instruction (e.g. adjust a Tailwind spacing/color class, fix a typo/label copy, update an icon, or fix a broken import).
+  3. Zero Risk: Does NOT touch auth, payment, data stores, API contracts, routing, or public props of shared Primitives/Blocks.
+- **Fast-Path Execution:**
+  - Skip Step 2 (formal proposal table) and Step 3 (blocking pause for user approval).
+  - Execute Step 4 (Precision Edit) directly with minimal surgical diff.
+  - Immediately run Step 5 (Verification) and display the applied diff + verification output in that single turn.
+  - Execute Step 6 (Learn) if a reusable pattern emerges.
+
 ---
 
 ## 2. Priority Rubric (use in every report)

@@ -10,6 +10,15 @@
 
 ## 📜 Danh sách nhật ký (Mới nhất ở trên cùng)
 
+### [2026-10-26] Fast-Path for micro-edits & Antigravity skills.json sync in installers
+- **Objective:** Add a low-friction Fast-Path protocol for micro-edits (<= 5 lines) to conventions.md, sync Antigravity global `skills.json` automatically in installer scripts, and document in the user guide.
+- **Files Changed:**
+  - Modified: [skills/fe-andy/references/conventions.md](skills/fe-andy/references/conventions.md) (added §1.1 Fast-Path for micro-edits <= 5 lines).
+  - Modified: [scripts/install-skills.ps1](scripts/install-skills.ps1), [scripts/install-skills.sh](scripts/install-skills.sh) (auto-sync `~/.gemini/config/skills.json` on install/uninstall).
+  - Modified: [HUONG-DAN-SU-DUNG.md](HUONG-DAN-SU-DUNG.md) (documented Fast-Path in §5; added path-replacement notice for different user directories and generalized all script examples).
+  - Modified: [skills/fe-andy/references/learned.md](skills/fe-andy/references/learned.md) (recorded Fast-Path and Antigravity skills.json sync lessons).
+- **Status & Next Steps:** Health check PASS (0 errors, 0 warnings); install-skills.ps1 tested and verified; Antigravity global skills.json verified.
+
 ### [2026-10-26] fe-learn collect → check → plan → approve flow; per-skill prompt guide
 - **Objective:** Detailed usage guide with standard prompts per skill; a collect/check/plan/approve flow for adding knowledge or new skills (kept under the name fe-learn per user).
 - **Files Changed:** Modified [skills/fe-learn/SKILL.md](skills/fe-learn/SKILL.md) (modes A–D, 8 steps), created [skills/fe-learn/references/skill-template.md](skills/fe-learn/references/skill-template.md); rewrote [HUONG-DAN-SU-DUNG.md](HUONG-DAN-SU-DUNG.md); router row in fe-andy; routing evals R29–R30; check-skills.mjs now skips fenced code blocks.
