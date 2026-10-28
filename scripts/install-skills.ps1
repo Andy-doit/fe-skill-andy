@@ -35,12 +35,10 @@ $HomeDir = $env:USERPROFILE
 $Targets = [ordered]@{
   "claude"          = @("$HomeDir\.claude\skills")
   "codex"           = @("$HomeDir\.agents\skills")
-  "antigravity"     = @("$HomeDir\.gemini\config\skills")
   "antigravity-cli" = @("$HomeDir\.gemini\antigravity-cli\skills")
 }
 if ($IncludeLegacy) {
   $Targets["codex"] += "$HomeDir\.codex\skills"
-  $Targets["antigravity"] += "$HomeDir\.gemini\antigravity\skills"
 }
 
 $Selected = if ($Tools -contains "all") { $Targets.Keys } else { $Tools }
@@ -74,47 +72,73 @@ foreach ($tool in $Selected) {
   }
 }
 
-# Sync Antigravity global skills.json configuration
+# Clean old standalone junctions and register fe-skill-andy as an Antigravity Plugin
 if ($Selected -contains "antigravity" -or $Selected -contains "all") {
   $geminiConfigDir = Join-Path $HomeDir ".gemini\config"
   $geminiSkillsJson = Join-Path $geminiConfigDir "skills.json"
-  if ($Uninstall) {
-    if (Test-Path $geminiSkillsJson) {
-      try {
-        $json = Get-Content $geminiSkillsJson -Raw | ConvertFrom-Json
-        if ($json.entries) {
-          $normalizedSrc = $Src.Replace("\", "/")
-          $json.entries = @($json.entries | Where-Object {
-            $p = "$($_.path)".Replace("\", "/")
-            $p -ne $normalizedSrc -and -not $p.EndsWith("/fe-skill-andy/skills") -and -not $p.EndsWith("/starci-fe-skills/skills")
-          })
-          $json | ConvertTo-Json -Depth 5 | Set-Content -Path $geminiSkillsJson -Encoding UTF8
-          Write-Host "`n== Antigravity global config: cleaned $geminiSkillsJson"
-        }
-      } catch {
-        Write-Warning "Could not update Antigravity skills.json: $_"
+  $legacyAgySkills = Join-Path $HomeDir ".gemini\antigravity\skills"
+  $cfgSkillsDir = Join-Path $geminiConfigDir "skills"
+  $pluginDir = Join-Path $geminiConfigDir "plugins\fe-skill-andy"
+
+  # Clean old legacy and standalone duplicate junctions
+  if (Test-Path $legacyAgySkills) {
+    Get-ChildItem -Path $legacyAgySkills -ErrorAction SilentlyContinue | ForEach-Object {
+      if ($_.LinkType -eq "Junction") { (Get-Item $_.FullName).Delete() }
+      else { Remove-Item -Recurse -Force $_.FullName -ErrorAction SilentlyContinue }
+    }
+    Remove-Item -Recurse -Force $legacyAgySkills -ErrorAction SilentlyContinue
+  }
+  if (Test-Path $cfgSkillsDir) {
+    Get-ChildItem -Path $cfgSkillsDir -ErrorAction SilentlyContinue | Where-Object { $_.Name -like "fe*" } | ForEach-Object {
+      if ($_.LinkType -eq "Junction") { (Get-Item $_.FullName).Delete() }
+      else { Remove-Item -Recurse -Force $_.FullName -ErrorAction SilentlyContinue }
+    }
+    $rem = Get-ChildItem -Path $cfgSkillsDir -ErrorAction SilentlyContinue
+    if (-not $rem) { Remove-Item -Force $cfgSkillsDir -ErrorAction SilentlyContinue }
+  }
+
+  if (Test-Path $geminiSkillsJson) {
+    try {
+      $json = Get-Content $geminiSkillsJson -Raw | ConvertFrom-Json
+      if ($json.entries) {
+        $normalizedSrc = $Src.Replace("\", "/")
+        $json.entries = @($json.entries | Where-Object {
+          $p = "$($_.path)".Replace("\", "/")
+          -not ($p.Contains("fe-skill-andy") -or $p.Contains("starci-fe-skills"))
+        })
+        $json | ConvertTo-Json -Depth 5 | Set-Content -Path $geminiSkillsJson -Encoding UTF8
       }
+    } catch {
+      Write-Warning "Could not update Antigravity skills.json: $_"
+    }
+  }
+
+  if ($Uninstall) {
+    if (Test-Path $pluginDir) {
+      $pSkills = Join-Path $pluginDir "skills"
+      if (Test-Path $pSkills) { (Get-Item $pSkills).Delete() }
+      Remove-Item -Path $pluginDir -Recurse -Force -ErrorAction SilentlyContinue
+      Write-Host "`n== Antigravity: removed plugin $pluginDir"
     }
   } else {
     try {
-      if (-not (Test-Path $geminiConfigDir)) { New-Item -ItemType Directory -Force $geminiConfigDir | Out-Null }
-      $normalizedSrc = $Src.Replace("\", "/")
-      $entries = @()
-      if (Test-Path $geminiSkillsJson) {
-        $existing = Get-Content $geminiSkillsJson -Raw | ConvertFrom-Json
-        if ($existing.entries) {
-          $entries = @($existing.entries | Where-Object {
-            $p = "$($_.path)".Replace("\", "/")
-            $p -ne $normalizedSrc -and -not $p.EndsWith("/starci-fe-skills/skills")
-          })
-        }
+      if (-not (Test-Path $pluginDir)) { New-Item -ItemType Directory -Force $pluginDir | Out-Null }
+      $pluginJsonSrc = Join-Path $Src "..\.antigravity-plugin\plugin.json"
+      $readmeSrc = Join-Path $Src "..\README.md"
+      if (Test-Path $pluginJsonSrc) { Copy-Item -Path $pluginJsonSrc -Destination (Join-Path $pluginDir "plugin.json") -Force }
+      if (Test-Path $readmeSrc) { Copy-Item -Path $readmeSrc -Destination (Join-Path $pluginDir "README.md") -Force }
+      $rulesSrc = Join-Path $Src "..\.antigravity-plugin\rules"
+      $pluginRulesDir = Join-Path $pluginDir "rules"
+      if (Test-Path $rulesSrc) {
+        if (-not (Test-Path $pluginRulesDir)) { New-Item -ItemType Directory -Force $pluginRulesDir | Out-Null }
+        Copy-Item -Path (Join-Path $rulesSrc "*") -Destination $pluginRulesDir -Force -Recurse
       }
-      $entries += [PSCustomObject]@{ path = $normalizedSrc }
-      $config = [PSCustomObject]@{ entries = $entries }
-      $config | ConvertTo-Json -Depth 5 | Set-Content -Path $geminiSkillsJson -Encoding UTF8
-      Write-Host "`n== Antigravity global config: registered $normalizedSrc in $geminiSkillsJson"
+      $pluginSkillsJunction = Join-Path $pluginDir "skills"
+      if (Test-Path $pluginSkillsJunction) { (Get-Item $pluginSkillsJunction).Delete() }
+      New-Item -ItemType Junction -Path $pluginSkillsJunction -Target $Src | Out-Null
+      Write-Host "`n== Antigravity: registered clean plugin (no duplicates) at $pluginDir"
     } catch {
-      Write-Warning "Could not update Antigravity skills.json: $_"
+      Write-Warning "Could not register Antigravity plugin: $_"
     }
   }
 }

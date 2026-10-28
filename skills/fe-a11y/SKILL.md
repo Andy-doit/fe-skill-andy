@@ -43,6 +43,7 @@ Keyboard, focus, semantics, and assistive technology support. Follows [conventio
 **Names & state**:
 - Icon-only buttons: `aria-label` or visually hidden text.
 - Toggles/disclosures: `aria-expanded`, `aria-controls`; current page in nav: `aria-current="page"`.
+- Custom dropdown/combobox triggers (e.g. `<button popovertarget="...">` opening a listbox): apply `role="combobox"`, `aria-controls="listbox-id"`, `aria-haspopup="listbox"`, and `aria-expanded={isOpen}`. Plain `<button>` does not support `aria-invalid` or `aria-required` in ARIA specs/linters; `role="combobox"` officially supports them.
 - Images: meaningful `alt`; decorative `alt=""`.
 
 **Dynamic content**:

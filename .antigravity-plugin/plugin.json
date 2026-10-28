@@ -13,13 +13,17 @@
     "/fe-i18n",
     "/fe-layout",
     "/fe-learn",
+    "/fe-mfe",
     "/fe-motion",
     "/fe-perf",
+    "/fe-pwa",
     "/fe-recon",
+    "/fe-review",
     "/fe-sec",
     "/fe-ship",
     "/fe-skel",
     "/fe-test",
-    "/fe-ux"
+    "/fe-ux",
+    "/fe-viz"
   ]
 }

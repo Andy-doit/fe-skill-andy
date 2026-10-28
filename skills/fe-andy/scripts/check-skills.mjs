@@ -121,7 +121,7 @@ for (const skill of skills) {
       }
     });
     if (file.endsWith(path.join("references", "learned.md"))) {
-      const count = (body.match(/\*\*Status:\*\*\s*new/gi) || []).length;
+      const count = (body.match(/(?:\*\*Status:\*\*|Status:)\s*new/gi) || []).length;
       if (count) pending.push(`${skill}: ${count}`);
     }
   }

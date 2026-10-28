@@ -16,4 +16,4 @@ Only reusable, proven, non-duplicate lessons. No secrets, client names, or machi
   ```
 - **Applies to:** Any framework serving static SVGs (`next/image`, Vite, Astro)
 - **Related:** loading.md:16
-- **Status:** new
+- **Status:** promoted (2026-10-28 -> references/loading.md §2 Images)

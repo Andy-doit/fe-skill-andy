@@ -21,6 +21,7 @@ Each row: what to check → how to fix → how to verify. Measure first ([measur
 | Oversized images | Serve responsive sizes: `srcset` + `sizes`; modern formats (AVIF/WebP) with fallback | Network: transferred bytes vs rendered size |
 | Below-the-fold images | `loading="lazy"` + `decoding="async"` | Not requested until scrolled near |
 | Missing dimensions | `width`/`height` attributes or CSS `aspect-ratio` | CLS shift regions |
+| SVGs with embedded base64 raster images (`<image>`) | Inspect SVGs in `public/`; re-export true vector `<path>` or convert to modern WebP/AVIF. Framework image optimizers (e.g. `next/image`) bypass optimization for `.svg`, delivering full uncompressed raster payloads | Check SVG markup (`!svg.includes('<image')`); transferred bytes shrink |
 
 ## 3. Video
 

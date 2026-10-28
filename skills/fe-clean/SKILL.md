@@ -25,7 +25,7 @@ Find code smells and refactor in small, verified steps. Follows [conventions.md]
 
 | Area | Smell | Typical fix |
 |---|---|---|
-| Layers | Feature components with custom styling; Blocks calling stores/APIs | Move style into a Block; lift data to the Feature |
+| Layers | Feature components with custom styling; Blocks calling stores/APIs; leftover re-export bridge shims (`export * from "@/components/blocks/..."`) in feature folders | Move style into a Block; lift data to the Feature; prune leftover shims once callers import directly from blocks |
 | Size | Function > 50 lines, component > 200 lines, nesting > 3 levels | Extract components/hooks; early returns |
 | React | Derived state in `useEffect`; inline objects into memoized children; index keys on dynamic lists | Compute in render; stable keys (see fe-perf for measured re-renders) |
 | TypeScript | `any`, `as unknown as T`, non-null `!` chains, untyped API payloads | Proper types; runtime validation (e.g. Zod) at API boundaries |

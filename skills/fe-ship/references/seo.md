@@ -22,6 +22,7 @@ Next.js App Router: `export const metadata` or `generateMetadata()` per route, `
 ## 3. Sitemap and robots
 
 - `sitemap.xml` with canonical URLs only, `lastmod` when reliable; split above 50,000 URLs.
+- In Next.js App Router (`app/sitemap.ts` / `.js`), define multilingual URLs with `alternates: { languages: { en: '...', vi: '...', 'x-default': '...' } }`. Next.js natively transforms this into standards-compliant `<xhtml:link rel="alternate" hreflang="..." href="..." />` tags in `/sitemap.xml` without extra packages.
 - `robots.txt`: allow crawling of public pages, reference the sitemap, block staging entirely (also with auth).
 
 ## 4. Multilingual

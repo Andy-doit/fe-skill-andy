@@ -17,4 +17,4 @@ Only reusable, proven, non-duplicate lessons. No secrets, client names, or machi
   ```
 - **Applies to:** Node.js >= 18.0.0, any JS/TS frontend project
 - **Related:** test-recipes.md:1
-- **Status:** new
+- **Status:** promoted (2026-10-28 -> references/test-recipes.md §1.1)

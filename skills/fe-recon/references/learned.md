@@ -17,4 +17,4 @@ Only reusable, proven, non-duplicate lessons. No secrets, client names, or machi
   ```
 - **Applies to:** Next.js >= 16.0.0
 - **Related:** none
-- **Status:** new
+- **Status:** promoted (2026-10-28 -> SKILL.md §1 Steps)

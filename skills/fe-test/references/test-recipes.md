@@ -20,6 +20,21 @@ describe("formatPrice", () => {
 ```
 Note: `Intl` output can contain non-breaking spaces; compare with `toBe` on normalized strings if needed.
 
+### 1.1 Zero-dependency testing with Node.js built-in runner (`node:test`, Node >= 18)
+
+For minimal projects, static sites, or landing pages without an installed test framework (Jest/Vitest), use Node.js built-in runner and assertions without adding dependencies:
+
+```js
+// test/i18n-parity.test.mjs — run with: node --test
+import test from "node:test";
+import assert from "node:assert/strict";
+
+test("i18n dictionary key parity", () => {
+  assert.deepEqual(missingKeys, []);
+});
+```
+Runs in <100ms, requires zero configuration or build setup, and satisfies Tier 1 & 2 verification.
+
 ## 2. Component (Testing Library)
 
 ```tsx

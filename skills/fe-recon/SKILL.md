@@ -27,7 +27,7 @@ Map a frontend codebase quickly without changing anything. Follows [conventions.
 |---|---|---|
 | 1 Stack | `package.json` (deps + scripts), lockfile name, `tsconfig.json`, framework config (`next.config.*`, `vite.config.*`) | Framework + versions, package manager, TS strictness, scripts |
 | 2 Layout | Directory listing 2–3 levels deep (`git ls-files` grouped by folder) | Source root, layering (features/blocks/ui), naming patterns |
-| 3 Rendering & routing | `app/` or `pages/` tree, `"use client"` count, route handlers, middleware | Router type, client/server split, dynamic segments (`[locale]`) |
+| 3 Rendering & routing | `app/` or `pages/` tree, `"use client"` count, route handlers, middleware (`middleware.js` in Next.js < 16; check `proxy.js` in Next.js 16+) | Router type, client/server split, dynamic segments (`[locale]`), proxy/middleware conventions |
 | 4 Data & state | Imports of SWR/TanStack/Redux/Zustand, API client files | Server-state lib, stores, fetch wrappers |
 | 5 Styling | `globals.css`, Tailwind config/`@theme`, UI library imports | Tokens, dark mode, UI primitives |
 | 6 i18n | messages folder, i18n config | Library, locales |

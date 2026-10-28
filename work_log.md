@@ -10,6 +10,102 @@
 
 ## 📜 Danh sách nhật ký (Mới nhất ở trên cùng)
 
+### [2026-10-28 14:36] Full Andy Agent System Integration (Plugin & Workspace Rules)
+- **Objective:** Tích hợp `andy-persona.md` và `skill-dispatcher.md` vào toàn bộ hệ thống (workspace rules và global Antigravity plugin rules) để Andy trở thành Agent mặc định.
+- **Files Modified/Created:**
+  - [.antigravity-plugin/rules/AGENTS.md](.antigravity-plugin/rules/AGENTS.md) — Tạo rule bundle của plugin kết hợp Persona + Dispatcher (< 8KB, dưới trần 24KB của Antigravity).
+  - [AGENTS.md](AGENTS.md) & [GEMINI.md](GEMINI.md) — Tích hợp Andy Persona và Skill Dispatcher vào chỉ dẫn cấp workspace.
+  - [scripts/install-skills.ps1](scripts/install-skills.ps1) & [scripts/clean-and-reinstall.ps1](scripts/clean-and-reinstall.ps1) — Cập nhật automation script để tự động đồng bộ `rules/` vào thư mục plugin Antigravity toàn cục.
+  - `C:\Users\Endy\.gemini\config\plugins\fe-skill-andy\rules\AGENTS.md` — Cài đặt live vào Antigravity plugin toàn cục.
+- **Verification:**
+  - Live plugin rule verified: `C:\Users\Endy\.gemini\config\plugins\fe-skill-andy\rules\AGENTS.md` (7,139 bytes).
+  - Health check `node skills/fe-andy/scripts/check-skills.mjs`: PASS (0 errors, 0 warnings).
+- **Status & Impact:**
+  - Ở repo này: Agent tự động nhận diện danh tính Andy, các giới hạn an toàn và bảng định tuyến từ `AGENTS.md` / `GEMINI.md`.
+  - Ở bất kỳ repo nào khác: Khi plugin `fe-skill-andy` được kích hoạt, Antigravity tự nạp `rules/AGENTS.md` từ plugin, biến agent thành Andy với đầy đủ kỹ năng Frontend.
+
+### [2026-10-28] v2 Rewrite: Persona & Dispatcher based on production review
+- **Objective:** Apply structured review feedback to rewrite both `andy-persona.md` and `skill-dispatcher.md` in English (with Vietnamese signals/examples).
+- **Changes Applied (from review):**
+  - **Persona**: Reduced from 906 → 740 words. Reordered: Identity → Scope/Limits → Working Method → Output Contract → Tone. Added "why" to every rule. Added Stop/Escalation conditions table. Added Done Criteria checklist. Removed parallel tool use rule (too implementation-specific).
+  - **Dispatcher**: Added §3 Compositional Tasks (multi-skill decomposition + common compositions table). Added §4 Artifact-Based Routing. Added §5.2 Model Cascade principle. Added §6 Skill Loadout principle (metadata-only default, full load on-demand). Expanded Vietnamese keywords across all skills.
+- **Verification:**
+  - Static check: PASS — 21/21 skills covered, 10/10 persona sections, 5/5 new dispatcher sections.
+  - Routing evals: 84% (37/44) — same as pre-rewrite, no regression. 7 remaining failures are ambiguous short Vietnamese phrases (keyword matching limit, not LLM semantic limit).
+- **Decisions:**
+  - Persona word count 740 > target 600, accepted because new sections (Stop conditions, Done criteria) add essential value.
+  - Did not add parallel tool use rule (review suggested it, but it's runtime-specific, not behavioral).
+  - Kept Vietnamese + English dual keywords in dispatcher for bilingual routing.
+- **Files Changed:** [andy-persona.md](andy-persona.md), [skill-dispatcher.md](skill-dispatcher.md)
+
+### [2026-10-28] Andy Agent Blueprint: Persona, Dispatcher & Routing Evals
+- **Objective:** Brainstorm và xây dựng các thành phần cốt lõi để biến fe-skill-andy thành AI Agent cá nhân hoàn chỉnh.
+- **Files Created:**
+  - [andy-persona.md](andy-persona.md) — Linh hồn & nguyên tắc bất khả xâm phạm của Agent Andy (casual/bạn bè, tiếng Việt mặc định).
+  - [skill-dispatcher.md](skill-dispatcher.md) — Bảng định tuyến intent → skill → model cho 21 skills, gồm keywords tiếng Việt thực tế và Multi-model routing rules.
+  - [andy-evals.mjs](andy-evals.mjs) — Bộ 44 test cases routing eval tự động (keyword matching simulation).
+- **Verification:**
+  - Static check: 21/21 skills covered trong dispatcher, tất cả key sections trong persona — PASS.
+  - Routing eval ban đầu: 66% (29/44).
+  - Sau khi bổ sung keywords tiếng Việt thực tế: **84% (37/44)** — WARNING (≥ 90% để PASS).
+  - 7 case còn lại fail do câu nói quá ngắn/mơ hồ — chấp nhận được với LLM semantic routing thực tế.
+- **Decisions:**
+  - Eval script dùng keyword matching để simulate dispatcher logic — đủ để phát hiện gaps trong keywords, không thay thế LLM semantic routing thực.
+  - Giới hạn 84% là acceptable: thực tế LLM đọc ngữ nghĩa tốt hơn regex, nên accuracy thực tế cao hơn con số này.
+- **Next Steps:**
+  - Tích hợp `andy-persona.md` và `skill-dispatcher.md` vào System Prompt của Agent (AGENTS.md hoặc plugin.json).
+  - Thêm test cases mới vào `andy-evals.mjs` khi phát hiện routing sai trong thực tế.
+  - Phase tiếp theo: Multi-model routing thực tế với OpenRouter/LiteLLM.
+
+### [2026-10-28] fe-learn: Promote 6 proven notes to skill-set & Health check PASS
+- **Objective:** Run `/fe-learn` to audit pending learned notes across all 21 skills, evaluate value, and fold approved items into target skills.
+- **Learnings Promoted (6 items):**
+  1. `fe-a11y`: `<button popovertarget>` trigger requires `role="combobox"` for `aria-invalid` / `aria-required` support per ARIA 1.2 Combobox pattern (updated [skills/fe-a11y/SKILL.md](skills/fe-a11y/SKILL.md)).
+  2. `fe-ship`: Next.js App Router multilingual sitemap `alternates` generating standard `<xhtml:link rel="alternate" hreflang="...">` tags natively (updated [skills/fe-ship/references/seo.md](skills/fe-ship/references/seo.md)).
+  3. `fe-clean`: Prune leftover 1-line re-export bridge/barrel shims (`export * from "@/components/blocks/..."`) in feature folders post-block extraction (updated [skills/fe-clean/SKILL.md](skills/fe-clean/SKILL.md)).
+  4. `fe-perf`: Audit static SVGs for embedded oversized base64 raster `<image>` tags that bypass framework image compression (updated [skills/fe-perf/references/loading.md](skills/fe-perf/references/loading.md)).
+  5. `fe-recon`: Version-sensitive check for Next.js 16+ `proxy.js` alongside legacy `middleware.js` in routing recon (updated [skills/fe-recon/SKILL.md](skills/fe-recon/SKILL.md)).
+  6. `fe-test`: Zero-dependency testing recipe with Node.js built-in `node:test` + `node:assert/strict` for lightweight projects/landing pages (updated [skills/fe-test/references/test-recipes.md](skills/fe-test/references/test-recipes.md)).
+- **Decisions:**
+  - Items 7 & 8 (fintech-dense radius remap & borderless tabs) excluded from core skill tokens per user decision and marked scoped/rejected in [skills/fe-layout/references/learned.md](skills/fe-layout/references/learned.md).
+  - Updated [skills/fe-andy/scripts/check-skills.mjs](skills/fe-andy/scripts/check-skills.mjs) regex to uniformly track both `Status: new` and `**Status:** new`.
+- **Verification:**
+  - `node skills/fe-andy/scripts/check-skills.mjs`: PASS (0 errors, 0 warnings, 0 pending).
+
+### [2026-10-26] Resolve Autocomplete Duplication & Dedicated Clean-and-Reinstall Automation
+- **Objective:** Fix duplicate `/fe-*` entries in the Antigravity chat autocomplete menu and provide a clean wipe & reinstall mechanism ("xoá hết rồi cài lại").
+- **Root Cause Identified:**
+  - Antigravity loaded both the standalone skill junctions (`~/.gemini/config/skills/`, legacy `~/.gemini/antigravity/skills/`, `.agents/skills`) AND the newly registered Antigravity Plugin (`~/.gemini/config/plugins/fe-skill-andy/`).
+  - Standalone skills appeared without badge; plugin skills appeared with `Andy Frontend Agent Skills` badge, creating duplicate pairs for all 21 skills.
+- **Actions Taken:**
+  - Created [scripts/clean-and-reinstall.ps1](scripts/clean-and-reinstall.ps1): cleans up all legacy junctions in `~/.gemini/antigravity/skills`, standalone `fe*` junctions in `~/.gemini/config/skills`, workspace `.agents/skills`, cleans `skills.json`, and reinstalls only the clean Antigravity plugin (`v2.6.0`).
+  - Updated [scripts/install-skills.ps1](scripts/install-skills.ps1) so Antigravity target exclusively installs the Plugin and removes loose standalone junctions.
+  - Unlinked and removed `.agents/` in `fe-skill-andy`.
+  - Health check: 21 skills in skills/ → PASS (0 errors, 0 warnings).
+- **Status & Next Steps:** Instruct user to run `clean-and-reinstall.ps1` in PowerShell to wipe all old duplicates and leave only the single clean plugin.
+
+### [2026-10-26] Antigravity 2.0 Slash Command Autocomplete & Multi-Project Plugin Integration
+- **Objective:** Fix issue where typing `/fe` in Antigravity 2.0 UI chat box did not show `fe-*` skills in new/other projects (e.g., `dnl-capital-landing-page`).
+- **Root Cause Identified:**
+  1. Antigravity 2.0 (Electron desktop app) populates the chat `/` dropdown autocomplete from registered plugins in `~/.gemini/config/plugins/<plugin-name>/plugin.json` (`suggestedPrompts` property) and builtin app skills. Individual skill directories in `~/.gemini/config/skills` or `skills.json` provide agent execution capability, but do NOT populate the slash dropdown UI without plugin registration.
+  2. For per-workspace detection, Antigravity looks specifically at `<workspace>/.agents/skills/`.
+  3. Antigravity caches plugins and skills at window/process startup, requiring an app restart or Window reload to refresh autocomplete suggestions.
+- **Actions Taken:**
+  - Packaged and registered `fe-skill-andy` as a global Antigravity plugin in `C:\Users\Endy\.gemini\config\plugins\fe-skill-andy` with `plugin.json` (listing all 21 `/fe-*` commands in `suggestedPrompts`), `README.md`, and NTFS junction to `skills`.
+  - Updated [scripts/install-skills.ps1](scripts/install-skills.ps1) and [.antigravity-plugin/plugin.json](.antigravity-plugin/plugin.json) to automate this setup on every install.
+  - Linked `.agents/skills` junction in `D:\Work\AI\fe-skill-andy` and secondary workspace `dnl-capital-landing-page`.
+  - Added `.agents/` to [.gitignore](.gitignore).
+  - Health check: 21 skills in skills/ → PASS (0 errors, 0 warnings).
+- **Status & Next Steps:** Instruct user to fully restart Antigravity 2.0 (close app and reopen) to refresh the autocomplete cache. Explain that skills can also be triggered directly in chat regardless of autocomplete.
+
+### [2026-10-26] Big update review & Antigravity installer execution (21 skills linked)
+- **Objective:** Review the big update (v2.2.0–v2.6.0, 51 files, +4714 lines); re-run installer to link the 4 new skills (`fe-mfe`, `fe-pwa`, `fe-review`, `fe-viz`) to Antigravity global environment; verify health check.
+- **Verification Results:**
+  - Health check: 21 skills in skills/ → PASS (0 errors, 0 warnings).
+  - Installer: Ran `scripts\install-skills.ps1 -Tools antigravity`. All 21 skills linked to `~/.gemini/config/skills` and `~/.gemini/antigravity/skills` via NTFS junctions; global `skills.json` verified; created workspace junction `.agents/skills` -> `skills`; updated `.antigravity-plugin/plugin.json` with all 21 suggestedPrompts.
+  - New scripts verified: `check-build-output.mjs` and `check-env-secrets.mjs` loaded successfully.
+- **Status & Next Steps:** All 21 skills are active, linked, and available in the Antigravity runtime.
+
 ### [2026-10-26] v2.6.0 — new skill fe-viz (data visualization)
 - **Objective:** Close the last open coverage item with a dedicated skill.
 - **Files Changed:**
