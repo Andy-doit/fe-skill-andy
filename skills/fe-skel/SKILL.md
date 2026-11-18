@@ -38,6 +38,7 @@ Render data-backed regions through one switch component: **Error → Loading →
 - Show skeleton only on first load (`isLoading && !data`); on refetch keep stale content and show a subtle indicator.
 - Error state: plain-language message + retry; empty state: why it is empty + the next action (copy rules: fe-ux skill).
 - Route-level: in Next.js App Router, `loading.tsx` per segment for instant navigation feedback.
+- See [data-slot-pattern.md](references/data-slot-pattern.md) for the DataSlot<T> + SlotView + Skeleton Parity recipe.
 
 ## 3. Workflow
 

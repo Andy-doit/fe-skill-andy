@@ -55,3 +55,4 @@ Invoke a skill by name in whatever way your agent supports. Routing test cases: 
 - [engineering-workflow.md](./references/engineering-workflow.md) — branching, conventional commits, rebase/bisect/worktree, PR template, code-review order and comment labels, ADR template, RFC-lite, planning
 - [learned.md](./references/learned.md) — learned notes about routing and shared conventions
 - [scripts/check-skills.mjs](./scripts/check-skills.mjs) — skill-set health check (`node scripts/check-skills.mjs` from this folder, or pass the skills root path)
+- [scripts/check-loosening.mjs](./scripts/check-loosening.mjs) — scan codebase for banned loosening markers (`eslint-disable`, `@ts-ignore`, skipped tests, `|| true`)

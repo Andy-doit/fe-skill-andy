@@ -62,3 +62,7 @@ Last reviewed: YYYY-MM-DD
 
 ## 8. Known decisions & exceptions
 - YYYY-MM-DD — <decision> — <reason>
+
+## Domain Concepts
+- Catalog location: <!-- e.g. docs/concepts/README.md or .starciwork/concepts/README.md -->
+- Read the catalog before touching any folder. See [domain-concept-catalog.md](../../fe-recon/references/domain-concept-catalog.md).

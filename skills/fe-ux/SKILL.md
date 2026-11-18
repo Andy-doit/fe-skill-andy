@@ -22,7 +22,24 @@ Evidence-based UX: heuristics, flows, forms, and words. Follows [conventions.md]
 
 ---
 
+See [proof-lenses.md](references/proof-lenses.md) for the gating vs scored audit framework (A11Y, Contrast, Focus, Motion, Taste, UX lenses).
+
 ## 1. Mode 1 — Brainstorm
+
+### Canvas-First Order
+UI changes follow this order: **Canvas/Mockup → Code → Verification**.
+
+A mockup is designed from exactly two inputs only:
+1. **The business**: real backend operations (resolvers, commands, queries by their names in code), fields they read/write, states a record goes through, permissions/approvals.
+2. **The Design System**: only its published elements, component slots, and tokens.
+
+**Never copy the old screen's layout.** The current screen only tells which jobs exist — its layout is not carried forward.
+
+Two gaps NEVER stop the design flow:
+- **Missing Design System component**: draw it anyway, mark `needs: <component-name>` in the frame and in the note. List as a design system request.
+- **Missing API operation**: draw as if it existed, name it `needs API: <operation>` in the note. Build it when coding the page.
+
+Only a real business choice (what the product wants) is a question for the owner.
 
 1. Read the current page/flow and the project's known decisions.
 2. State the user goal and the primary action of the screen (one per screen).

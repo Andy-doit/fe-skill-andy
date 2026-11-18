@@ -185,3 +185,21 @@ A task is complete only when all applicable criteria are satisfied (profile valu
 - [ ] **Cleanliness**: no leftover `console.log`, dead imports, or temporary scripts.
 - [ ] **Evidence**: verification output reported; anything not verified is labelled as such.
 - [ ] **Learn**: learning loop run (§1 step 6).
+
+---
+
+## 9. Banned Code Loosening Markers
+
+Never write, suggest, or leave any of these in code — because they silently widen quality gates:
+- `eslint-disable`, `stylelint-disable` (suppress linter)
+- `@ts-ignore`, `@ts-nocheck`, `@ts-expect-error` (suppress TypeScript)
+- `// NOSONAR` (suppress static analysis)
+- `xit`, `xdescribe`, `it.skip`, `test.skip` (skipped tests = hidden failures)
+- `it.only`, `describe.only`, `test.only` (focused tests that break CI)
+- `|| true` patterns that short-circuit conditions
+
+**Exception process:** If a marker is genuinely needed (e.g. a detector test that must spell the marker), it must be declared in a project-level `policy/loosening.yaml` with `kind` (fixture/template/rule/detector), `match` (exact line text), and `reason`. Never inline.
+
+**Enforcement:**
+- `fe-clean` and `fe-test` enforce this rule during audits and verification runs.
+- `fe-sec` specifically checks for `@ts-ignore` on security-related code (auth, payment, session flows).

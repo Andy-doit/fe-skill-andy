@@ -70,3 +70,7 @@ With the default scale, snap off-scale values (`gap-1`, `gap-5`, `p-5`, `p-7`) t
    - After colour/theme changes, re-run contrast with the fe-contrast skill.
 
 Learned notes: [references/learned.md](./references/learned.md).
+
+## References
+
+- [control-height-ramp.md](references/control-height-ramp.md): One control-height ramp + touch floor rules

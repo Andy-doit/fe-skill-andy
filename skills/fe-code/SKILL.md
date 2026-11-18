@@ -52,6 +52,7 @@ File conventions, route groups, parallel slots (`@slot` + `default.tsx`), interc
 - Upload (direct / presigned / resumable), download, clipboard, drag-and-drop with keyboard alternatives, previews and memory: [files.md](./references/files.md). Server-side limits: fe-sec; UX: fe-ux.
 - Storybook stories as the executable contract of a Block (CSF3, story set per Block, `play` interaction tests, a11y addon, docs): [component-docs.md](./references/component-docs.md). Running them in CI: fe-test.
 - Progressive enhancement and Web Components interop: [component-api.md](./references/component-api.md) §4–5.
+- See [connected-pure-twin.md](references/connected-pure-twin.md) for the Connected/Pure Twin split pattern.
 
 ## 3. Forms and Server Actions
 

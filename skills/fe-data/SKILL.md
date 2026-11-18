@@ -60,6 +60,8 @@ More: [resilience.md](./references/resilience.md) — retry/backoff, pagination,
 
 **API contracts and typed clients:** [api-contracts.md](./references/api-contracts.md) — choosing REST+OpenAPI vs GraphQL vs tRPC vs BFF, codegen (`openapi-typescript`/`orval`, GraphQL `client` preset), one `ApiError` union, contract-drift gate in CI, versioning. Rule: payload types are generated from the spec/schema, never hand-written; all calls go through one client module per backend.
 
+See [data-slot-pattern.md](../fe-skel/references/data-slot-pattern.md) for the DataSlot<T> union type and SlotView rendering contract.
+
 **Offline beyond the tab:** this skill owns in-memory and query-cache behaviour while the app is open (offline detection, paused mutations, retry). For anything that must survive a reload or work with no network (service worker caching, offline fallback pages, the IndexedDB outbox, Background Sync, update prompts), use the [fe-pwa](../fe-pwa/SKILL.md) skill. Keep the optimistic state here and the durable queue there.
 
 ## 3. Verify

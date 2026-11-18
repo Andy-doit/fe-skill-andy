@@ -53,6 +53,8 @@ Keyboard, focus, semantics, and assistive technology support. Follows [conventio
 
 **WCAG 2.2 additions** — see [wcag22-checklist.md](./references/wcag22-checklist.md): focus not obscured, target size minimum 24×24 px (44×44 preferred for touch), dragging alternatives, consistent help, redundant entry, accessible authentication.
 
+See [proof-lenses.md](../fe-ux/references/proof-lenses.md) for the full gating lens criteria (A11Y-1..4, FOCUS-1..5, MOTION-1..4).
+
 ## 2. Testing
 
 | Layer | How |

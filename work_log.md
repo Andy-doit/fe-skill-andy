@@ -10,6 +10,26 @@
 
 ## 📜 Danh sách nhật ký (Mới nhất ở trên cùng)
 
+### [2026-11-18 10:10] Tích hợp 7 Cải tiến Kiến trúc từ starci-harness vào fe-skill-andy
+- **Objective:** Nghiên cứu `starci-harness` (`D:\work\AI\starci-harness`), thẩm định 7 cải tiến kiến trúc/chất lượng cao cấp và tích hợp toàn bộ vào hệ sinh thái `fe-skill-andy`.
+- **7 Cải tiến đã thẩm định & triển khai:**
+  1. **Banned Loosening Markers:** Cấm tuyệt đối linter/TS/test suppressions inline (`eslint-disable`, `@ts-ignore`, skipped tests, `|| true`). Cập nhật `andy-persona.md`, `conventions.md`, `.antigravity-plugin/rules/AGENTS.md` (deploy live), và tạo mới script tự động `skills/fe-andy/scripts/check-loosening.mjs`.
+  2. **Connected/Pure Twin Pattern:** Tạo `skills/fe-code/references/connected-pure-twin.md` chuẩn hóa cấu trúc component tách đôi `{ shape?, props, on? }`. `shape` mang ý nghĩa nghiệp vụ (không dùng từ data-status); Pure twin chỉ nhận atoms, render từ fixture không cần world hooks.
+  3. **DataSlot<T> + SlotView + Skeleton Parity:** Tạo `skills/fe-skel/references/data-slot-pattern.md` với union 4 trạng thái + `isForbidden` + `isValidating`. Skeleton là cùng tree ready với `isLoading=true`, không vẽ skeleton tay. Quản lý `aria-busy` duy nhất ở cấp Region.
+  4. **Control-Height Ramp + Touch Floor:** Tạo `skills/fe-layout/references/control-height-ramp.md`. Chuẩn 4 bậc (`sm`, `md`, `lg`, `control`). Touch floor 44–48px qua invisible extension (`:after`), không làm phình nút. Mật độ đạt qua co khoảng cách, không co nút.
+  5. **Proof Lenses (Gating vs Scored):** Tạo `skills/fe-ux/references/proof-lenses.md`. Phân tách Gating (100% binary: A11Y, Contrast, Focus, Motion, Render Truth) và Scored (1–5: Taste, UX). Bổ sung 4 Luật Interface Audit (AUDIT-1..4).
+  6. **Canvas-First Order:** Cập nhật `skills/fe-ux/SKILL.md` bổ sung luồng Mockup → Code → Verification. Thiết kế từ 2 nguồn duy nhất: Backend operations thực trong code + Design System. Hai khoảng trống (`needs: Component`, `needs API: Operation`) không dừng luồng thiết kế.
+  7. **Domain Concept Catalog:** Tạo `skills/fe-recon/references/domain-concept-catalog.md` chuẩn hóa việc đọc khái niệm nghiệp vụ trước khi đụng code. Định dạng ≤60 dòng/concept với schema cố định. Tích hợp vào `fe-recon` và `project-profile.template.md`.
+- **Files Modified/Created:**
+  - Tạo mới: `skills/fe-code/references/connected-pure-twin.md`, `skills/fe-skel/references/data-slot-pattern.md`, `skills/fe-layout/references/control-height-ramp.md`, `skills/fe-ux/references/proof-lenses.md`, `skills/fe-recon/references/domain-concept-catalog.md`, `skills/fe-andy/scripts/check-loosening.mjs`.
+  - Cập nhật: `andy-persona.md`, `.antigravity-plugin/rules/AGENTS.md`, `skills/fe-andy/references/conventions.md`, `skills/fe-andy/references/project-profile.template.md`, `skills/fe-andy/SKILL.md`, `skills/fe-code/SKILL.md`, `skills/fe-skel/SKILL.md`, `skills/fe-data/SKILL.md`, `skills/fe-layout/SKILL.md`, `skills/fe-ux/SKILL.md`, `skills/fe-a11y/SKILL.md`, `skills/fe-recon/SKILL.md`.
+- **Verification:**
+  - `node skills/fe-andy/scripts/check-skills.mjs` → **PASS** (0 errors, 0 warnings across all 21 skills).
+  - `node skills/fe-andy/scripts/check-loosening.mjs` → **PASS** (0 loosening markers found).
+  - Live rule deployed: `C:\Users\Endy\.gemini\config\plugins\fe-skill-andy\rules\AGENTS.md`.
+- **Status & Next Steps:**
+  - Hoàn tất 100% việc thẩm định và tích hợp 7 cải tiến vào bộ kỹ năng. Tất cả tài liệu và quy chuẩn đã sẵn sàng cho production.
+
 ### [2026-10-28 14:36] Full Andy Agent System Integration (Plugin & Workspace Rules)
 - **Objective:** Tích hợp `andy-persona.md` và `skill-dispatcher.md` vào toàn bộ hệ thống (workspace rules và global Antigravity plugin rules) để Andy trở thành Agent mặc định.
 - **Files Modified/Created:**

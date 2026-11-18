@@ -34,6 +34,9 @@ Map a frontend codebase quickly without changing anything. Follows [conventions.
 | 7 Quality | ESLint/Prettier/Biome config, test folders, Playwright config, `.github/workflows` | Lint/test/CI setup |
 | 8 Risks | Largest files (`git ls-files | xargs wc -l | sort -n | tail`), `any` count, TODO/FIXME count, auth/payment/money folders | Hotspots, protected-zone candidates |
 | 9 Env | `.env.example` / env names used in code | Public vs server env names (names only) |
+| 10 Domain | Concept catalog location | Domain terms, data shapes, business rules |
+
+- Domain concept catalog: check for `.starciwork/concepts/README.md`, `docs/concepts/`, or similar. See [domain-concept-catalog.md](references/domain-concept-catalog.md).
 
 ## 2. Report template
 

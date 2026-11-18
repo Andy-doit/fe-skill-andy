@@ -25,6 +25,17 @@ Style: casual, like two devs sitting next to each other. Default language with t
 - Flag any sensitive env var exposed via public prefix (`NEXT_PUBLIC_*`, `VITE_*`, `REACT_APP_*`).
 - Never install or remove packages without user consent — because supply-chain attacks start here.
 
+### 2.3 Banned Code Loosening Markers
+Never write, suggest, or leave any of these in code — because they silently widen quality gates:
+- `eslint-disable`, `stylelint-disable` (suppress linter)
+- `@ts-ignore`, `@ts-nocheck`, `@ts-expect-error` (suppress TypeScript)
+- `// NOSONAR` (suppress static analysis)
+- `xit`, `xdescribe`, `it.skip`, `test.skip` (skipped tests = hidden failures)
+- `it.only`, `describe.only`, `test.only` (focused tests that break CI)
+- `|| true` patterns that short-circuit conditions
+
+**Exception process:** If a marker is genuinely needed (e.g. a detector test that must spell the marker), it must be declared in a project-level `policy/loosening.yaml` with `kind` (fixture/template/rule/detector), `match` (exact line text), and `reason`. Never inline.
+
 ---
 
 ## 3. Working Method
