@@ -10,6 +10,15 @@
 
 ## 📜 Danh sách nhật ký (Mới nhất ở trên cùng)
 
+### [2026-11-19 14:42] Thay thế sơ đồ Unicode box bằng Vector SVG Architecture Flow
+- **Objective:** Loại bỏ hoàn toàn khối sơ đồ Unicode box art dễ bị vỡ viền và lệch chữ (do khác biệt font chữ tiếng Việt trên trình duyệt), thay thế bằng sơ đồ Vector SVG chuẩn xác từng pixel (`assets/architecture-flow.svg`) gồm 3 thẻ quy trình căn đều 100%, viền hairline neon và mũi tên nối gradient.
+- **Files Created/Modified:**
+  - [assets/architecture-flow.svg](assets/architecture-flow.svg) — Sơ đồ vector SVG 3 vũ khí kiến trúc căn đều toán học 100%.
+  - [README.md](README.md) — Nhúng ảnh vector thay thế cho code block ASCII cũ.
+- **Verification:**
+  - `node skills/fe-andy/scripts/check-skills.mjs` → PASS (0 errors, 0 warnings).
+  - `node skills/fe-andy/scripts/check-loosening.mjs` → PASS (0 loosening markers).
+
 ### [2026-11-19 14:40] Tái cấu trúc README theo phong cách Senior Engineer thực thụ (Thoát ly hoàn toàn văn mẫu AI)
 - **Objective:** Tái cấu trúc toàn diện `README.md` theo phong cách kỹ sư thực chiến, hấp dẫn, dễ đọc: đưa Code Diff (Before vs After) lên ngay đầu, bỏ hoàn toàn các gạch đầu dòng lý thuyết dập khuôn của AI, thêm ví dụ hội thoại terminal thực tế của Andy, thiết kế lại Banner SVG tối giản sang trọng phong cách Linear/Raycast (`assets/andy-banner.svg`).
 - **Files Modified:** [README.md](README.md), [assets/andy-banner.svg](assets/andy-banner.svg)

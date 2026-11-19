@@ -89,24 +89,9 @@ export const UserProfile = ({ userId }: { userId: string }) => {
 
 ### 3 "Vũ Khí" Kỹ Thuật Cốt Lõi
 
-```
-┌────────────────────────────────────────────────────────────────────────┐
-│ 1. KIẾN TRÚC 4 TẦNG & TWIN PATTERN                                    │
-│ Tokens ──► Primitives (Ramp md) ──► Blocks (Twin) ──► Features (Pages) │
-└───────────────────────────────────┬────────────────────────────────────┘
-                                    │
-                                    ▼
-┌────────────────────────────────────────────────────────────────────────┐
-│ 2. DATASLOT<T> & SKELETON PARITY                                      │
-│ Loading ──► Error / 403 ──► Empty ──► Ready (Cùng 1 cây DOM, CLS = 0)  │
-└───────────────────────────────────┬────────────────────────────────────┘
-                                    │
-                                    ▼
-┌────────────────────────────────────────────────────────────────────────┐
-│ 3. CỔNG CHẶN NỚI LỎNG (ZERO-LOOSENING GATE)                            │
-│ Quét sạch @ts-ignore, eslint-disable, test.skip, || true bằng script   │
-└────────────────────────────────────────────────────────────────────────┘
-```
+<p align="center">
+  <img src="./assets/architecture-flow.svg" alt="3 Vũ Khí Kỹ Thuật Cốt Lõi" width="100%" style="max-width: 840px;" />
+</p>
 
 #### 1. Connected / Pure Twin Pattern
 Mỗi widget phức tạp được phân tách cơ học:
