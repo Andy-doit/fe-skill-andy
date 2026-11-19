@@ -10,6 +10,22 @@
 
 ## 📜 Danh sách nhật ký (Mới nhất ở trên cùng)
 
+### [2026-11-19 17:32] Thiết lập Project Profile chính thức & Minh định 3 tầng bằng chứng độc lập (Heuristic, Semantic, Execution)
+- **Objective:** Giải quyết 4 khuyến nghị chuyên sâu từ đợt review đạt 8/10:
+  1. **Khởi tạo [project-profile.md](project-profile.md) tại Repo Root:**
+     - Thiết lập hồ sơ dự án chính thức cho chính repo `fe-skill-andy`, loại bỏ lỗ hổng thiếu context bootstrap (BW-P1, BW-P3).
+     - Định nghĩa rõ stack: Node.js 24+ ESM (Zero dependencies), PowerShell junction linking, 21 skills architecture, các lệnh verification chuẩn xác, và chính sách miễn trừ bảo mật 6 trường.
+  2. **Minh Định Rạch Ròi 3 Tầng Bằng Chứng trong [skills/fe-andy/evals/routing.md](skills/fe-andy/evals/routing.md):**
+     - **Tầng 1 [Automated Heuristic Benchmark — Measured]:** Kết quả đo lường tự động bởi `andy-evals.mjs`: Suite A = 29/56 (51.8%), Suite B = 43/44 (97.7%). Không trộn lẫn nhãn với mô hình LLM.
+     - **Tầng 2 [LLM Semantic Evaluation — Qualitative Analysis]:** Hạ cấp tuyên bố tuyệt đối thành phân tích ngữ nghĩa định tính (Qualitative Analysis), giải thích cơ chế phân tích cú pháp chủ-vị; đặt mục tiêu định lượng $\ge 95\%$ cho dedicated LLM harness.
+     - **Tầng 3 [Execution Quality Framework — Specification & Audit Rubric]:** Chuẩn hóa bảng E01–E05 thành quy chuẩn kiểm thử vàng (Golden Task Benchmark Specifications) với đầy đủ Verification Proof Artifacts (lệnh chạy, fixture file, tiêu chí nghiệm thu) và bảng điểm đối soát mẫu.
+  3. **Đồng bộ và Kiểm tra Tự động:**
+     - `node skills/fe-andy/scripts/check-skills.mjs` → 0 error(s), 0 warning(s) → PASS.
+     - `node skills/fe-andy/scripts/check-loosening.mjs` → 0 loosening marker(s) → PASS.
+     - `node andy-evals.mjs` → Suite A: 52%, Suite B: 98% → PASS.
+- **Files Created/Modified:**
+  - `project-profile.md` (mới tạo tại root), `skills/fe-andy/evals/routing.md`, `work_log.md`.
+
 ### [2026-11-19 17:25] Hoàn thiện 4 điểm phản hồi kỹ thuật: Tách bạch Benchmark 2 Suite, Tier 2 Execution Eval, Siết chặt 6 trường Source Map Waiver & Live Sync
 - **Objective:** Xử lý triệt để 4 điểm phản hồi sâu sắc từ đợt review chuyên sâu:
   1. **Tách bạch Benchmark 2 Suite & Số liệu thực nghiệm:**
