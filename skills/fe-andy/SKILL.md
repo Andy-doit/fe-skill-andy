@@ -39,7 +39,7 @@ Pick one skill, then follow it. Every skill uses the shared rules in [convention
 | fe-review | Validate a pattern, library, architecture decision, or advice against current standards; verdict + improved version | "is this still best practice?", "review this recommendation", "should we adopt X?" |
 | fe-learn | Collect new knowledge from a project/session → check duplicates → plan → user approves → update skills or add a new skill | "learn", "remember this", "update the skills from this project", "create a skill for X" |
 
-Invoke a skill by name in whatever way your agent supports. Routing test cases: [evals/routing.md](./evals/routing.md).
+Invoke a skill by name in whatever way your agent supports. Routing test cases: [evals/routing.md](./evals/routing.md); execution proofs & audit logs: [evals/execution-proofs.md](./evals/execution-proofs.md).
 
 **Process requests** ("write an ADR", "PR template", "how should we branch", "review this PR as a reviewer") are handled here with [engineering-workflow.md](./references/engineering-workflow.md); pattern disputes inside a review go to fe-review.
 

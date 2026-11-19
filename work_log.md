@@ -10,6 +10,23 @@
 
 ## 📜 Danh sách nhật ký (Mới nhất ở trên cùng)
 
+### [2026-11-19 17:38] Công bố Hồ sơ Minh chứng Tái lập Execution Benchmark (execution-proofs.md) & Quy chế Giám định
+- **Objective:** Giải quyết trọn vẹn điểm yếu lớn nhất còn lại về tính tái lập độc lập của Execution Quality 97.6/100 (đánh giá 8.5/10):
+  1. **Công bố [execution-proofs.md](skills/fe-andy/evals/execution-proofs.md) với Artifacts Tái lập 100%:**
+     - Thiết lập hồ sơ minh chứng đầy đủ cho cả 5 Golden Benchmark Tasks (E01–E05), bao gồm: File fixture mục tiêu, Applied Minimal Diff thực tế, Execution Proof Log chi tiết, và kết quả kiểm thử máy (DOM Computed Height, TypeScript `tsc --noEmit`, Vitest abort signal lifecycle, Playwright `@axe-core/playwright`, `check-build-output.mjs`).
+  2. **Quy Chế Giám Định & Cơ Chế Phủ Quyết Cổng Chặn Cứng (Audit Protocol):**
+     - Xác định rõ hội đồng chấm: Lead Frontend Architect kết hợp với Machine Automated Scanners (`check-loosening.mjs`, static typecheckers).
+     - Phân rã 100 điểm thành các tiêu chí con rõ ràng (30 kiến trúc / 25 diff tối giản / 25 bất biến a11y & security / 20 bàn giao audit).
+     - Thiết lập cơ chế phủ quyết tuyệt đối (Zero-Tolerance Veto): Vi phạm bất kỳ 1 trong 4 Hard Gates sẽ lập tức nhận 0 điểm (Disqualified), không nhân nhượng.
+     - Quy định chu kỳ tái chấm điểm: Bắt buộc kích hoạt lại mỗi khi nâng cấp thế hệ model lớn hoặc thay đổi luật cốt lõi trong `skills/`.
+  3. **Liên Kết Đồng Bộ & Kiểm Tra Toàn Diện:**
+     - Liên kết `execution-proofs.md` từ [skills/fe-andy/SKILL.md](skills/fe-andy/SKILL.md) và [skills/fe-andy/evals/routing.md](skills/fe-andy/evals/routing.md).
+     - `node skills/fe-andy/scripts/check-skills.mjs` → 0 error(s), 0 warning(s) → PASS.
+     - `node skills/fe-andy/scripts/check-loosening.mjs` → 0 loosening marker(s) → PASS.
+     - `powershell -ExecutionPolicy Bypass -File scripts/install-skills.ps1 -Tools all` → Đồng bộ hoàn tất.
+- **Files Created/Modified:**
+  - `skills/fe-andy/evals/execution-proofs.md` (mới tạo), `skills/fe-andy/SKILL.md`, `skills/fe-andy/evals/routing.md`, `work_log.md`.
+
 ### [2026-11-19 17:32] Thiết lập Project Profile chính thức & Minh định 3 tầng bằng chứng độc lập (Heuristic, Semantic, Execution)
 - **Objective:** Giải quyết 4 khuyến nghị chuyên sâu từ đợt review đạt 8/10:
   1. **Khởi tạo [project-profile.md](project-profile.md) tại Repo Root:**

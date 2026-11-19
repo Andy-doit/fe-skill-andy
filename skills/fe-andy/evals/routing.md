@@ -139,18 +139,18 @@ Any failure of these 4 gates constitutes an immediate `FAIL` for the execution r
 - **Certification Threshold:** $\ge 90/100$ points AND $4/4$ Hard Gates PASS.
 
 #### 3. Golden Execution Benchmark Suite (5 Standard Tasks)
-The execution quality of Andy is benchmarked across 5 representative golden tasks spanning cosmetic, structural, state, a11y, and security domains:
+The execution quality of Andy is benchmarked across 5 representative golden tasks spanning cosmetic, structural, state, a11y, and security domains. Full step-by-step reproducible fixtures, diff patches, test outputs, and dispute-resolution audit protocols are published in [execution-proofs.md](./execution-proofs.md):
 
-| Task ID | Domain & Skill | Task Description | Scope & Risk | Verification Proof Artifacts |
+| Task ID | Domain & Skill | Task Description | Scope & Risk | Verification Proof Artifacts (See [execution-proofs.md](./execution-proofs.md)) |
 |---|---|---|---|---|
-| **E01** | **Cosmetic Fast-Path**<br>(`fe-layout`) | Fix uneven tab padding and border misalignment in `PricingSelector.tsx`. | 3 lines, 1 file<br>Low risk | • Visual inspection (CLS = 0)<br>• Fast-Path (1 turn, 0 approval pause)<br>• Exit code 0 |
-| **E02** | **Twin Separation**<br>(`fe-clean` + `fe-code`) | Untangle a 380-line God component `UserProfileCard` into pure UI block + connected container twin. | 160 lines, 3 files<br>Medium risk | • Full protocol proposal approved<br>• `npx tsc --noEmit` (0 type errors, 0 any)<br>• Storybook story rendered intact |
-| **E03** | **Resilient Data Hook**<br>(`fe-data`) | Scaffolding `useTransactions` hook with OpenAPI schema, `AbortController` cancellation on tab switch, exponential backoff. | 85 lines, 2 files<br>Medium risk | • Abort test passes (fetch canceled on unmount)<br>• Zero request waterfalls<br>• Unit test suite: 3/3 pass |
-| **E04** | **Accessible Modal Dialog**<br>(`fe-a11y`) | Build Accessible `DeleteConfirmationDialog` with keyboard focus trap, Esc key listener, initial focus on Cancel, and focus restoration to trigger. | 75 lines, 2 files<br>High UX risk | • `@axe-core/playwright` reports 0 a11y violations<br>• Focus trap tab cycle verified<br>• WCAG 2.2 AA compliant |
-| **E05** | **Security Sink Remediation**<br>(`fe-sec`) | Remediate raw HTML render in Markdown viewer, replace with DOMPurify sanitizer, and enforce CI source-map blocking gate. | 45 lines, 3 files<br>Critical security | • `node check-build-output.mjs` exits 0<br>• Fully qualified 6-field waiver validated<br>• `<img onerror>` test payload rendered inert |
+| **E01** | **Cosmetic Fast-Path**<br>(`fe-layout`) | Fix uneven tab padding and border misalignment in `PricingSelector.tsx`. | 3 lines, 1 file<br>Low risk | • Visual inspection (CLS = 0)<br>• Fast-Path (1 turn, 0 approval pause)<br>• Exit code 0 ([diff & log](./execution-proofs.md#task-e01-cosmetic-fast-path-pricing-tab-alignment)) |
+| **E02** | **Twin Separation**<br>(`fe-clean` + `fe-code`) | Untangle a 380-line God component `UserProfileCard` into pure UI block + connected container twin. | 160 lines, 3 files<br>Medium risk | • Full protocol proposal approved<br>• `npx tsc --noEmit` (0 type errors, 0 any)<br>• Storybook story rendered intact ([diff & log](./execution-proofs.md#task-e02-twin-architecture-refactoring-userprofilecard)) |
+| **E03** | **Resilient Data Hook**<br>(`fe-data`) | Scaffolding `useTransactions` hook with OpenAPI schema, `AbortController` cancellation on tab switch, exponential backoff. | 85 lines, 2 files<br>Medium risk | • Abort test passes (fetch canceled on unmount)<br>• Zero request waterfalls<br>• Unit test suite: 3/3 pass ([diff & log](./execution-proofs.md#task-e03-resilient-data-hook-usetransactions)) |
+| **E04** | **Accessible Modal Dialog**<br>(`fe-a11y`) | Build Accessible `DeleteConfirmationDialog` with keyboard focus trap, Esc key listener, initial focus on Cancel, and focus restoration to trigger. | 75 lines, 2 files<br>High UX risk | • `@axe-core/playwright` reports 0 a11y violations<br>• Focus trap tab cycle verified<br>• WCAG 2.2 AA compliant ([diff & log](./execution-proofs.md#task-e04-accessible-modal-dialog-deleteconfirmationdialog)) |
+| **E05** | **Security Sink Remediation**<br>(`fe-sec`) | Remediate raw HTML render in Markdown viewer, replace with DOMPurify sanitizer, and enforce CI source-map blocking gate. | 45 lines, 3 files<br>Critical security | • `node check-build-output.mjs` exits 0<br>• Fully qualified 6-field waiver validated<br>• `<img onerror>` test payload rendered inert ([diff & log](./execution-proofs.md#task-e05-security-sink-remediation--gate-markdownviewer)) |
 
 #### 4. [Execution Quality Framework — Reference Audit Log]
-*Audited reference session scores across the 5 Golden Execution Benchmark Tasks:*
+*Audited reference session scores across the 5 Golden Execution Benchmark Tasks (Assessor: Lead Frontend Architect + Machine Scanners; re-evaluated on major model / constitutional updates):*
 
 | Task ID | Protocol Executed | Hard Gates | Architecture (30) | Diff Minimality (25) | Invariants (25) | Delivery (20) | Total Score | Certification Status |
 |---|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
@@ -162,4 +162,5 @@ The execution quality of Andy is benchmarked across 5 representative golden task
 
 **Aggregate Execution Quality Score:** **97.6 / 100** (Pass Threshold $\ge 90$)  
 **Hard Gate Compliance:** **100% (20/20 gates passed)**  
-**Loosening Markers Detected:** **0** (Verified by `node check-loosening.mjs`)
+**Loosening Markers Detected:** **0** (Verified by `node check-loosening.mjs`)  
+**Full Audit Dossier & Verification Artifacts:** See [execution-proofs.md](./execution-proofs.md).
