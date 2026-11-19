@@ -41,11 +41,13 @@ if ($IncludeLegacy) {
   $Targets["codex"] += "$HomeDir\.codex\skills"
 }
 
-$Selected = if ($Tools -contains "all") { $Targets.Keys } else { $Tools }
+$AllSupported = @("claude", "codex", "antigravity-cli", "antigravity")
+$Selected = if ($Tools -contains "all") { $AllSupported } else { $Tools }
 $Skills = Get-ChildItem $Src -Directory | Where-Object { Test-Path (Join-Path $_.FullName "SKILL.md") }
 
 foreach ($tool in $Selected) {
-  if (-not $Targets.Contains($tool)) { Write-Warning "Unknown tool '$tool' (use: $($Targets.Keys -join ', '), all)"; continue }
+  if ($tool -eq "antigravity") { continue }
+  if (-not $Targets.Contains($tool)) { Write-Warning "Unknown tool '$tool' (use: $($Targets.Keys -join ', '), antigravity, all)"; continue }
   foreach ($dst in $Targets[$tool]) {
     Write-Host "`n== $tool -> $dst"
     if ($Uninstall) {

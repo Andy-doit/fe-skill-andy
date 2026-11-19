@@ -59,6 +59,18 @@ Last reviewed: YYYY-MM-DD
 - Auth model: e.g. HttpOnly session cookie set by backend
 - Allowed public env prefixes:
 - CSP owner: e.g. `next.config.ts` headers / reverse proxy
+- Security waivers (e.g. source maps):
+  <!-- Every waiver MUST contain all 6 fields to satisfy the pre-deploy security gate: -->
+  <!--
+  - waiver_id: SEC-WVR-SOURCEMAP-001
+    target: "apps/internal-diagnostics"
+    owner: "@frontend-infra / Jane Doe"
+    expiration: 2026-12-31  # Max 90 days for non-OSS
+    audience: "vpn-only"    # "vpn-only" | "mfa-session-gated" | "public-oss"
+    data_classification: "ui-presentation-only" # Verified zero embedded secrets, internal routes scrubbed
+    compensating_controls: "Cloudflare Access JWT + WAF IP whitelist"
+    threat_model_rationale: "Internal diagnostic console with mandatory corporate SSO; client bundle contains no proprietary business algorithms or API secrets."
+  -->
 
 ## 8. Known decisions & exceptions
 - YYYY-MM-DD — <decision> — <reason>
