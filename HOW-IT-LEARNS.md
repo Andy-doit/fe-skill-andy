@@ -30,4 +30,4 @@ Rules: [skills/fe-andy/references/learning-loop.md](skills/fe-andy/references/le
 
 ## Legacy
 
-The older StarCi-specific stores (`decision/`, `design/`, `cannon/`, `rules/`, `ui/`, `design-system/`) are kept for reference. They are project knowledge; for new projects use `project-profile.md`.
+Older reference knowledge stores (`decision/`, `design/`, `cannon/`, `rules/`, `ui/`, `design-system/`) are kept for archival reference. For new projects, use `project-profile.md`.

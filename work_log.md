@@ -10,6 +10,17 @@
 
 ## 📜 Danh sách nhật ký (Mới nhất ở trên cùng)
 
+### [2026-11-19 14:30] Tái thiết kế toàn diện README.md — Khẳng định thương hiệu cá nhân fe-skill-andy
+- **Objective:** Viết lại toàn bộ `README.md` theo phong cách chuyên nghiệp, đậm chất cá tính kỹ sư của Andy, loại bỏ hoàn toàn dấu vết tên cũ ("StarCi"), cập nhật bản quyền LICENSE sang Andy-doit, định vị rõ rệt thương hiệu Harness AI Frontend độc lập.
+- **Files Modified:**
+  - [README.md](README.md) — Tái thiết kế toàn diện: Badges phong cách hiện đại, tuyên ngôn "The agent that does the work NEVER judges it", phân loại 21 skills theo 6 nhóm trực quan, mô tả 4-Layer Architecture, Connected/Pure Twin, Kỷ luật Zero-Loosening, 2 luồng thực chiến (Maintain vs Greenfield) và hướng dẫn cài đặt 1-click.
+  - [LICENSE](LICENSE) — Cập nhật bản quyền `Copyright (c) 2026 Andy-doit`.
+  - [HOW-IT-LEARNS.md](HOW-IT-LEARNS.md) — Tinh chỉnh tham chiếu sạch sẽ.
+- **Verification:**
+  - `node skills/fe-andy/scripts/check-skills.mjs` → PASS (0 errors, 0 warnings).
+  - `node skills/fe-andy/scripts/check-loosening.mjs` → PASS (0 loosening markers).
+  - Kiểm tra `git grep -i "starci" README.md` → 0 kết quả (sạch 100%).
+
 ### [2026-11-18 10:10] Tích hợp 7 Cải tiến Kiến trúc từ starci-harness vào fe-skill-andy
 - **Objective:** Nghiên cứu `starci-harness` (`D:\work\AI\starci-harness`), thẩm định 7 cải tiến kiến trúc/chất lượng cao cấp và tích hợp toàn bộ vào hệ sinh thái `fe-skill-andy`.
 - **7 Cải tiến đã thẩm định & triển khai:**
