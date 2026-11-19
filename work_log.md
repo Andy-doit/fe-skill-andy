@@ -10,6 +10,14 @@
 
 ## 📜 Danh sách nhật ký (Mới nhất ở trên cùng)
 
+### [2026-11-19 14:34] Nâng cấp Layout & Visual Hierarchy cho README.md qua fe-layout
+- **Objective:** Tái cấu trúc giao diện `README.md` theo bộ kỹ năng `fe-layout`: cải thiện phân cấp thị giác (visual hierarchy), ASCII Art banner, thanh điều hướng nhanh (Quick Jump), bảng so sánh Before vs After có Harness, sơ đồ hộp Unicode kiến trúc 4 tầng, thẻ đóng mở `<details>` cho 2 luồng thực chiến, và alert callout nổi bật.
+- **Files Modified:** [README.md](README.md)
+- **Verification:**
+  - `node skills/fe-andy/scripts/check-skills.mjs` → PASS (0 errors, 0 warnings).
+  - `node skills/fe-andy/scripts/check-loosening.mjs` → PASS (0 loosening markers).
+  - 0 từ "StarCi" trong file.
+
 ### [2026-11-19 14:30] Tái thiết kế toàn diện README.md — Khẳng định thương hiệu cá nhân fe-skill-andy
 - **Objective:** Viết lại toàn bộ `README.md` theo phong cách chuyên nghiệp, đậm chất cá tính kỹ sư của Andy, loại bỏ hoàn toàn dấu vết tên cũ ("StarCi"), cập nhật bản quyền LICENSE sang Andy-doit, định vị rõ rệt thương hiệu Harness AI Frontend độc lập.
 - **Files Modified:**
