@@ -10,6 +10,21 @@
 
 ## 📜 Danh sách nhật ký (Mới nhất ở trên cùng)
 
+### [2026-11-19 17:10] Tiếp thu đánh giá P1/P2: Giảm ma sát Multi-Skill, Evals 2 lớp & Security Waiver
+- **Objective:** Xử lý toàn bộ các điểm phản hồi từ bản review kiến trúc tổng thể (điểm 7.5/10):
+  1. **P1.1 (Multi-skill friction):** Thêm ngoại lệ Fast-Path trong `skill-dispatcher.md` và `AGENTS.md` (nếu các sub-task đều $\le 5$ dòng, cosmetic/low-risk thì thực thi ngay trong 1 lượt, không bắt duyệt từng bước).
+  2. **P1.2 & P2.3 (Routing & Execution Evals):** Cập nhật `skills/fe-andy/evals/routing.md` với số liệu đo lường thực nghiệm từ `andy-evals.mjs` (37/44 passed, 84.1%), phân tích nguyên nhân fail và thiết lập khung đánh giá 2 lớp (Tier 1: Routing vs Tier 2: Execution Quality).
+  3. **P1.3 (Security Hard Gate):** Cập nhật `fe-sec/SKILL.md` bổ sung cơ chế Security Waiver / Exception Policy dựa trên Threat Model cho source maps trong open-source/staging.
+  4. **P2.1 (Structural check clarity):** Minh định `check-skills.mjs` là Structural Integrity Check.
+  5. **P2.2 (Learning loop lightweight):** Tinh giản learning loop cho các task routine, tránh phình to thủ tục.
+  6. **Claude Code Native:** Bổ sung `CLAUDE.md` tại root repo.
+- **Files Modified/Created:**
+  - `skill-dispatcher.md`, `.antigravity-plugin/rules/AGENTS.md`, `skills/fe-andy/evals/routing.md`, `skills/fe-sec/SKILL.md`, `skills/fe-andy/scripts/check-skills.mjs`, `skills/fe-andy/SKILL.md`, `skills/fe-andy/references/learning-loop.md`, `CLAUDE.md`.
+- **Verification:**
+  - `node skills/fe-andy/scripts/check-skills.mjs` → PASS (0 errors, 0 warnings).
+  - `node skills/fe-andy/scripts/check-loosening.mjs` → PASS (0 loosening markers).
+  - `node andy-evals.mjs` → 37/44 passed (84.1%).
+
 ### [2026-11-19 14:42] Thay thế sơ đồ Unicode box bằng Vector SVG Architecture Flow
 - **Objective:** Loại bỏ hoàn toàn khối sơ đồ Unicode box art dễ bị vỡ viền và lệch chữ (do khác biệt font chữ tiếng Việt trên trình duyệt), thay thế bằng sơ đồ Vector SVG chuẩn xác từng pixel (`assets/architecture-flow.svg`) gồm 3 thẻ quy trình căn đều 100%, viền hairline neon và mũi tên nối gradient.
 - **Files Created/Modified:**

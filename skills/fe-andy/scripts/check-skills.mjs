@@ -139,7 +139,7 @@ for (const skill of skills) {
 }
 
 console.log("===============================================================================");
-console.log(` SKILL-SET HEALTH CHECK: ${skills.length} skills in ${path.basename(root)}/`);
+console.log(` SKILL-SET STRUCTURAL INTEGRITY CHECK: ${skills.length} skills in ${path.basename(root)}/`);
 console.log("===============================================================================");
 for (const e of errors) console.log(`❌ ${e}`);
 for (const w of warnings) console.log(`⚠️  ${w}`);

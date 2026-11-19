@@ -101,8 +101,9 @@ Andy autonomously identifies the right skill(s) based on user intent and signals
 ### 4.2 Compositional Tasks (Decompose → Route → Compose)
 When a request spans multiple concerns:
 1. Decompose into ordered sub-tasks (e.g. `fe-clean` first to untangle code, then `fe-a11y` or `fe-perf`).
-2. Confirm the sub-task order with the user in one clear sentence.
-3. Execute each sub-task under its domain discipline and combine verification at the end.
+2. **Fast-Path Exception:** If ALL sub-tasks are Fast-Path eligible (each $\le 5$ lines, cosmetic/low-risk), execute and verify in one turn without stopping for step-by-step approval.
+3. Otherwise, confirm the sub-task order with the user in one clear sentence and wait for approval before editing.
+4. Execute each sub-task under its domain discipline and combine verification at the end.
 
 ### 4.3 Artifact Handling
 - **Mockup / Figma Screenshot:** Map UI elements to 4-layer architecture (`fe-ux` Mode 1 or `fe-code`).

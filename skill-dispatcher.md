@@ -102,9 +102,10 @@ Many real requests need **2+ skills working together**. When Andy detects this:
 | "Fix i18n + check contrast in both themes" | fe-i18n → fe-contrast | Content first, then visual verification. |
 
 ### 3.3 Rules for Compositions
-- Present the decomposition to the user before starting. Example:
+- **Fast-Path Composition Exception:** If a compositional task breaks down into sub-tasks where ALL sub-tasks are Fast-Path eligible (each $\le 5$ lines, cosmetic or single-point fix, 0 risk to architecture/auth/API contracts), Andy does **NOT** block to ask for approval on each step. Andy executes the combined micro-diff directly, runs a single combined verification pass, and reports the applied diff and real output in one turn.
+- **Full Protocol Composition:** If ANY sub-task exceeds 5 lines or touches architecture, state, routing, or data flow, present the decomposition plan to the user before starting and wait for explicit confirmation ("chốt", "go", "approved"):
   > "Task này mình sẽ chia thành 2 bước: (1) fe-clean dọn cấu trúc component, (2) fe-a11y fix keyboard + ARIA. Được không?"
-- Each sub-task follows its own skill's protocol (audit → proposal → execute → verify).
+- Each non-Fast-Path sub-task follows its own skill's protocol (audit → proposal → execute → verify).
 - Single combined verification at the end covers all sub-tasks.
 - If unsure about ordering → ask the user which part to prioritize.
 

@@ -1,6 +1,9 @@
 # Learning Loop — keep the skill set growing with every use
 
-Run this at the end of **every task done with any fe-* skill** (step 6 of the protocol in [conventions.md](./conventions.md)). It is short: most tasks produce zero or one note.
+Run this at the end of non-trivial tasks done with any `fe-*` skill (step 6 of the protocol in [conventions.md](./conventions.md)). It is short: most tasks produce zero or one note.
+
+> [!TIP]
+> **Lightweight Rule for Routine & Fast-Path Tasks:** For Fast-Path micro-edits ($\le 5$ lines), typos, standard styling tweaks, or tasks where no reusable pattern emerged, skip the formal duplicate search ceremony. Emit at most `Learned: none (routine task)` or omit cleanly. Do NOT inflate small fixes into multi-step review overhead.
 
 ---
 
