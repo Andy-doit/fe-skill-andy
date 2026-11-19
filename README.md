@@ -1,241 +1,222 @@
 <div align="center">
 
 <p align="center">
-  <img src="./assets/andy-banner.svg" alt="Andy — Autonomous Frontend Architect & Quality Harness" width="100%" style="max-width: 840px;" />
-</p>
-
-### ⚡ Biến mọi AI Coding Agent thành Senior Frontend Engineer thực thụ.
-
-<p align="center">
-  <a href="#-tổng-quan"><b>Tổng quan</b></a> •
-  <a href="#-sự-khác-biệt"><b>So sánh</b></a> •
-  <a href="#-kiến-trúc-4-tầng"><b>Kiến trúc 4 Tầng</b></a> •
-  <a href="#-bản-đồ-21-kỹ-năng"><b>21 Kỹ năng</b></a> •
-  <a href="#-kỷ-luật-zero-loosening"><b>Kỷ luật Cổng</b></a> •
-  <a href="#-cài-đặt-nhanh"><b>Cài đặt</b></a>
+  <img src="./assets/andy-banner.svg" alt="Andy Frontend Architect" width="100%" style="max-width: 840px;" />
 </p>
 
 <p align="center">
-  <a href="https://nextjs.org"><img src="https://img.shields.io/badge/Next.js_15+-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" alt="Next.js" /></a>
-  <a href="https://react.dev"><img src="https://img.shields.io/badge/React_19-149eca?style=for-the-badge&logo=react&logoColor=white" alt="React 19" /></a>
-  <a href="https://tailwindcss.com"><img src="https://img.shields.io/badge/Tailwind_v4-38bdf8?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS" /></a>
-  <a href="https://www.typescriptlang.org"><img src="https://img.shields.io/badge/TypeScript-Strict_Zero_Any-3178c6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript Strict" /></a>
+  <strong>Bộ khung gầm kỹ thuật (Quality Harness) biến AI Coding Agents thành Senior Frontend Architect.</strong><br/>
+  <em>Dành riêng cho Claude Code · Google Antigravity · Gemini CLI · Codex</em>
 </p>
 
 <p align="center">
-  <a href="https://www.w3.org/WAI/standards-guidelines/wcag/"><img src="https://img.shields.io/badge/WCAG_2.2-AA_Compliant-22c55e?style=for-the-badge&logo=w3c&logoColor=white" alt="WCAG 2.2 AA" /></a>
-  <a href="#-kỷ-luật-zero-loosening"><img src="https://img.shields.io/badge/Gates-Zero_Loosening-dc2626?style=for-the-badge&logo=checkmarx&logoColor=white" alt="Zero Loosening" /></a>
-  <a href="#-cài-đặt-nhanh"><img src="https://img.shields.io/badge/Claude_Code-Plugin_Ready-d97757?style=for-the-badge&logo=anthropic&logoColor=white" alt="Claude Code Plugin" /></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="MIT License" /></a>
+  <a href="#tại-sao-cần-andy"><img src="https://img.shields.io/badge/Vấn_đề-AI_Code_Ẩu-dc2626?style=flat-square" alt="Problem" /></a>
+  <a href="#vũ-khí-kiến-trúc"><img src="https://img.shields.io/badge/Kiến_trúc-4--Layer_Twin-38bdf8?style=flat-square" alt="Architecture" /></a>
+  <a href="#kỷ-luật-cổng-thép"><img src="https://img.shields.io/badge/Cổng_chất_lượng-Zero_Loosening-10b981?style=flat-square" alt="Gates" /></a>
+  <a href="#21-skills-directory"><img src="https://img.shields.io/badge/Hệ_kỹ_năng-21_Skills-818cf8?style=flat-square" alt="Skills" /></a>
+  <a href="#cài-đặt-trong-30-giây"><img src="https://img.shields.io/badge/Cài_đặt-1--Click_Setup-f59e0b?style=flat-square" alt="Install" /></a>
 </p>
 
 </div>
 
 ---
 
-> [!IMPORTANT]
-> 🎯 **"AI agents write code fast and check it badly. Andy gives every agent a strict quality harness: Machine checks on clean code, zero loose suppressions, 100% production-ready."**
-> 
-> *— Nguyên tắc cốt lõi: Đứa viết ra code KHÔNG BAO GIỜ là đứa tự chấm điểm.*
+### Tại sao bạn cần Andy?
+
+Bao nhiêu lần bạn giao việc cho Claude Code hay Cursor, để rồi nhận lại:
+1. Một file component 700 dòng nhét đủ thứ từ API fetch, state, HTML đến CSS inline?
+2. Khi gặp lỗi TypeScript hay linter, Agent **lén chèn `// @ts-ignore` hoặc `/* eslint-disable */`** để qua mặt bạn?
+3. Giao diện khi load dữ liệu thì giật cục, nhảy layout lung tung (CLS), phím Tab không bấm được, modal mở lên mất focus?
+4. Agent luôn miệng bảo: *"I have updated the code, it should work now!"* — nhưng chạy thử thì gãy tanh bành?
+
+> **Andy sinh ra để chấm dứt toàn bộ những trò hề đó.**  
+> Nguyên tắc bất biến: **Đứa viết ra code KHÔNG BAO GIỜ là đứa tự chấm điểm.**
 
 ---
 
-## 💡 Tổng Quan
+### Xem Code thực tế: AI thường vs AI có Andy Harness
 
-**Andy** (`fe-skill-andy`) là một **Hạ tầng Kỹ thuật & Hệ thống Kỹ năng Frontend hoàn chỉnh (21 Skills)** được thiết kế chuyên biệt cho các AI Coding Agent hàng đầu (**Claude Code, Antigravity, Gemini CLI, Codex**).
+#### ❌ Code AI thường hay sinh (Spaghetti & Lách luật)
+```tsx
+// UserProfile.tsx — 1 file ôm đồm, lén lách TypeScript, giật layout khi tải
+export function UserProfile({ id }: { id: any }) {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-Khi không có Harness, Agent chỉ là một "thợ gõ prompt" dễ bị ảo giác (hallucination), đọc sót context, tự ý chèn `@ts-ignore` và sinh ra code rác. **Khi được trang bị Andy, Agent biến thành một Senior Frontend Architect:**
+  useEffect(() => {
+    fetch(`/api/users/${id}`).then(res => res.json()).then(d => {
+      setData(d);
+      setLoading(false);
+    });
+  }, [id]);
 
-* 🗣️ **Giao tiếp ngang hàng (Peer-to-Peer):** Tiếng Việt thực chiến (*"mình - bạn"*), không vòng vo lý thuyết.
-* 🛡️ **Kỷ luật máy chấm độc lập:** Bắt buộc chạy terminal và báo cáo output thực tế. Cấm tuyệt đối nói *"chắc là chạy được"*.
-* 🧠 **Giữ mạch liên tục (Continuous Memory):** Tự động đọc và ghi nhật ký [work_log.md](./work_log.md), nhớ toàn bộ bối cảnh qua từng phiên làm việc.
+  // @ts-ignore — Lén bỏ qua lỗi type
+  if (loading) return <div className="animate-pulse h-40 bg-gray-200" />; // Gây nhảy layout (CLS)
+
+  return <div style={{ padding: 17 }}><h3>{data.name}</h3></div>;
+}
+```
+
+#### ✅ Code chuẩn Senior khi có Andy Harness (Connected/Pure Twin + DataSlot)
+```tsx
+// 1. component.tsx — Pure UI: Nhận atoms, exhaust switch trên Shape, test độc lập ở Storybook
+export const UserProfileBase = (props: UserProfileBaseProps) => (
+  <SlotView
+    slot={props.props.userSlot}
+    placeholder={USER_PLACEHOLDER}
+    render={(user, isLoading) => (
+      <Card className="p-4 flex flex-col gap-2">
+        <UserAvatar src={user.avatarUrl} isLoading={isLoading} />
+        <Heading rank={3} isLoading={isLoading}>{user.fullName}</Heading>
+        {isLoading ? null : <RoleBadge role={user.role} />}
+      </Card>
+    )}
+  />
+);
+
+// 2. index.tsx — Connected: Chỉ lo data fetching & handlers, truyền atoms xuống Base
+export const UserProfile = ({ userId }: { userId: string }) => {
+  const { data, error, isValidating } = useUserSwr(userId);
+  const userSlot = slotOfSwr({ data, error, isValidating });
+
+  return <UserProfileBase props={{ userSlot }} on={{ onRetry: () => mutate() }} />;
+};
+```
+*Kết quả: **0% Layout Shift (CLS = 0)** vì skeleton dùng chung 1 cây DOM với data thật; **0 dòng `any`**; kiểm thử được trên fixture mà không cần mock API.*
 
 ---
 
-## ⚖️ Sự Khác Biệt: Trước & Sau Khi Có Andy
-
-| Tiêu chí | AI Coding Agent Thường (Không Harness) | AI Agent Được Trang Bị Andy Harness |
-|---|---|---|
-| **Cấu trúc Component** | Nhét chung CSS, fetch data, state vào 1 file khổng lồ | **Connected / Pure Twin Pattern**: Tách riêng Base atoms và Twin container |
-| **Trạng thái Tải (Loading)** | Tự vẽ `<div className="animate-pulse" />` gây giật layout (CLS) | **DataSlot + Skeleton Parity**: Cùng 1 cây DOM, CLS = 0 tuyệt đối |
-| **Khi gặp lỗi Linter / TS** | Tự động chèn `// @ts-ignore` hoặc `eslint-disable` để qua mặt | **Bị chặn đứng ngay lập tức** bởi script `check-loosening.mjs` |
-| **Quy trình Sửa Code** | Tự ý đập đi xây lại, sửa lan man gây regression | **Audit-First & Proposal Protocol**: Báo cáo Impact/Risk, chờ bạn duyệt mới sửa |
-| **Kích thước Nút & Nhập liệu** | Nút to nút nhỏ lộn xộn, mất thẩm mỹ hàng | **Control-Height Ramp**: Chuẩn 4 bậc (`sm`, `md`, `lg`, `control`) + Touch floor 44px |
-| **Trải nghiệm Người dùng** | Bỏ qua người dùng bàn phím, tương phản kém | **5 Gating Proof Lenses**: A11Y, Focus trap, Contrast AA, Motion an toàn |
-
----
-
-## 🏛️ Kiến Trúc 4 Tầng (4-Layer Law)
-
-> *Mọi quyết định giao diện chỉ được phép nằm ở đúng một tầng duy nhất. Phong cách chảy xuống dưới, tính năng chỉ tổng hợp — không bao giờ tự vẽ.*
+### 3 "Vũ Khí" Kỹ Thuật Cốt Lõi
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
-│ Layer 1: TOKENS                                                        │
-│ Màu sắc (CSS variables), Typography, Spacing scale (4px), Bán kính bo   │
+│ 1. KIẾN TRÚC 4 TẦNG & TWIN PATTERN                                    │
+│ Tokens ──► Primitives (Ramp md) ──► Blocks (Twin) ──► Features (Pages) │
 └───────────────────────────────────┬────────────────────────────────────┘
                                     │
                                     ▼
 ┌────────────────────────────────────────────────────────────────────────┐
-│ Layer 2: PRIMITIVES (Control-Height Ramp: sm · md · lg · control)       │
-│ Nút bấm, Ô nhập liệu, Dialog, Badge... Tuân thủ Touch Floor 44px       │
+│ 2. DATASLOT<T> & SKELETON PARITY                                      │
+│ Loading ──► Error / 403 ──► Empty ──► Ready (Cùng 1 cây DOM, CLS = 0)  │
 └───────────────────────────────────┬────────────────────────────────────┘
                                     │
                                     ▼
 ┌────────────────────────────────────────────────────────────────────────┐
-│ Layer 3: BLOCKS (Connected / Pure Twin Pattern)                        │
-│ ├─ component.tsx (XBase): Pure UI, nhận atoms, exhaust switch trên Shape│
-│ └─ index.tsx (X): SWR/Query, Translations, Handlers ──► DataSlot<T>   │
-└───────────────────────────────────┬────────────────────────────────────┘
-                                    │
-                                    ▼
-┌────────────────────────────────────────────────────────────────────────┐
-│ Layer 4: FEATURES (Pages & Routing)                                    │
-│ Điều phối luồng dữ liệu, ghép Blocks vào Layout ── Tuyệt đối ko style  │
+│ 3. CỔNG CHẶN NỚI LỎNG (ZERO-LOOSENING GATE)                            │
+│ Quét sạch @ts-ignore, eslint-disable, test.skip, || true bằng script   │
 └────────────────────────────────────────────────────────────────────────┘
 ```
 
----
+#### 1. Connected / Pure Twin Pattern
+Mỗi widget phức tạp được phân tách cơ học:
+- **`component.tsx` (`XBase`)**: Chỉ nhận atoms và callbacks. Không gọi bất kỳ React Hook chạm thế giới bên ngoài (`useRouter`, `useSWR`, `useTranslation`). Nhờ vậy, UI có thể render và test bằng Storybook fixture trong 1 giây.
+- **`index.tsx` (`X`)**: Chỉ làm nhiệm vụ kết nối thế giới bên ngoài (API, Store, Router) và map dữ liệu thành atoms truyền xuống Base.
 
-## 🧩 Bản Đồ 21 Kỹ Năng (Autonomous Skills Matrix)
+#### 2. DataSlot<T> & Triệt Tiêu Nhấp Nháy (Skeleton Parity)
+Thay vì tự bịa thẻ skeleton loading linh tinh gây giật khung hình:
+- Trạng thái dữ liệu được đóng gói chặt chẽ: `{ isLoading } | { isError } | { isForbidden } | { isEmpty } | { items }`.
+- Công thức `SlotView` render hàm `render(placeholder, true)` khi đang tải. Toàn bộ typography, khoảng cách, chiều cao được giữ nguyên vẹn 100% so với khi có dữ liệu thật.
 
-Andy tự động điều phối các skill theo ngữ cảnh mà bạn không cần phải gõ lệnh slash command thủ công:
-
-<br/>
-
-### 1. 🧭 Khảo sát & Điều hướng (Recon & Hub)
-* [`fe-recon`](./skills/fe-recon/) — **Khảo sát toàn diện (Read-Only):** Quét codebase lạ, đếm any, phát hiện God components, lập hồ sơ dự án.
-* [`fe-andy`](./skills/fe-andy/) — **Router Hub & Quy ước:** Bộ quy ước lõi (`conventions.md`), quản lý template và điều phối chung.
-
-### 2. 🧹 Kiến trúc & Dọn dẹp (Architecture & Clean)
-* [`fe-clean`](./skills/fe-clean/) — **Phẫu thuật refactor:** Triệt tiêu code smell, gỡ rối component quá lớn, xóa dead code, dọn nợ kỹ thuật.
-* [`fe-code`](./skills/fe-code/) — **Tạo mới chuẩn 4 tầng:** Scaffolding component mới, custom hooks, Server Actions, Storybook stories.
-
-### 3. 🎨 Giao diện & Trải nghiệm (UI, UX & Motion)
-* [`fe-ux`](./skills/fe-ux/) — **Canvas-First & UX:** Brainstorm layout wireframe trước khi code, UX writing, microcopy, Proof Lenses.
-* [`fe-layout`](./skills/fe-layout/) — **Bố cục & Khoảng cách:** Thước đo Control-Height Ramp, Touch floor 44px, Container queries, Modern CSS.
-* [`fe-skel`](./skills/fe-skel/) — **Trạng thái tải hoàn hảo:** Union `DataSlot<T>`, công thức `SlotView`, Skeleton Parity chống giật layout.
-* [`fe-motion`](./skills/fe-motion/) — **Chuyển động mượt 60fps:** View Transitions, GSAP, triệt tiêu hao pin/GPU khi idle, `prefers-reduced-motion`.
-* [`fe-viz`](./skills/fe-viz/) — **Trực quan hóa dữ liệu:** Biểu đồ chuẩn mực (Recharts/visx/D3), KPI tiles, sparklines, dashboard responsive & a11y.
-
-### 4. 🌐 Dữ liệu & Đa ngôn ngữ (Data & i18n)
-* [`fe-data`](./skills/fe-data/) — **Hạ tầng API & Cache:** Schema contracts (OpenAPI/GraphQL/tRPC), SWR/TanStack, retry backoff, optimistic updates.
-* [`fe-i18n`](./skills/fe-i18n/) — **Quốc tế hóa chuẩn mực:** Intl format tiền tệ/ngày tháng, kiểm tra lệch key bản dịch, timezones an toàn.
-
-### 5. ♿ Tiếp cận & Tương phản (Accessibility & Contrast)
-* [`fe-a11y`](./skills/fe-a11y/) — **WCAG 2.2 AA:** Điều hướng bàn phím toàn phần, focus trap modal, screen readers, live regions.
-* [`fe-contrast`](./skills/fe-contrast/) — **Đo lường tương phản:** Thuật toán APCA/WCAG đo màu chữ ($\ge 4.5:1$) và UI component ($\ge 3:1$) cho mọi theme.
-
-### 6. 🔒 Bảo mật & Chất lượng (Security & Quality)
-* [`fe-sec`](./skills/fe-sec/) — **Bảo mật Frontend:** Quét XSS sinks, chặn rò rỉ secret trong `NEXT_PUBLIC_*`, HttpOnly session, CSP hardening.
-* [`fe-test`](./skills/fe-test/) — **Kiểm thử đa tầng:** Phân loại test theo rủi ro, Playwright E2E, axe core testing, component tests.
-* [`fe-review`](./skills/fe-review/) — **Thẩm định tri thức:** Đánh giá các pattern, thư viện xem có còn là Best Practice hiện nay không.
-* [`fe-learn`](./skills/fe-learn/) — **Bộ máy tự học:** Đúc kết bài học thực chiến vào `learned.md`, tự động cập nhật bộ kỹ năng.
-
-### 7. 🚀 Nền tảng & Vận hành (Platform & Ship)
-* [`fe-ship`](./skills/fe-ship/) — **Đóng gói phát hành:** CI/CD pipeline, Docker frontend, Sentry observability, SEO metadata, release checklist.
-* [`fe-pwa`](./skills/fe-pwa/) — **Progressive Web App:** Service worker lifecycle, Workbox caching strategies, offline mutation outbox.
-* [`fe-mfe`](./skills/fe-mfe/) — **Micro-Frontends:** Module Federation, Next.js Multi-Zones, kiểm soát version conflicts.
-
----
-
-## 🛡️ Kỷ Luật Zero-Loosening
-
-> [!CAUTION]
-> **Tuyệt đối cấm làm suy yếu cổng chất lượng (No Gate Widening)**
-> 
-> Một dòng `@ts-ignore` hay `eslint-disable` hôm nay là một quả bom nổ chậm trong production ngày mai. Andy trang bị script quét tự động để chặn đứng hành vi này:
-
+#### 3. Kỷ Luật Cổng Thép (Zero-Loosening Gate)
+Andy đi kèm script kiểm tra tự động quét 9 pattern lách luật thường gặp nhất ở AI:
 ```bash
-# Quét toàn bộ source code tìm các điểm lách luật
 node skills/fe-andy/scripts/check-loosening.mjs
 ```
-
-**9 Dấu hiệu bị cấm hoàn toàn:**
-1. `eslint-disable` / `stylelint-disable` (trốn linter)
-2. `@ts-ignore` / `@ts-nocheck` / `@ts-expect-error` (trốn TypeScript)
-3. `// NOSONAR` (trốn sonar code smell)
-4. `xit(` / `it.skip(` / `test.skip(` (bỏ qua unit test gãy)
-5. `it.only(` / `test.only(` (tập trung test làm xanh giả tạo)
-6. `|| true` (đoản mạch biểu thức điều kiện)
+*Nếu phát hiện bất kỳ dòng `@ts-ignore`, `eslint-disable`, `it.skip` hay `|| true` nào mà chưa khai báo lý do ở cấp dự án, bài kiểm tra sẽ đánh trượt ngay lập tức.*
 
 ---
 
-## ⚡ Hai Luồng Tác Vụ Thực Chiến
+### Hội thoại thực tế: Cách Andy làm việc cùng bạn
 
-<details open>
-<summary><b>🔧 Luồng 1: Bảo Trì & Refactor Code Có Sẵn (Boy Scout Rule)</b></summary>
-<br/>
+Andy không "thưa gửi rườm rà", Andy nói chuyện như một Senior Dev ngồi ghế bên cạnh:
 
-* **Bước 1 (Recon):** `fe-recon` đọc `work_log.md`, nhận diện `project-profile.md` và các Vùng bảo vệ (Protected Zones: Tiền, Auth, Payment).
-* **Bước 2 (Triage):** Kích hoạt đúng skill chuyên trách (`fe-clean` dọn rác, `fe-perf` tối ưu tốc độ, `fe-a11y` sửa kẹt phím).
-* **Bước 3 (Proposal):** Thay đổi $> 5$ dòng hoặc đụng logic bắt buộc xuất **Bảng Đề Xuất (Proposal Table)**. Andy dừng lại chờ bạn gõ *"chốt"* mới làm.
-* **Bước 4 (Precision Edit):** Sửa đúng chỗ, không lan man, giữ nguyên comment và code xung quanh.
-* **Bước 5 (Verify & Log):** Chạy `check-loosening.mjs`, linter, test thật và ghi tóm tắt vào đầu file `work_log.md`.
-</details>
+```text
+Bạn: "Andy, nút thanh toán trên trang checkout mobile đang bị lệch."
 
-<details>
-<summary><b>🚀 Luồng 2: Khởi Tạo Dự Án Mới (Canvas-First)</b></summary>
-<br/>
+Andy:
+"Mình soi thấy 2 vấn đề ở `src/features/checkout/PaymentAction.tsx:42`:
+ 1. Nút đang ăn class `h-8` (step `sm`) nằm chung hàng với input `h-10` (step `md`), làm gãy đường gióng ngang.
+ 2. Vùng bấm thực tế chỉ có 32px, vi phạm Touch Floor 44px của mobile.
 
-* **Bước 1 (Scaffold):** Khởi tạo `project-profile.md` và Domain Concept Catalog (`docs/concepts/`).
-* **Bước 2 (Canvas-First):** `fe-ux` Mode 1 vẽ Mockup/Wireframe từ API backend thật và Design System.
-* **Bước 3 (Layer 1 & 2):** `fe-layout` thiết lập Tokens & Primitives theo Control-Height Ramp + Touch floor 44px.
-* **Bước 4 (Layer 3):** `fe-code` dựng Connected / Pure Twin + `DataSlot<T>` + Skeleton Parity.
-* **Bước 5 (Layer 4 & Sec):** Ghép Routes, kiểm tra Route guards và CSP với `fe-sec`.
-* **Bước 6 (Proof Lenses & Ship):** Soi qua 5 thấu kính Gating, setup CI/CD pipeline với `fe-ship`.
-</details>
+Giải pháp:
+ - Snap nút về step `md` theo Control-Height Ramp.
+ - Thêm pseudo-element `:after` mở rộng vùng bấm vô hình lên 44px.
+ - Không làm phình chiều cao nút thật.
 
----
-
-## 📦 Cài Đặt Nhanh (1-Click Setup)
-
-### Cách 1: Cài đặt liên kết toàn cục (Khuyên dùng)
-
-```powershell
-# Windows PowerShell (Chạy bình thường không cần quyền Admin)
-powershell -ExecutionPolicy Bypass -File scripts\install-skills.ps1
+Diff dự kiến 4 dòng. Bạn gõ 'go' là mình sửa và verify ngay."
 ```
 
+---
+
+### 21 Kỹ Năng Rành Mạch (Skills Directory)
+
+Andy tự động chọn đúng skill theo intent của bạn, không bắt bạn phải nhớ cú pháp lệnh:
+
+| Nhóm chuyên môn | Kỹ năng | Nhiệm vụ chính |
+|---|---|---|
+| **Khảo sát & Kiến trúc** | [`fe-recon`](./skills/fe-recon/) | Khảo sát tổng thể repo lạ, đếm nợ kỹ thuật & God components |
+| | [`fe-clean`](./skills/fe-clean/) | Phẫu thuật refactor code bẩn, dọn dẹp circular imports |
+| | [`fe-code`](./skills/fe-code/) | Dựng code mới chuẩn 4 tầng, custom hooks, Server Actions |
+| | [`fe-andy`](./skills/fe-andy/) | Hub điều phối trung tâm & quy ước kỹ thuật chung |
+| **Giao diện & Trải nghiệm** | [`fe-ux`](./skills/fe-ux/) | Brainstorm layout Canvas-First, UX copy, Proof Lenses |
+| | [`fe-layout`](./skills/fe-layout/) | Spacing scale, Control-Height Ramp, Touch floor 44px |
+| | [`fe-skel`](./skills/fe-skel/) | 4 trạng thái async, SlotView recipe, Skeleton Parity |
+| | [`fe-motion`](./skills/fe-motion/) | 60fps animation, View Transitions, GPU idle cleanup |
+| | [`fe-viz`](./skills/fe-viz/) | Biểu đồ trực quan (Recharts/visx/D3), KPI tiles, dashboard |
+| **Dữ liệu & Tiếp cận** | [`fe-data`](./skills/fe-data/) | API contracts (OpenAPI/tRPC), SWR/TanStack, retry, offline |
+| | [`fe-i18n`](./skills/fe-i18n/) | Intl format, dictionary parity check, timezone an toàn |
+| | [`fe-a11y`](./skills/fe-a11y/) | WCAG 2.2 AA, điều hướng bàn phím, focus trap modal |
+| | [`fe-contrast`](./skills/fe-contrast/) | Đo đạc tương phản màu chữ (4.5:1) và UI (3:1) độc lập |
+| **Chất lượng & Vận hành** | [`fe-sec`](./skills/fe-sec/) | Quét XSS sinks, chặn lộ API Key (`NEXT_PUBLIC_*`), CSP |
+| | [`fe-test`](./skills/fe-test/) | Tầng kiểm thử Playwright E2E, component test, axe a11y |
+| | [`fe-ship`](./skills/fe-ship/) | CI/CD pipeline, Docker frontend, Sentry, SEO metadata |
+| | [`fe-pwa`](./skills/fe-pwa/) | Service worker, Workbox caching, offline outbox sync |
+| | [`fe-mfe`](./skills/fe-mfe/) | Micro-Frontends, Module Federation, Next.js Multi-Zones |
+| | [`fe-review`](./skills/fe-review/) | Thẩm định các mẫu code và thư viện theo chuẩn hiện hành |
+| | [`fe-learn`](./skills/fe-learn/) | Bộ máy tự học: lưu bài học thực chiến vào `learned.md` |
+
+---
+
+### Cài đặt trong 30 giây
+
+#### Cách 1: Chạy script 1-Click (Khuyên dùng)
+```powershell
+# Windows PowerShell
+powershell -ExecutionPolicy Bypass -File scripts\install-skills.ps1
+```
 ```bash
-# macOS / Linux Terminal
+# macOS / Linux
 sh scripts/install-skills.sh
 ```
 
-### Cách 2: Cài đặt cho Claude Code qua Plugin Marketplace
-
+#### Cách 2: Cài qua Claude Code Plugin Marketplace
 ```bash
 /plugin marketplace add Andy-doit/fe-skill-andy
 /plugin install fe-skill-andy@fe-skill-andy
 ```
 
-### Cách 3: Tích hợp vào Google Antigravity / Gemini CLI
-Toàn bộ quy tắc của Andy đã được biên soạn sẵn tại [.antigravity-plugin/rules/AGENTS.md](./.antigravity-plugin/rules/AGENTS.md). Khi plugin được kích hoạt, Antigravity tự động tải Andy làm trợ lý kiến trúc mặc định cho mọi workspace.
+#### Cách 3: Tích hợp vào Google Antigravity / Gemini CLI
+Toàn bộ quy tắc của Andy đã được biên soạn sẵn tại [.antigravity-plugin/rules/AGENTS.md](./.antigravity-plugin/rules/AGENTS.md). Plugin khi bật sẽ tự động nhận diện Andy ở mọi workspace.
 
 ---
 
-## 🩺 Tự Kiểm Tra Hệ Thống (Health Check)
+### Kiểm tra tính toàn vẹn (Health Check)
 
 ```bash
-# 1. Kiểm tra tính toàn vẹn của 21 skills và các liên kết chéo
+# 1. Kiểm tra 21 skills và các liên kết chéo
 node skills/fe-andy/scripts/check-skills.mjs
 
 # 2. Quét toàn bộ codebase để kiểm tra kỷ luật Zero-Loosening
 node skills/fe-andy/scripts/check-loosening.mjs
-
-# 3. Chạy bộ benchmark định tuyến intent thông minh của Andy
-node andy-evals.mjs
 ```
 
 ---
 
 <div align="center">
 
-Phát triển với sự tỉ mỉ và tâm huyết bởi **[Andy](https://github.com/Andy-doit)**.
+Tác giả: **[Andy](https://github.com/Andy-doit)** · Phát hành theo giấy phép [MIT License](./LICENSE)
 
-[![GitHub](https://img.shields.io/badge/GitHub-Andy--doit-181717?style=flat-square&logo=github)](https://github.com/Andy-doit)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
-
-*Mọi dòng code xuất xưởng đều phải đạt chuẩn 10/10.*
+*Mọi dòng code xuất xưởng đều phải có bằng chứng kiểm thử thực tế.*
 
 </div>

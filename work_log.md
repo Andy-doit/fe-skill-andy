@@ -10,6 +10,14 @@
 
 ## 📜 Danh sách nhật ký (Mới nhất ở trên cùng)
 
+### [2026-11-19 14:40] Tái cấu trúc README theo phong cách Senior Engineer thực thụ (Thoát ly hoàn toàn văn mẫu AI)
+- **Objective:** Tái cấu trúc toàn diện `README.md` theo phong cách kỹ sư thực chiến, hấp dẫn, dễ đọc: đưa Code Diff (Before vs After) lên ngay đầu, bỏ hoàn toàn các gạch đầu dòng lý thuyết dập khuôn của AI, thêm ví dụ hội thoại terminal thực tế của Andy, thiết kế lại Banner SVG tối giản sang trọng phong cách Linear/Raycast (`assets/andy-banner.svg`).
+- **Files Modified:** [README.md](README.md), [assets/andy-banner.svg](assets/andy-banner.svg)
+- **Verification:**
+  - `node skills/fe-andy/scripts/check-skills.mjs` → PASS (0 errors, 0 warnings).
+  - `node skills/fe-andy/scripts/check-loosening.mjs` → PASS (0 loosening markers).
+  - 0 từ "StarCi" trong file.
+
 ### [2026-11-19 14:36] Căn giữa hoàn hảo & Thay thế Banner SVG cho README.md qua fe-layout
 - **Objective:** Sửa triệt để lỗi hiển thị bị lệch trái của khối ASCII art trên GitHub CSS bằng cách thiết kế Banner Vector SVG cao cấp (`assets/andy-banner.svg`) căn giữa 100%, chuẩn quang học (optical alignment), tách khối blockquote ra khỏi thẻ div để hiển thị thẻ Alert GitHub native đẹp mắt, cân bằng 2 hàng badges.
 - **Files Created/Modified:**
