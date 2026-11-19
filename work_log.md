@@ -10,6 +10,15 @@
 
 ## 📜 Danh sách nhật ký (Mới nhất ở trên cùng)
 
+### [2026-11-19 14:36] Căn giữa hoàn hảo & Thay thế Banner SVG cho README.md qua fe-layout
+- **Objective:** Sửa triệt để lỗi hiển thị bị lệch trái của khối ASCII art trên GitHub CSS bằng cách thiết kế Banner Vector SVG cao cấp (`assets/andy-banner.svg`) căn giữa 100%, chuẩn quang học (optical alignment), tách khối blockquote ra khỏi thẻ div để hiển thị thẻ Alert GitHub native đẹp mắt, cân bằng 2 hàng badges.
+- **Files Created/Modified:**
+  - [assets/andy-banner.svg](assets/andy-banner.svg) — Banner SVG công nghệ cao, responsive, bo góc, neon gradient.
+  - [README.md](README.md) — Căn giữa 100% bằng HTML chuẩn, dùng `> [!IMPORTANT]` native card.
+- **Verification:**
+  - `node skills/fe-andy/scripts/check-skills.mjs` → PASS (0 errors, 0 warnings).
+  - `node skills/fe-andy/scripts/check-loosening.mjs` → PASS (0 loosening markers).
+
 ### [2026-11-19 14:34] Nâng cấp Layout & Visual Hierarchy cho README.md qua fe-layout
 - **Objective:** Tái cấu trúc giao diện `README.md` theo bộ kỹ năng `fe-layout`: cải thiện phân cấp thị giác (visual hierarchy), ASCII Art banner, thanh điều hướng nhanh (Quick Jump), bảng so sánh Before vs After có Harness, sơ đồ hộp Unicode kiến trúc 4 tầng, thẻ đóng mở `<details>` cho 2 luồng thực chiến, và alert callout nổi bật.
 - **Files Modified:** [README.md](README.md)

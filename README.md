@@ -1,40 +1,42 @@
 <div align="center">
 
-```
-  █████╗ ███╗   ██╗██████╗ ██╗   ██╗
- ██╔══██╗████╗  ██║██╔══██╗╚██╗ ██╔╝
- ███████║██╔██╗ ██║██║  ██║ ╚████╔╝ 
- ██╔══██║██║╚██╗██║██║  ██║  ╚██╔╝  
- ██║  ██║██║ ╚████║██████╔╝   ██║   
- ╚═╝  ╚═╝╚═╝  ╚═══╝╚═════╝    ╚═╝   
-```
+<p align="center">
+  <img src="./assets/andy-banner.svg" alt="Andy — Autonomous Frontend Architect & Quality Harness" width="100%" style="max-width: 840px;" />
+</p>
 
-### ⚡ AUTONOMOUS FRONTEND ARCHITECT & QUALITY HARNESS
-**Biến mọi AI Coding Agent thành Senior Frontend Engineer thực thụ.**
+### ⚡ Biến mọi AI Coding Agent thành Senior Frontend Engineer thực thụ.
 
-[Tổng quan](#-tổng-quan) • [So sánh](#-sự-khác-biệt) • [Kiến trúc 4 Tầng](#-kiến-trúc-4-tầng) • [21 Kỹ năng](#-bản-đồ-21-kỹ-năng) • [Kỷ luật Cổng](#-kỷ-luật-zero-loosening) • [Cài đặt](#-cài-đặt-nhanh)
+<p align="center">
+  <a href="#-tổng-quan"><b>Tổng quan</b></a> •
+  <a href="#-sự-khác-biệt"><b>So sánh</b></a> •
+  <a href="#-kiến-trúc-4-tầng"><b>Kiến trúc 4 Tầng</b></a> •
+  <a href="#-bản-đồ-21-kỹ-năng"><b>21 Kỹ năng</b></a> •
+  <a href="#-kỷ-luật-zero-loosening"><b>Kỷ luật Cổng</b></a> •
+  <a href="#-cài-đặt-nhanh"><b>Cài đặt</b></a>
+</p>
 
-<br/>
+<p align="center">
+  <a href="https://nextjs.org"><img src="https://img.shields.io/badge/Next.js_15+-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" alt="Next.js" /></a>
+  <a href="https://react.dev"><img src="https://img.shields.io/badge/React_19-149eca?style=for-the-badge&logo=react&logoColor=white" alt="React 19" /></a>
+  <a href="https://tailwindcss.com"><img src="https://img.shields.io/badge/Tailwind_v4-38bdf8?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS" /></a>
+  <a href="https://www.typescriptlang.org"><img src="https://img.shields.io/badge/TypeScript-Strict_Zero_Any-3178c6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript Strict" /></a>
+</p>
 
-<!-- Badges: Core Engine -->
-[![Next.js 15+](https://img.shields.io/badge/Next.js_15+-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org)
-[![React 19](https://img.shields.io/badge/React_19-149eca?style=for-the-badge&logo=react&logoColor=white)](https://react.dev)
-[![Tailwind v4](https://img.shields.io/badge/Tailwind_v4-38bdf8?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
-[![TypeScript Strict](https://img.shields.io/badge/TypeScript-Strict_Zero_Any-3178c6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+<p align="center">
+  <a href="https://www.w3.org/WAI/standards-guidelines/wcag/"><img src="https://img.shields.io/badge/WCAG_2.2-AA_Compliant-22c55e?style=for-the-badge&logo=w3c&logoColor=white" alt="WCAG 2.2 AA" /></a>
+  <a href="#-kỷ-luật-zero-loosening"><img src="https://img.shields.io/badge/Gates-Zero_Loosening-dc2626?style=for-the-badge&logo=checkmarx&logoColor=white" alt="Zero Loosening" /></a>
+  <a href="#-cài-đặt-nhanh"><img src="https://img.shields.io/badge/Claude_Code-Plugin_Ready-d97757?style=for-the-badge&logo=anthropic&logoColor=white" alt="Claude Code Plugin" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="MIT License" /></a>
+</p>
 
-<!-- Badges: Quality & Compliance -->
-[![WCAG 2.2 AA](https://img.shields.io/badge/WCAG_2.2-AA_Compliant-22c55e?style=for-the-badge&logo=w3c&logoColor=white)](https://www.w3.org/WAI/standards-guidelines/wcag/)
-[![Zero Loosening](https://img.shields.io/badge/Gates-Zero_Loosening-dc2626?style=for-the-badge&logo=checkmarx&logoColor=white)](#-kỷ-luật-zero-loosening)
-[![Claude Code Plugin](https://img.shields.io/badge/Claude_Code-Plugin_Ready-d97757?style=for-the-badge&logo=anthropic&logoColor=white)](#-cài-đặt-nhanh)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
+</div>
 
-<br/>
+---
 
+> [!IMPORTANT]
 > 🎯 **"AI agents write code fast and check it badly. Andy gives every agent a strict quality harness: Machine checks on clean code, zero loose suppressions, 100% production-ready."**
 > 
 > *— Nguyên tắc cốt lõi: Đứa viết ra code KHÔNG BAO GIỜ là đứa tự chấm điểm.*
-
-</div>
 
 ---
 
